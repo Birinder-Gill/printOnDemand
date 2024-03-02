@@ -17,6 +17,7 @@ class PrintOnDemandController extends Controller
         ->inline();
     }
 
+
     public function generatePdf(Request $request)  {
         // return view('greeting',['name'=>"Birinder"]);
         $pdf = SnappyPdf::loadView('greeting',['name'=>"Birinder"]);
