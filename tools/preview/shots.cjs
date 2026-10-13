@@ -1,0 +1,47 @@
+// node shots.cjs <page> <width> [outPrefix] [--full] [--h=900] [--slice=1800] [--y=0] [--hover=sel] [--click=sel] [--wait=ms] [--reduced]
+// Screenshots http://127.0.0.1:8777/<page>.html; full-page shots are cut into slices out_1.png, out_2.png ...
+const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwright');
+const { execFileSync } = require('child_process');
+(async () => {
+  const a = process.argv.slice(2);
+  const page = a[0], W = +a[1], out = a[2] && !a[2].startsWith('--') ? a[2] : `/home/claude/work/shots/${page}-${W}`;
+  const opt = k => { const m = a.find(x => x.startsWith(`--${k}=`)); return m ? m.split('=').slice(1).join('=') : null; };
+  const full = a.includes('--full');
+  const H = +(opt('h') || (W < 600 ? 844 : 900));
+  require('fs').mkdirSync(require('path').dirname(out), { recursive: true });
+  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const ctx = await b.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: +(opt('dpr') || 1), reducedMotion: a.includes('--reduced') ? 'reduce' : 'no-preference', hasTouch: W < 600 });
+  const p = await ctx.newPage();
+  const errs = [];
+  p.on('pageerror', e => errs.push('PAGEERROR ' + String(e)));
+  p.on('console', m => { if (m.type() === 'error') errs.push('CONSOLE ' + m.text()); });
+  p.on('requestfailed', r => errs.push('FAILED ' + r.url()));
+  p.on('response', r => { if (r.status() >= 400 && !r.url().endsWith('favicon.ico')) errs.push(r.status() + ' ' + r.url()); });
+  await p.goto(`http://127.0.0.1:8777/${page}.html`, { waitUntil: 'networkidle', timeout: 120000 });
+  await p.evaluate(async () => { await document.fonts.ready; });
+  if (opt('click')) for (const s of opt('click').split('|')) { await p.click(s).catch(e => errs.push('click ' + s + ' ' + e.message.split('\n')[0])); await p.waitForTimeout(400); }
+  if (opt('hover')) await p.hover(opt('hover')).catch(() => {});
+  if (opt('eval')) await p.evaluate(opt('eval'));
+  await p.waitForTimeout(+(opt('wait') || 1500));
+  if (opt('y')) await p.evaluate(y => window.scrollTo(0, y), +opt('y'));
+  if (full) {
+    // trigger lazy content by scrolling through
+    const h = await p.evaluate(() => document.documentElement.scrollHeight);
+    for (let y = 0; y < h; y += 700) { await p.evaluate(y => window.scrollTo(0, y), y); await p.waitForTimeout(120); }
+    await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(600);
+    await p.screenshot({ path: out + '.png', fullPage: true });
+    const slice = +(opt('slice') || 1800);
+    const total = await p.evaluate(() => document.documentElement.scrollHeight);
+    execFileSync('python3', ['-c', `
+from PIL import Image
+im=Image.open('${out}.png'); W,H=im.size; s=${slice}; n=0
+for y in range(0,H,s):
+    n+=1; im.crop((0,y,W,min(H,y+s))).save('${out}_%d.png'%n)
+print('slices',n,'height',H)
+`], { stdio: 'inherit' });
+  } else {
+    await p.screenshot({ path: out + '.png' });
+  }
+  if (errs.length) console.log(errs.slice(0, 20).join('\n'));
+  await b.close();
+})();

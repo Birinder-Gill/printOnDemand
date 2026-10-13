@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js{% unless settings.motion_enabled %} no-motion{% endunless %}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#6a34c8">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    {%- else -%}
+      <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}">
+    {%- endif -%}
+    {%- liquid
+      assign brand = settings.brand_name | default: shop.name
+      assign title_text = page_title
+      if request.page_type == 'index'
+        assign title_text = brand | append: ': The Throwback Puzzle Book'
+      endif
+    -%}
+    <title>{{ title_text }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.page' | t: number: current_page }}{% endif %}{% unless title_text contains brand %} &ndash; {{ brand }}{% endunless %}</title>
+    {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
+    {% render 'meta-tags', brand: brand %}
+    <link rel="preload" href="{{ 'f-archivo-var.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+    {% render 'font-faces' %}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'chrome.css' | asset_url | stylesheet_tag }}
+    <script>document.documentElement.classList.replace('no-js','js');</script>
+    {{ content_for_header }}
+  </head>
+  <body class="tpl-{{ request.page_type | handle }}{% if template.suffix %} tpl-{{ template.suffix | handle }}{% endif %}">
+    <a class="skip-link" href="#MainContent">{{ 'general.skip_to_content' | t }}</a>
+    {% sections 'header-group' %}
+    <main id="MainContent" class="main" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+    {% sections 'footer-group' %}
+    {% section 'cart-drawer' %}
+    <script>
+      window.theme = {
+        routes: { cart: {{ routes.cart_url | json }}, cartAdd: {{ routes.cart_add_url | json }}, cartChange: {{ routes.cart_change_url | json }}, root: {{ routes.root_url | json }} },
+        cartType: {{ settings.cart_type | json }},
+        strings: { adding: {{ 'products.adding' | t | json }}, added: {{ 'products.added' | t | json }}, addToCart: {{ 'products.add_to_cart' | t | json }}, cartError: {{ 'cart.update_error' | t | json }} }
+      };
+    </script>
+    <script src="{{ 'global.js' | asset_url }}" defer></script>
+  </body>
+</html>

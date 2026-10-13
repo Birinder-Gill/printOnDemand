@@ -1,0 +1,17 @@
+{
+  "current": {
+    "brand_name": "90s America Crossword",
+    "hero_product": "90s-america-crossword-gift-edition",
+    "cart_type": "drawer",
+    "motion_enabled": true,
+    "sections": {}
+  },
+  "presets": {
+    "Throwback": {
+      "brand_name": "90s America Crossword",
+      "hero_product": "90s-america-crossword-gift-edition",
+      "cart_type": "drawer",
+      "motion_enabled": true
+    }
+  }
+}

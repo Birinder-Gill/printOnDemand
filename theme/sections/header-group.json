@@ -1,0 +1,23 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "ticker": {
+      "type": "x-ticker",
+      "settings": { "bug": "New", "label": "Announcements", "speed": 9, "show_clock": true, "time": "7:05", "temp": "72°" },
+      "blocks": {
+        "m1": { "type": "message", "settings": { "text": "The Gift Edition hardcover is here", "link": "shopify://products/90s-america-crossword-gift-edition" } },
+        "m2": { "type": "message", "settings": { "text": "48 crosswords about the 1990s" } },
+        "m3": { "type": "message", "settings": { "text": "651 clues, 71 hints, one answer key" } },
+        "m4": { "type": "message", "settings": { "text": "Every page is a different piece of the decade" } },
+        "m5": { "type": "message", "settings": { "text": "Hints are printed upside down. No peeking" } }
+      },
+      "block_order": ["m1", "m2", "m3", "m4", "m5"]
+    },
+    "header": {
+      "type": "x-header",
+      "settings": { "menu": "main-menu", "word_top": "America", "word_tiles": "Crossword", "sheet_label": "Prismatic stickers", "sheet_number": "Sheet No. 1" }
+    }
+  },
+  "order": ["ticker", "header"]
+}

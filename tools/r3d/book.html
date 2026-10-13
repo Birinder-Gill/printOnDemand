@@ -1,0 +1,310 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/r3d/node_modules/three/build/three.module.js","three/addons/":"/r3d/node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+window.__ready = false;
+const Q = new URLSearchParams(location.search);
+const SHOT = Q.get('shot') || 'hero';
+const SIZE = +(Q.get('size') || 1600);
+const ASPECT = +(Q.get('aspect') || 1);
+
+// ---- book dimensions (inches) ----------------------------------------------------------------
+const W = 8.447, H = 11.236, BT = 0.092, T = 0.43, R = 0.028;   // board w/h, board thickness, overall thickness, edge radius
+const PW = 8.25, PH = 11.0;                                     // page block (trim)
+const DPI = 300, BLEED = 0.125 * DPI;                           // cover images are 300 dpi with 0.125 in bleed
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(SIZE * ASPECT, SIZE);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.VSMShadowMap;
+renderer.setClearColor(0x000000, 0);
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = +(Q.get('env') || 0.5);
+
+const load = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+
+function canvasTex(c, srgb = true) {
+  const t = new THREE.CanvasTexture(c);
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter;
+  return t;
+}
+function crop(img, x, y, w, h, rot = 0) {
+  const c = document.createElement('canvas');
+  const r90 = rot === 90 || rot === -90;
+  c.width = r90 ? h : w; c.height = r90 ? w : h;
+  const g = c.getContext('2d');
+  g.translate(c.width / 2, c.height / 2); g.rotate(rot * Math.PI / 180);
+  g.drawImage(img, x, y, w, h, -w / 2, -h / 2, w, h);
+  return c;
+}
+
+// the board face, with the French groove baked in as a soft shadow/highlight pair near the spine
+function boardFace(img, spineOnLeft) {
+  const c = document.createElement('canvas');
+  const w = img.width - 2 * BLEED, h = img.height - 2 * BLEED;
+  c.width = Math.round(w); c.height = Math.round(h);
+  const g = c.getContext('2d');
+  g.drawImage(img, BLEED, BLEED, w, h, 0, 0, w, h);
+  const gx = 0.36 * DPI, gw = 0.09 * DPI;
+  const x0 = spineOnLeft ? gx : w - gx;
+  const dir = spineOnLeft ? 1 : -1;
+  const grd = g.createLinearGradient(x0 - dir * gw, 0, x0 + dir * gw, 0);
+  grd.addColorStop(0, 'rgba(0,0,0,0)'); grd.addColorStop(.38, 'rgba(0,0,0,.30)');
+  grd.addColorStop(.52, 'rgba(0,0,0,.10)'); grd.addColorStop(.62, 'rgba(255,255,255,.16)'); grd.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grd; g.fillRect(Math.min(x0 - gw, x0 + gw), 0, 2 * gw, h);
+  return c;
+}
+
+// page edges: 40 leaves of white paper, each a hair different
+function pageEdge(wpx, hpx, leaves, alongX) {
+  const c = document.createElement('canvas'); c.width = wpx; c.height = hpx;
+  const g = c.getContext('2d');
+  g.fillStyle = '#f3f1ea'; g.fillRect(0, 0, wpx, hpx);
+  const n = leaves, span = alongX ? hpx : wpx;
+  let rs = 7; const rnd = () => (rs = (rs * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < n; i++) {
+    const p = (i + .5) / n * span, v = 236 + Math.floor(rnd() * 14);
+    g.fillStyle = `rgb(${v},${v - 1},${v - 5})`;
+    if (alongX) g.fillRect(0, p - span / n / 2, wpx, span / n * .62); else g.fillRect(p - span / n / 2, 0, span / n * .62, hpx);
+    g.fillStyle = 'rgba(120,112,100,.20)';
+    if (alongX) g.fillRect(0, p + span / n * .2, wpx, Math.max(1, span / n * .14)); else g.fillRect(p + span / n * .2, 0, Math.max(1, span / n * .14), hpx);
+  }
+  // soft grime toward the middle, like light falling into the stack
+  const gr = alongX ? g.createLinearGradient(0, 0, 0, hpx) : g.createLinearGradient(0, 0, wpx, 0);
+  gr.addColorStop(0, 'rgba(0,0,0,.10)'); gr.addColorStop(.15, 'rgba(0,0,0,0)'); gr.addColorStop(.85, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.10)');
+  g.fillStyle = gr; g.fillRect(0, 0, wpx, hpx);
+  return c;
+}
+
+function noiseTex(n = 512, amt = 18, base = 128) {
+  const c = document.createElement('canvas'); c.width = c.height = n;
+  const g = c.getContext('2d'); const d = g.createImageData(n, n);
+  let rs = 11; const rnd = () => (rs = (rs * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < n * n; i++) { const v = base + (rnd() - .5) * amt; d.data[i * 4] = d.data[i * 4 + 1] = d.data[i * 4 + 2] = v; d.data[i * 4 + 3] = 255; }
+  g.putImageData(d, 0, 0);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(6, 8); return t;
+}
+
+function coverMat(map) {
+  return new THREE.MeshPhysicalMaterial({ map, roughness: +(Q.get('rough') || 0.32), metalness: 0, clearcoat: +(Q.get('cc') || 0.7), clearcoatRoughness: +(Q.get('ccr') || 0.16),
+    roughnessMap: ROUGH, sheen: 0 });
+}
+let ROUGH;
+
+async function makeBook() {
+  const [front, back, spine] = await Promise.all([load('/tex/front300.png'), load('/tex/back300_bc.png'), load('/tex/spine_v.png')]);
+  ROUGH = noiseTex();
+  const book = new THREE.Group();
+  const bw = W, bx = 0;   // boards span the full width; the spine bulges outside x = -W/2
+  // strips from the bleed for the board edges (the laminate wraps round the board)
+  const edge = Math.round(BT * DPI);
+  const fw = front.width, fh = front.height;
+  // FRONT board (+z side). spine on its left (x = -W/2)
+  const fFace = canvasTex(boardFace(front, true));
+  const fTop = canvasTex(crop(front, BLEED, BLEED - edge, fw - 2 * BLEED, edge));
+  const fBot = canvasTex(crop(front, BLEED, fh - BLEED, fw - 2 * BLEED, edge));
+  const fFore = canvasTex(crop(front, fw - BLEED, BLEED, edge, fh - 2 * BLEED));
+  const inner = new THREE.MeshStandardMaterial({ color: 0xf5f3ee, roughness: 0.85 });
+  const fGeo = new RoundedBoxGeometry(bw, H, BT, 3, R);
+  // material order: px, nx, py, ny, pz, nz
+  const fMats = [coverMat(fFore), inner, coverMat(fTop), coverMat(fBot), coverMat(fFace), inner];
+  const fBoard = new THREE.Mesh(fGeo, fMats);
+  fBoard.position.set(bx, 0, T / 2 - BT / 2);
+  // BACK board (-z side). Seen from behind, its spine is on the right of the back-cover art
+  const bFace = canvasTex(boardFace(back, false));
+  const bw2 = back.width, bh2 = back.height;
+  const bTop = canvasTex(crop(back, BLEED, BLEED - edge, bw2 - 2 * BLEED, edge));
+  const bBot = canvasTex(crop(back, BLEED, bh2 - BLEED, bw2 - 2 * BLEED, edge));
+  const bFore = canvasTex(crop(back, 0 + BLEED - edge, BLEED, edge, bh2 - 2 * BLEED));
+  bTop.wrapS = bBot.wrapS = THREE.RepeatWrapping; bTop.repeat.x = bBot.repeat.x = -1;   // mirrored: seen from the back
+  const bGeo = new RoundedBoxGeometry(bw, H, BT, 3, R);
+  const bMats = [coverMat(bFore), inner, coverMat(bTop), coverMat(bBot), inner, coverMat(bFace)];
+  const bBoard = new THREE.Mesh(bGeo, bMats);
+  bBoard.position.set(bx, 0, -T / 2 + BT / 2);
+  // SPINE: a shallow curved shell joining the boards at x = -W/2
+  const bulge = 0.07;
+  const sGeo = new THREE.CylinderGeometry(T / 2, T / 2, H - 0.002, 48, 1, true, Math.PI, Math.PI);
+  const sTex = canvasTex(spine);
+  const sMesh = new THREE.Mesh(sGeo, coverMat(sTex));
+  sMesh.scale.set(bulge / (T / 2) + 0.0001, 1, 1);
+  sMesh.position.set(-W / 2 + R * .6, 0, 0);
+  // PAGE BLOCK
+  const pt = T - 2 * BT - 0.012;
+  const ex = Math.round(PW * 100), ey = Math.round(PH * 100), ez = Math.round(pt * 1000);
+  const peFore = canvasTex(pageEdge(ez, ey, 41, false));
+  const peTop = canvasTex(pageEdge(ex, ez, 41, true));
+  const paper = m => new THREE.MeshStandardMaterial({ map: m, roughness: 0.92, metalness: 0 });
+  const pGeo = new THREE.BoxGeometry(PW - 0.06, PH, pt);
+  const pMats = [paper(peFore), inner, paper(peTop), paper(peTop), inner, inner];
+  const pages = new THREE.Mesh(pGeo, pMats);
+  pages.position.set(-W / 2 + 0.05 + (PW - 0.06) / 2, 0, 0);
+  // a dark sliver where the boards meet the spine inside the hinge
+  for (const m of [fBoard, bBoard, sMesh, pages]) { m.castShadow = true; m.receiveShadow = true; book.add(m); }
+  return book;
+}
+
+function ground(y, opacity = .3) {
+  if (Q.get('noground')) return new THREE.Object3D();
+  const g = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.ShadowMaterial({ opacity }));
+  g.rotation.x = -Math.PI / 2; g.position.y = y; g.receiveShadow = true;
+  return g;
+}
+function contact(w, d, y, opacity = .55, blur = .35) {
+  if (Q.get('nocontact')) return new THREE.Object3D();
+  // soft contact shadow: a blurred rounded rectangle under the footprint
+  const c = document.createElement('canvas'); c.width = 512; c.height = 512;
+  const g = c.getContext('2d');
+  g.filter = `blur(${Math.round(512 * blur / Math.max(w, d) * 2)}px)`;
+  g.fillStyle = '#000';
+  const pad = 512 * .18;
+  g.fillRect(pad, pad, 512 - 2 * pad, 512 - 2 * pad);
+  const t = new THREE.CanvasTexture(c);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w / (1 - .36) * 1.0, d / (1 - .36) * 1.0),
+    new THREE.MeshBasicMaterial({ map: t, transparent: true, opacity, depthWrite: false, toneMapped: false }));
+  m.rotation.x = -Math.PI / 2; m.position.y = y + 0.002;
+  return m;
+}
+
+function lights(target, key = [-9, 14, 12], kint = 2.2) {
+  const k = new THREE.DirectionalLight(0xffffff, kint);
+  k.position.set(...key); k.castShadow = true;
+  k.shadow.mapSize.set(4096, 4096); k.shadow.radius = +(Q.get('soft') || 14); k.shadow.blurSamples = 24;
+  const s = k.shadow.camera; s.left = -14; s.right = 14; s.top = 14; s.bottom = -14; s.near = 1; s.far = 60;
+  k.shadow.bias = -0.0004;
+  k.target = target; scene.add(k, k.target);
+  const fill = new THREE.DirectionalLight(0xe9edff, 0.55); fill.position.set(12, 4, 10); scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xfff1dc, 1.3); rim.position.set(-6, 9, -12); scene.add(rim);
+  const top = new THREE.DirectionalLight(0xffffff, 0.35); top.position.set(0, 20, 2); scene.add(top);
+}
+
+// ---- an open book lying flat: two page stacks whose top sheets curve down into the gutter --------------
+async function makeOpen(leftSrc, rightSrc) {
+  const [L, Rr, front, back] = await Promise.all([load(leftSrc), load(rightSrc), load('/tex/front300.png'), load('/tex/back300.png')]);
+  const pdpi = L.width / 8.375, pb = 0.125 * pdpi;              // page renders: trim + bleed on top, bottom and the outer edge
+  const pageCanvas = (img, isLeft) => {
+    const c = document.createElement('canvas'); c.width = Math.round(img.width - pb); c.height = Math.round(img.height - 2 * pb);
+    const g = c.getContext('2d');
+    g.drawImage(img, isLeft ? pb : 0, pb, c.width, c.height, 0, 0, c.width, c.height);
+    // the gutter: a soft shade where the sheet dives into the binding, and a paper grain
+    const gx = isLeft ? c.width : 0, dir = isLeft ? -1 : 1, gw = c.width * 0.16;
+    const grd = g.createLinearGradient(gx, 0, gx + dir * gw, 0);
+    grd.addColorStop(0, 'rgba(40,30,25,.42)'); grd.addColorStop(.18, 'rgba(40,30,25,.16)'); grd.addColorStop(.55, 'rgba(40,30,25,.03)'); grd.addColorStop(1, 'rgba(40,30,25,0)');
+    g.fillStyle = grd; g.fillRect(Math.min(gx, gx + dir * gw), 0, gw, c.height);
+    return c;
+  };
+  const grp = new THREE.Group();
+  const stack = +(Q.get('stack') || 0.11), BTh = BT;
+  const sag = +(Q.get('sag') || 0.2), k = +(Q.get('k') || 0.5), lift = 0.02, gap = 0.004;
+  const hump = +(Q.get('hump') || 0.2), hu = +(Q.get('hu') || 1.25);
+  const zOf = (u) => BTh + 0.004 + stack * (1 - Math.exp(-u / 0.3)) + hump * (u / hu) * Math.exp(1 - u / hu) + lift * Math.pow(u / PW, 2.2);
+  const SEG = 120;
+  const us = Array.from({ length: SEG + 1 }, (_, i) => PW * Math.pow(i / SEG, 1.6));   // denser near the gutter
+  function strip(points, uvs, idx) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(points, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2)); g.setIndex(idx); g.computeVertexNormals(); return g; }
+  const inner = new THREE.MeshStandardMaterial({ color: 0xf3f1ea, roughness: .9 });
+  for (const side of [-1, 1]) {
+    const isLeft = side < 0;
+    const X = u => side * (gap + u);
+    // board under the stack, lying flat (x: width, y: thickness, z: height)
+    const board = new THREE.Mesh(new RoundedBoxGeometry(W - 0.03, BTh, H, 3, R * .8),
+      new THREE.MeshPhysicalMaterial({ color: 0x17131f, roughness: .42, clearcoat: .4 }));
+    board.position.set(side * ((W - 0.03) / 2), BTh / 2, 0);
+    board.castShadow = board.receiveShadow = true; grp.add(board);
+    // top sheet
+    let P = [], UV = [], I = [];
+    for (let i = 0; i <= SEG; i++) {
+      const u = us[i], y = zOf(u), x = X(u), tu = isLeft ? 1 - u / PW : u / PW;
+      P.push(x, y, -PH / 2, x, y, PH / 2); UV.push(tu, 1, tu, 0);
+    }
+    for (let i = 0; i < SEG; i++) { const a = 2 * i; if (!isLeft) I.push(a, a + 1, a + 2, a + 2, a + 1, a + 3); else I.push(a, a + 2, a + 1, a + 2, a + 3, a + 1); }
+    const tex = canvasTex(pageCanvas(isLeft ? L : Rr, isLeft));
+    const sheet = new THREE.Mesh(strip(P, UV, I), new THREE.MeshStandardMaterial({ map: tex, roughness: .85 }));
+    sheet.castShadow = sheet.receiveShadow = true; grp.add(sheet);
+    // the near and far edges of the stack follow the curve down to the board
+    for (const zEdge of [PH / 2, -PH / 2]) {
+      P = []; UV = []; I = [];
+      for (let i = 0; i <= SEG; i++) { const u = us[i], x = X(u), y = zOf(u) - 0.001; P.push(x, y, zEdge, x, BTh, zEdge); UV.push(u / PW, 1, u / PW, 0); }
+      const front = zEdge > 0;
+      for (let i = 0; i < SEG; i++) { const a = 2 * i; const flip = (front ? 1 : -1) * side > 0; if (flip) I.push(a, a + 1, a + 2, a + 2, a + 1, a + 3); else I.push(a, a + 2, a + 1, a + 2, a + 3, a + 1); }
+      const pe = canvasTex(pageEdge(Math.round(PW * 120), 64, 22, true));
+      const m = new THREE.Mesh(strip(P, UV, I), new THREE.MeshStandardMaterial({ map: pe, roughness: .92, side: THREE.DoubleSide }));
+      m.castShadow = m.receiveShadow = true; grp.add(m);
+    }
+    // fore-edge
+    const fx = X(PW), fy = zOf(PW);
+    const fe = new THREE.Mesh(new THREE.PlaneGeometry(PH, fy - BTh), new THREE.MeshStandardMaterial({ map: canvasTex(pageEdge(Math.round(PH * 100), 64, 22, true)), roughness: .92, side: THREE.DoubleSide }));
+    fe.rotation.y = side * Math.PI / 2; fe.position.set(fx, (fy + BTh) / 2, 0);
+    fe.castShadow = fe.receiveShadow = true; grp.add(fe);
+  }
+  return grp;
+}
+
+const cam = new THREE.PerspectiveCamera(+(Q.get('fov') || 20), ASPECT, 0.1, 400);
+const target = new THREE.Object3D();
+const book = SHOT === 'open' ? null : await makeBook();
+
+if (SHOT === 'open') {
+  const ob = await makeOpen(Q.get('l'), Q.get('r'));
+  ob.rotation.y = THREE.MathUtils.degToRad(+(Q.get('ry') || 0));
+  scene.add(ob, ground(0, .3), contact(W * 2.05, H, 0, .38, .25));
+  lights(target, [-8, 24, 10], 2.1);
+  cam.position.set(0, +(Q.get('cy') || 46), +(Q.get('cz') || 18));
+  cam.lookAt(0, 0, +(Q.get('lz') || 0.4));
+} else if (SHOT === 'hero') {          // standing, three-quarter: front and spine
+  book.rotation.y = THREE.MathUtils.degToRad(+(Q.get('ry') || 30));
+  book.position.y = H / 2;
+  scene.add(book, ground(0, .28), contact(W * .62, 1.6, 0, .5));
+  lights(target, [-10, 16, 14]);
+  cam.position.set(+(Q.get('cx') || 0), +(Q.get('cy') || 7.2), +(Q.get('cz') || 42));
+  cam.lookAt(0, +(Q.get('ly') || 5.7), 0);
+} else if (SHOT === 'front') {  // standing, nearly square on
+  book.rotation.y = THREE.MathUtils.degToRad(+(Q.get('ry') || 8));
+  book.position.y = H / 2;
+  scene.add(book, ground(0, .26), contact(W, 1.4, 0, .45));
+  lights(target, [-8, 15, 16]);
+  cam.position.set(0, 6.6, 44); cam.lookAt(0, 5.7, 0);
+} else if (SHOT === 'flat') {   // lying face up, seen from above at an angle
+  book.rotation.x = -Math.PI / 2;
+  book.rotation.z = THREE.MathUtils.degToRad(+(Q.get('rz') || -14));
+  book.position.y = T / 2;
+  scene.add(book, ground(0, .3), contact(W, H, 0, .35));
+  lights(target, [-10, 22, 8], 2.3);
+  cam.position.set(0, +(Q.get('cy') || 40), +(Q.get('cz') || 22)); cam.lookAt(0, 0, 0.6);
+} else if (SHOT === 'duo') {    // front and back side by side
+  const b2 = book.clone(true);
+  book.rotation.y = THREE.MathUtils.degToRad(16); book.position.set(-5.0, H / 2, 0.6);
+  b2.rotation.y = THREE.MathUtils.degToRad(180 - 16); b2.position.set(5.0, H / 2, -0.6);
+  scene.add(book, b2, ground(0, .26));
+  const c1 = contact(W * .95, 1.5, 0, .4); c1.position.x = -5; c1.rotation.z = THREE.MathUtils.degToRad(-16);
+  const c2 = contact(W * .95, 1.5, 0, .4); c2.position.x = 5; c2.rotation.z = THREE.MathUtils.degToRad(16);
+  scene.add(c1, c2);
+  lights(target, [-4, 16, 16]);
+  cam.position.set(0, +(Q.get('cy') || 7), +(Q.get('cz') || 58)); cam.lookAt(0, +(Q.get('ly') || 5.6), 0);
+} else if (SHOT === 'spine') {  // spine forward
+  book.rotation.y = THREE.MathUtils.degToRad(+(Q.get('ry') || 62));
+  book.position.y = H / 2;
+  scene.add(book, ground(0, .28), contact(3, 3, 0, .45));
+  lights(target, [-12, 16, 10]);
+  cam.position.set(0, 7.5, 40); cam.lookAt(0, 5.6, 0);
+}
+cam.updateProjectionMatrix();
+renderer.render(scene, cam);
+window.__png = renderer.domElement.toDataURL('image/png');
+window.__ready = true;
+</script>
+</body></html>
