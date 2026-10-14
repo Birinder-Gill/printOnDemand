@@ -1,0 +1,51 @@
+{%- comment -%}
+  Blog: a photocopied zine. Ransom-note masthead cut from magazines, an issue line on a strip of tape, and every
+  post as a clipping glued down at an angle: high-contrast photocopy image, typewritten title, hot pink highlighter.
+{%- endcomment -%}
+{{ 'zine.css' | asset_url | stylesheet_tag }}
+<section class="zn" aria-labelledby="ZnTitle-{{ section.id }}">
+  <header class="zn__mast">
+    <p class="zn__issue"><span>{{ section.settings.issue }}</span></p>
+    <h1 class="zn__title" id="ZnTitle-{{ section.id }}" aria-label="{{ blog.title | escape }}">{% render 'ransom', text: blog.title %}</h1>
+    {%- if section.settings.tagline != blank -%}<p class="zn__tag">{{ section.settings.tagline }}</p>{%- endif -%}
+  </header>
+  {%- paginate blog.articles by 9 -%}
+    {%- if blog.articles.size > 0 -%}
+      <ul class="zn__grid" role="list">
+        {%- for article in blog.articles -%}
+          <li class="clip clip--{{ forloop.index | modulo: 4 }}">
+            <span class="clip__tape" aria-hidden="true"></span>
+            {%- if article.image -%}
+              <span class="clip__img">{{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: '', widths: '400,600,900', sizes: '(min-width: 990px) 30vw, 90vw' }}</span>
+            {%- endif -%}
+            <p class="clip__date"><time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %d, %Y' }}</time></p>
+            <h2 class="clip__title"><a href="{{ article.url }}">{{ article.title }}</a></h2>
+            <p class="clip__ex">{{ article.excerpt_or_content | strip_html | truncatewords: 30 }}</p>
+            <span class="clip__more" aria-hidden="true">{{ 'blogs.read_more' | t }} &rarr;</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+      {%- if paginate.pages > 1 -%}
+        <nav class="zn__pages" aria-label="{{ 'general.page' | t: number: paginate.current_page }}">
+          {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">&larr; {{ 'general.previous' | t }}</a>{%- endif -%}
+          <span>{{ paginate.current_page }} / {{ paginate.pages }}</span>
+          {%- if paginate.next -%}<a href="{{ paginate.next.url }}">{{ 'general.next' | t }} &rarr;</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- else -%}
+      <p class="zn__empty">{{ section.settings.empty }}</p>
+    {%- endif -%}
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Photocopied zine (blog)",
+  "class": "sct-zine",
+  "settings": [
+    { "type": "text", "id": "issue", "label": "Issue line", "default": "Issue no. 1 · free · take one" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Notes, lists and arguments about the 1990s." },
+    { "type": "text", "id": "empty", "label": "No posts text", "default": "The first issue is still at the copy shop." }
+  ]
+}
+{% endschema %}

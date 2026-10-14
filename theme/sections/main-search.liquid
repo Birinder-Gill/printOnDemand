@@ -1,0 +1,95 @@
+{%- comment -%}
+  Search: the school library's card catalog. A row of oak drawers with brass label holders across the top, the
+  search box typed onto a blank catalog card, and every result filed as its own typed 3 x 5 card with a call number
+  and the rod hole at the bottom.
+{%- endcomment -%}
+{{ 'main-search.css' | asset_url | stylesheet_tag }}
+{%- assign drawers = section.settings.drawers | split: ',' -%}
+<section class="lib" aria-labelledby="LibTitle-{{ section.id }}">
+  <div class="lib__cabinet" aria-hidden="true">
+    {%- for d in drawers -%}
+      <span class="lib__drawer"><span class="lib__holder">{{ d | strip }}</span><span class="lib__pull"></span></span>
+    {%- endfor -%}
+  </div>
+
+  <div class="lib__in">
+    <div class="lcard lcard--search">
+      <p class="lcard__call" aria-hidden="true">{{ section.settings.call_number }}</p>
+      <h1 class="lcard__h" id="LibTitle-{{ section.id }}">{{ 'search.heading' | t }}</h1>
+      <form class="lib__form" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="lib__label" for="LibQ-{{ section.id }}">{{ section.settings.field_label }}</label>
+        <div class="lib__row">
+          <input class="lib__input" id="LibQ-{{ section.id }}" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}" autocomplete="off">
+          <input type="hidden" name="options[prefix]" value="last">
+          <button class="btn btn--sm" type="submit">{%- render 'icon', name: 'magnifying-glass' -%}{{ 'search.submit' | t }}</button>
+        </div>
+      </form>
+      <span class="lcard__hole" aria-hidden="true"></span>
+    </div>
+
+    {%- if search.performed -%}
+      {%- paginate search.results by 12 -%}
+        <p class="lib__count" role="status">
+          {%- if search.results_count > 0 -%}{{ 'search.results_for' | t: terms: search.terms }} · {{ search.results_count }}{%- else -%}{{ 'search.no_results' | t: terms: search.terms }}{%- endif -%}
+        </p>
+        {%- if search.results_count > 0 -%}
+          <ol class="lib__results" role="list">
+            {%- for item in search.results -%}
+              {%- liquid
+                assign kind = item.object_type | default: 'product'
+                assign img = blank
+                if kind == 'product'
+                  assign img = item.featured_media
+                elsif kind == 'article'
+                  assign img = item.image
+                endif
+                assign seq = forloop.index | plus: paginate.current_offset
+              -%}
+              <li class="lcard lcard--result">
+                <p class="lcard__call" aria-hidden="true">{{ section.settings.call_prefix }} {{ seq | prepend: '00' | slice: -3, 3 }}</p>
+                <p class="lcard__type">{{ kind | capitalize }}</p>
+                <h2 class="lcard__title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+                {%- if kind == 'product' -%}<p class="lcard__meta">{{ item.vendor }} · {{ item.price | money_without_trailing_zeros }}</p>{%- endif -%}
+                <p class="lcard__sum">{{ item.content | default: item.description | strip_html | truncatewords: 24 }}</p>
+                {%- if img -%}<span class="lcard__photo">{{ img | image_url: width: 240 | image_tag: loading: 'lazy', alt: '', widths: '160,240', sizes: '96px' }}</span>{%- endif -%}
+                <span class="lcard__hole" aria-hidden="true"></span>
+              </li>
+            {%- endfor -%}
+          </ol>
+          {%- if paginate.pages > 1 -%}
+            <nav class="lib__pages" aria-label="{{ 'general.page' | t: number: paginate.current_page }}">
+              {%- if paginate.previous -%}<a class="btn btn--sm btn--white" href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{%- endif -%}
+              <span>{{ paginate.current_page }} / {{ paginate.pages }}</span>
+              {%- if paginate.next -%}<a class="btn btn--sm btn--white" href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{%- endif -%}
+            </nav>
+          {%- endif -%}
+        {%- else -%}
+          <div class="lcard lcard--none">
+            <span class="lcard__stamp" aria-hidden="true">{{ section.settings.none_stamp }}</span>
+            <p>{{ section.settings.none_text }}</p>
+            {%- if settings.hero_product != blank -%}<a class="btn" href="{{ settings.hero_product.url }}">{{ 'cart.continue' | t }}</a>{%- endif -%}
+            <span class="lcard__hole" aria-hidden="true"></span>
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <p class="lib__hint">{{ section.settings.hint }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Card catalog (search)",
+  "class": "sct-library",
+  "settings": [
+    { "type": "text", "id": "drawers", "label": "Drawer labels (comma separated)", "default": "A–C,D–F,G–I,J–L,M–O,P–R,S–U,V–Z" },
+    { "type": "text", "id": "call_number", "label": "Call number on the search card", "default": "793.732 NIN" },
+    { "type": "text", "id": "field_label", "label": "Field label", "default": "Subject, title or keyword" },
+    { "type": "text", "id": "call_prefix", "label": "Call number prefix on results", "default": "793.73" },
+    { "type": "text", "id": "none_stamp", "label": "No results stamp", "default": "Not on file" },
+    { "type": "text", "id": "none_text", "label": "No results text", "default": "Try a shorter word, or check the spelling. The book is always on the shelf." },
+    { "type": "text", "id": "hint", "label": "Hint before searching", "default": "Look up a puzzle, a page or anything else in the shop." }
+  ]
+}
+{% endschema %}

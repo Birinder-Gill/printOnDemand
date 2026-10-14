@@ -85,6 +85,7 @@ export const mocks = {
       handle: '', additional_checkout_buttons: false, content_for_additional_checkout_buttons: '',
     };
     if (base === 'product') { s.product = product; s.page_title = product.title; s.request.path = product.url; }
+    if (base === 'list-collections') { const arr = [collection, { ...collection, id: 56, title: 'Gift ideas', handle: 'gifts', url: '/collections/gifts', products_count: 1 }]; arr.all = collection; s.collections = arr; }
     if (base === 'collection') { s.collection = collection; s.page_title = collection.title; }
     if (base === 'page') { const p = pages[suffix === 'about' ? 'about' : suffix === 'faq' ? 'faq' : suffix === 'contact' ? 'contact' : suffix === 'shipping' ? 'shipping-returns' : suffix === 'inside' ? 'inside-the-book' : 'about']; s.page = { ...p, template_suffix: suffix || null }; s.page_title = p.title; s.request.path = p.url; }
     if (base === 'search') { s.search = { performed: true, terms: 'popcorn', results: [product], results_count: 1, types: ['product'] }; }

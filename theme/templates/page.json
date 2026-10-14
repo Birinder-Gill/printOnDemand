@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "main-page", "settings": { "label_top": "Composition book", "label_bottom": "100 sheets · wide ruled", "doodle": true } }
+  },
+  "order": ["main"]
+}

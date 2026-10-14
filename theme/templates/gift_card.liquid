@@ -1,0 +1,73 @@
+{%- layout none -%}
+{%- comment -%}
+  Gift card: an arcade game card. Holographic plastic with a magnetic stripe, the balance on a red LED readout,
+  the code embossed, a QR code to scan at the counter, and the usual buttons (copy, print, wallet, shop).
+{%- endcomment -%}
+{%- liquid
+  assign brand = settings.brand_name | default: shop.name
+  assign balance = gift_card.balance | money_without_currency | remove: ','
+-%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>{{ 'gift_card.title' | t }} &ndash; {{ brand }}</title>
+    <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}">
+    {% render 'font-faces' %}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'gift-card.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+    {{ content_for_header }}
+  </head>
+  <body class="gc-body">
+    <main class="gc" id="MainContent">
+      <header class="gc__head">
+        <img class="gc__logo" src="{{ 'logo-90s.svg' | asset_url }}" alt="{{ brand | escape }}" width="200" height="118">
+        <h1 class="gc__title">{{ 'gift_card.title' | t }}</h1>
+      </header>
+
+      <div class="gcard{% if gift_card.expired or gift_card.enabled == false %} is-dead{% endif %}">
+        <div class="gcard__face">
+          <span class="gcard__holo" aria-hidden="true"></span>
+          <p class="gcard__brand" aria-hidden="true">{{ brand }}<small>Play card</small></p>
+          <div class="gcard__led">
+            <span class="gcard__lbl">{{ 'gift_card.balance' | t }}</span>
+            <span class="gcard__amt" aria-hidden="true"><span class="gcard__ghost">{{ balance | replace: '0', '8' | replace: '1', '8' | replace: '2', '8' | replace: '3', '8' | replace: '4', '8' | replace: '5', '8' | replace: '6', '8' | replace: '7', '8' | replace: '9', '8' }}</span>{{ balance }}</span>
+            <span class="visually-hidden">{{ gift_card.balance | money }}</span>
+          </div>
+          {%- if gift_card.expired -%}<p class="gcard__stamp">{{ 'gift_card.expired' | t }}</p>{%- endif -%}
+          <p class="gcard__code"><span class="gcard__lbl">{{ 'gift_card.code' | t }}</span><span class="gcard__emb" id="GcCode">{{ gift_card.code | format_code }}</span></p>
+          <span class="gcard__chip" aria-hidden="true"></span>
+        </div>
+        <div class="gcard__back" aria-hidden="true"><span class="gcard__stripe"></span><span class="gcard__sig">{{ brand }}</span></div>
+      </div>
+
+      <div class="gc__actions">
+        <button class="btn" type="button" data-copy="{{ gift_card.code }}">{{ 'gift_card.copy' | t }}</button>
+        <a class="btn btn--white" href="{{ shop.url }}">{{ 'gift_card.shop' | t }}</a>
+        <button class="btn btn--white" type="button" onclick="window.print()">{{ 'gift_card.print' | t }}</button>
+      </div>
+      <p class="gc__copied" role="status" aria-live="polite" data-copied></p>
+
+      <div class="gc__qr">
+        <div id="QrCode" data-identifier="{{ gift_card.qr_identifier }}"></div>
+        {%- if gift_card.pass_url -%}
+          <a class="gc__wallet" href="{{ gift_card.pass_url }}"><img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="Add to Apple Wallet"></a>
+        {%- endif -%}
+      </div>
+      <p class="gc__fine">{{ brand }} &middot; {{ shop.domain }}</p>
+    </main>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var el = document.getElementById('QrCode');
+        if (el && window.QRCode) new QRCode(el, { text: el.dataset.identifier, width: 132, height: 132, colorDark: '#17131f', colorLight: '#fff7e4' });
+        var b = document.querySelector('[data-copy]'), out = document.querySelector('[data-copied]');
+        if (b) b.addEventListener('click', function () {
+          if (navigator.clipboard) navigator.clipboard.writeText(b.dataset.copy).then(function () { out.textContent = {{ 'gift_card.copied' | t | json }}; });
+        });
+      });
+    </script>
+  </body>
+</html>

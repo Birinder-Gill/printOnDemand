@@ -106,6 +106,7 @@ F('font_face', () => ''); F('font_url', () => ''); F('font_modify', f => f);
 F('time_tag', (d, f) => `<time>${d}</time>`);
 F('format_address', () => '');
 F('highlight', (s) => s);
+F('format_code', s => String(s));
 F('default_errors', e => e ? `<ul><li>${[].concat(e).join('</li><li>')}</li></ul>` : '');
 F('newline_to_br', s => String(s ?? '').replace(/\n/g, '<br />\n'));
 F('weight_with_unit', (g) => `${(Number(g) / 1000).toFixed(2)} kg`);
@@ -184,7 +185,7 @@ engine.registerTag('paginate', class extends Tag {
     stream.start();
   }
   *render(ctx, emitter) {
-    ctx.push({ paginate: { current_page: 1, pages: 1, items: 1, page_size: 12, parts: [], previous: null, next: null } });
+    ctx.push({ paginate: { current_page: 1, current_offset: 0, pages: 1, items: 1, page_size: 12, parts: [], previous: null, next: null } });
     yield this.liquid.renderer.renderTemplates(this.tpls, ctx, emitter);
     ctx.pop();
   }

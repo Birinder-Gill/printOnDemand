@@ -1,0 +1,33 @@
+{%- comment -%}
+  Generic page: a composition notebook. Black-and-white marbled cover with a cloth spine and the white label
+  (Name / Subject = the page title in marker), then the page's text on a wide-ruled sheet with the red margin line.
+{%- endcomment -%}
+{{ 'main-page.css' | asset_url | stylesheet_tag }}
+{%- assign brand = settings.brand_name | default: shop.name -%}
+<article class="nb" aria-labelledby="NbTitle-{{ section.id }}">
+  <header class="nb__cover">
+    <div class="nb__spine" aria-hidden="true"></div>
+    <div class="nb__label">
+      <p class="nb__brand" aria-hidden="true">{{ section.settings.label_top }}</p>
+      <div class="nb__field"><span class="nb__k">Name</span><span class="nb__v nb__v--name">{{ brand }}</span></div>
+      <div class="nb__field nb__field--subj"><span class="nb__k">Subject</span><h1 class="nb__v nb__title" id="NbTitle-{{ section.id }}">{{ page.title }}</h1></div>
+      <p class="nb__sheets" aria-hidden="true">{{ section.settings.label_bottom }}</p>
+    </div>
+  </header>
+  <div class="nb__page">
+    <div class="nb__text rte">{{ page.content }}</div>
+    {%- if section.settings.doodle -%}<img class="nb__doodle" src="{{ 'st-smiley.svg' | asset_url }}" alt="" width="90" height="90" loading="lazy">{%- endif -%}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Composition notebook (page)",
+  "class": "sct-notebook",
+  "settings": [
+    { "type": "text", "id": "label_top", "label": "Line at the top of the label", "default": "Composition book" },
+    { "type": "text", "id": "label_bottom", "label": "Line at the bottom of the label", "default": "100 sheets · wide ruled" },
+    { "type": "checkbox", "id": "doodle", "label": "Smiley sticker on the page", "default": true }
+  ]
+}
+{% endschema %}
