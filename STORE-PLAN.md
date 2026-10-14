@@ -6,12 +6,19 @@ Real expensive vibe: every section and page should look handcrafted with precisi
 speed on every page, however many sessions it takes.
 
 ## How to resume in a new session (READ FIRST)
-1. Attach the GitHub repo `Birinder-Gill/printOnDemand` (add_repo, access "push"), then
-   `git clone --depth 1 -b crossword-store https://github.com/Birinder-Gill/printondemand /home/claude/store`.
-   (No GitHub? Unzip the newest `90s-store-backup*.zip` from /root/.claude/uploads/*/ to /home/claude so you get /home/claude/store.)
+1. Get this branch to `/home/claude/store` (every tool uses that path):
+   - Claude Code session opened on the repo `Birinder-Gill/printOnDemand`: `git fetch origin crossword-store &&
+     git checkout crossword-store`, then `mkdir -p /home/claude && ln -sfn "$(git rev-parse --show-toplevel)" /home/claude/store`.
+   - Any other session: attach the repo (access "push"), then
+     `git clone --depth 1 -b crossword-store https://github.com/Birinder-Gill/printOnDemand /home/claude/store`.
+   - No GitHub? Unzip the newest `90s-store-backup*.zip` the user attaches into /home/claude so you get /home/claude/store.
    The branch holds only store files; the user approved it for hosting store images, the theme source and this plan.
+   If pushing to `crossword-store` is refused in your session, push to the branch you are allowed to use and pin raw
+   URLs to that commit instead (raw URLs work for any pushed commit).
 2. `sh /home/claude/store/tools/setup_work.sh` (preview harness, 3D tools, local servers on :8765 and :8777, and the book
    project from the user's newest `*gift-backup*.zip` if one is attached; book images are only needed to rebuild media/).
+   Playwright is found by tools/pw.cjs (local, global npm, or `npm i -g playwright`); Chromium from /opt/pw-browsers if present.
+   Servers die when a session idles: restart with the two `http.server` lines from setup_work.sh.
 3. Read "Status" below, then continue with the first unchecked item. Shopify connector: "My Store 10"
    (i7d9cn-v1.myshopify.com), currency INR ("Rs. {{amount}}"), trial plan, Horizon is live. Our theme is a separate,
    unpublished theme (the connector cannot publish or write the live theme; the user clicks Publish in admin).
@@ -92,9 +99,20 @@ Other templates
       (file ids in data/puzzle-file-ids.json), product gid://shopify/Product/15425883046041 (Rs. 3,999, ACTIVE,
       published to Online Store), collection "The Gift Shop" (gift-shop), pages about/faq/shipping-returns/
       inside-the-book (+ contact updated), main + footer menus.
-- [ ] Theme install: dist/theme.zip at commit 7001d857 -> themeCreate(source raw URL, UNPUBLISHED); then check
-      every template on the theme preview; user publishes from admin (publishing is blocked for the connector)
-- [ ] QA every page at 1440 and 390 on the real store preview
+- [x] Theme installed (14 Oct): "90s America Crossword: Throwback", gid://shopify/OnlineStoreTheme/189145809049,
+      UNPUBLISHED. All 185 theme files are on it (verified file list; every JSON template matches the repo).
+      Lesson: Shopify silently drops a section whose schema has `"default": ""` on a text setting, and then every
+      template using that section (that happened to s-notes -> product.json, page.faq.json; fixed in a3ec34d).
+      Update files later with themeFilesUpsert (body type URL, raw URL at the new SHA, max 50 per call); it only works
+      while this theme is unpublished, so finish fixes before the user publishes, or duplicate the live theme first.
+- [x] Local QA: every template rendered with the LiquidJS harness at 1440 and 390 and screenshotted.
+- [ ] The workspace cannot open the storefront (Shopify hosts are blocked, and the trial store is password-protected),
+      so the real-store check is the user's: Online Store > Themes > "90s America Crossword: Throwback" > Preview.
+      Fix anything they report, then they click Publish.
+- [ ] User to-dos (tell them, don't do): pick a plan (trial), set store currency (INR now; switch before the first sale
+      if selling in USD), rename the store from "My Store 10" (Settings > General), add store policies (refund, shipping,
+      privacy, terms: the theme links to them), set up payments and shipping rates, publish the theme.
+      The 3D renders use a stand-in spine design until the real KDP wrap is done.
 
 ## Pipelines
 - `tools/shot.cjs in.html out.png W H [scale] [transparent]`: HTML to PNG with local fonts.

@@ -1,9 +1,9 @@
 // node render3d.cjs "query" out.png size [aspect]
-const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwright');
+const { chromium, exe } = require('../pw.cjs');
 const fs = require('fs');
 (async () => {
   const [, , q, out, size = '1600', aspect = '1'] = process.argv;
-  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+  const b = await chromium.launch({ ...exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   const W = Math.round(+size * +aspect), H = +size;
   const p = await b.newPage({ viewport: { width: W, height: H } });
   const errs = [];

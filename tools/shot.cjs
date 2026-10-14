@@ -1,9 +1,9 @@
 // node shot.cjs in.html out.png W H [scale] [transparent]
 // Renders a local HTML file to PNG at W x H CSS px (device scale factor `scale`).
-const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwright');
+const { chromium, exe } = require('./pw.cjs');
 (async () => {
   const [, , html, out, W, H, scale = '1', transparent = '0'] = process.argv;
-  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+  const b = await chromium.launch({ ...exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   const p = await b.newPage({ viewport: { width: +W, height: +H }, deviceScaleFactor: +scale });
   const errs = [];
   p.on('pageerror', e => errs.push(String(e)));

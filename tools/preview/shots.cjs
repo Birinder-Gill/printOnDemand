@@ -1,6 +1,6 @@
 // node shots.cjs <page> <width> [outPrefix] [--full] [--h=900] [--slice=1800] [--y=0] [--hover=sel] [--click=sel] [--wait=ms] [--reduced]
 // Screenshots http://127.0.0.1:8777/<page>.html; full-page shots are cut into slices out_1.png, out_2.png ...
-const { chromium } = require('/home/claude/.npm-global/lib/node_modules/playwright');
+const { chromium, exe } = require('../pw.cjs');
 const { execFileSync } = require('child_process');
 (async () => {
   const a = process.argv.slice(2);
@@ -9,7 +9,7 @@ const { execFileSync } = require('child_process');
   const full = a.includes('--full');
   const H = +(opt('h') || (W < 600 ? 844 : 900));
   require('fs').mkdirSync(require('path').dirname(out), { recursive: true });
-  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const b = await chromium.launch({ ...exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const ctx = await b.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: +(opt('dpr') || 1), reducedMotion: a.includes('--reduced') ? 'reduce' : 'no-preference', hasTouch: W < 600 });
   const p = await ctx.newPage();
   const errs = [];
