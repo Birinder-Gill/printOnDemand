@@ -78,14 +78,23 @@ Other templates
 - Blog/article: photocopied zine. Gift card: arcade game card. Generic page: composition notebook.
 
 ## Status
-- [ ] Render book images (covers, pages, 3D renders, spreads)
-- [ ] Theme skeleton, design tokens, fonts, preview harness
-- [ ] Global chrome
-- [ ] Home sections 1-9
-- [ ] Product sections 1-6
-- [ ] Other templates
-- [ ] Publish (files, theme, product, pages, menus)
-- [ ] QA every page at 1440 and 390, theme-check, Shopify upsert errors
+- [x] Render book images (covers, pages, 3D renders, spreads)
+- [x] Theme skeleton, design tokens, fonts, preview harness
+- [x] Global chrome
+- [x] Home sections 1-9
+- [x] Product sections 1-6
+- [x] Other templates: cart (checkout counter), page.about (CD liner notes), page.contact (message slip + answering
+      machine), page.faq (school hallway + notes), page.shipping (parcel + order form), page.inside (video store),
+      page (composition notebook), collection (toy catalog), list-collections (mall directory), search (card catalog),
+      404 (handheld GAME OVER), password (under-construction homepage), blog/article (zine), gift_card (arcade card)
+- [x] theme-check (@shopify/theme-check-node in /home/claude/tc, `node run.mjs`): clean except one preload suggestion
+- [x] Store content (14 Oct): 90 files (in Files, names nac-*), metaobject definition "puzzle" + 48 entries
+      (file ids in data/puzzle-file-ids.json), product gid://shopify/Product/15425883046041 (Rs. 3,999, ACTIVE,
+      published to Online Store), collection "The Gift Shop" (gift-shop), pages about/faq/shipping-returns/
+      inside-the-book (+ contact updated), main + footer menus.
+- [ ] Theme install: dist/theme.zip at commit 7001d857 -> themeCreate(source raw URL, UNPUBLISHED); then check
+      every template on the theme preview; user publishes from admin (publishing is blocked for the connector)
+- [ ] QA every page at 1440 and 390 on the real store preview
 
 ## Pipelines
 - `tools/shot.cjs in.html out.png W H [scale] [transparent]`: HTML to PNG with local fonts.
