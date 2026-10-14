@@ -1,0 +1,90 @@
+{
+  "sections": {
+    "main": {
+      "type": "pg-video",
+      "blocks": {
+        "s1": {
+          "type": "shelf",
+          "settings": {
+            "section": "Television",
+            "label": "",
+            "blurb": "Sitcoms, cartoons, game shows and the shows you taped.",
+            "color": "#38c6f4"
+          }
+        },
+        "s2": {
+          "type": "shelf",
+          "settings": {
+            "section": "Movies",
+            "label": "",
+            "blurb": "Blockbusters, rom-coms, family movies and Hollywood stars.",
+            "color": "#ff2f8e"
+          }
+        },
+        "s3": {
+          "type": "shelf",
+          "settings": {
+            "section": "Music",
+            "label": "",
+            "blurb": "Pop, boy bands, grunge, hip-hop, country and one-hit wonders.",
+            "color": "#b5e61d"
+          }
+        },
+        "s4": {
+          "type": "shelf",
+          "settings": {
+            "section": "Games & Toys",
+            "label": "",
+            "blurb": "Consoles, cartridges, fads and the toys you begged for.",
+            "color": "#ffd21f"
+          }
+        },
+        "s5": {
+          "type": "shelf",
+          "settings": {
+            "section": "Everyday Life",
+            "label": "",
+            "blurb": "Snacks, malls, school, fashion and the early internet.",
+            "color": "#ff6a1f"
+          }
+        },
+        "s6": {
+          "type": "shelf",
+          "settings": {
+            "section": "Sports, News & Slang",
+            "label": "",
+            "blurb": "Big games, headlines and the way everybody talked.",
+            "color": "#00e0cf"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s6"
+      ],
+      "settings": {
+        "product": "90s-america-crossword-gift-edition",
+        "kicker": "Now showing",
+        "heading": "Inside the book",
+        "strip": "48 titles · 6 aisles · No late fees",
+        "lede": "Every puzzle in the book gets its own page design. Here's all 48, shelved by section. Pick one up to read the back of the box.",
+        "aisles_label": "Aisles",
+        "label_category": "Category",
+        "label_section": "Section",
+        "label_side": "Side",
+        "label_clues": "Clues",
+        "label_hints": "Hints",
+        "rating": "PG-90",
+        "rating_text": "Contains mild nostalgia and strong opinions about theme songs.",
+        "button_label": "Take it home"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

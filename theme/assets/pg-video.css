@@ -1,0 +1,100 @@
+/* Inside the book: a neighborhood video store. */
+.sct-video{background:#16103a}
+.vs{position:relative;overflow:hidden;color:var(--paper);background:radial-gradient(80% 40% at 50% 0,rgba(255,255,255,.12),transparent 70%),linear-gradient(rgba(22,16,58,.5),rgba(22,16,58,.5)),url("pat-carpet.svg") 0 0/360px 360px,#16103a}
+
+/* ---------- drop ceiling ---------- */
+.vs__ceiling{position:relative;height:96px;display:flex;justify-content:space-around;align-items:center;padding:0 6%;
+  background:linear-gradient(90deg,#c9c6bd 2px,transparent 2px) 0 0/180px 100%,linear-gradient(180deg,#c9c6bd 2px,transparent 2px) 0 0/100% 48px,
+    radial-gradient(circle,rgba(150,145,130,.5) 1px,transparent 1.5px) 0 0/9px 9px,#ece9e0;border-bottom:4px solid #8c887c}
+.vs__ceiling span{width:min(22%,260px);height:46px;border:4px solid #c9c6bd;background:linear-gradient(180deg,#fff,#eef8ff);
+  box-shadow:0 0 24px 6px rgba(220,240,255,.9),0 40px 80px 10px rgba(220,240,255,.25);animation:vs-flick 7s steps(1,end) infinite}
+.vs__ceiling span:nth-child(2){animation-delay:-3.1s}
+.vs__ceiling span:nth-child(3){animation-delay:-5.4s}
+@keyframes vs-flick{0%,95%,100%{opacity:1}96%{opacity:.55}97%{opacity:1}98%{opacity:.7}}
+
+/* ---------- the lightbox sign ---------- */
+.vs__head{position:relative;padding:0 var(--gutter) clamp(40px,5vw,64px);text-align:center}
+.vs__sign{position:relative;display:inline-block;padding-top:70px;max-width:100%}
+.vs__chain{position:absolute;top:0;width:8px;height:74px;background:repeating-linear-gradient(180deg,#b7bbc9 0 6px,#5f6378 6px 8px,transparent 8px 10px);border-radius:4px}
+.vs__chain--l{left:16%}.vs__chain--r{right:16%}
+.vs__box{position:relative;padding:22px clamp(26px,4vw,64px) 0;border:8px solid #1b1622;border-radius:10px;overflow:hidden;color:#c8102e;
+  background:linear-gradient(180deg,#ffffff,#fff6e8);box-shadow:0 0 0 3px #d4d6e0,0 0 60px 10px rgba(255,240,220,.35),0 30px 50px rgba(0,0,0,.5)}
+.vs__box::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.05) 0,transparent 8%,transparent 92%,rgba(0,0,0,.05)),repeating-linear-gradient(90deg,transparent 0 120px,rgba(255,255,255,.6) 120px 124px,transparent 124px 240px);pointer-events:none}
+.vs__kicker{position:relative;margin:0 0 6px;font:800 13px/1 var(--f-body);letter-spacing:.34em;text-transform:uppercase;color:#1b1622}
+.vs__title{position:relative;font:400 clamp(44px,7.2vw,104px)/1 'Righteous',var(--f-tile);letter-spacing:.01em;transform:skewX(-8deg);
+  text-shadow:3px 3px 0 #ffd21f,6px 6px 0 #1b1622}
+.vs__strip{position:relative;margin:20px calc(-1 * clamp(26px,4vw,64px)) 0;padding:10px 16px;background:#1b1622;color:#ffd21f;font:800 14px/1 var(--f-body);letter-spacing:.24em;text-transform:uppercase}
+.vs__lede{max-width:680px;margin:clamp(26px,3vw,36px) auto 0;font-size:clamp(17px,1.4vw,19px);line-height:1.6;color:rgba(255,247,228,.9)}
+.vs__aisles ul{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:28px auto 0;padding:0;max-width:980px}
+.vs__aisles a{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border:2.5px solid var(--c);border-radius:999px;background:rgba(10,8,28,.7);color:#fff;text-decoration:none;
+  font:800 14px/1 var(--f-body);letter-spacing:.06em;transition:background-color .2s,color .2s,transform .15s}
+.vs__aisles a span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--c);color:var(--ink);font:400 14px/1 var(--f-tile)}
+.vs__aisles a:hover{background:var(--c);color:var(--ink);transform:translateY(-2px)}
+
+/* ---------- shelves ---------- */
+.vs__store{position:relative;display:flex;flex-direction:column;gap:clamp(56px,6vw,90px);width:min(100% - 2*var(--gutter),1320px);margin:0 auto;padding:clamp(20px,3vw,40px) 0 clamp(90px,10vw,140px)}
+.shelf{position:relative;scroll-margin-top:110px}
+.shelf__sign{position:relative;display:inline-flex;flex-direction:column;align-items:flex-start;margin:0 0 18px;padding:12px 22px 12px 18px;border:3px solid #0d0a18;border-radius:6px;
+  background:linear-gradient(180deg,rgba(255,255,255,.3),transparent 45%),var(--c);color:var(--ink);box-shadow:6px 6px 0 #0d0a18,0 0 30px color-mix(in srgb,var(--c) 45%,transparent);transform:rotate(-1.2deg)}
+.shelf__aisle{font:800 11px/1 var(--f-body);letter-spacing:.28em;text-transform:uppercase;opacity:.8}
+.shelf__name{margin:4px 0 0;font:400 clamp(28px,3.2vw,44px)/1 'Righteous',var(--f-tile);letter-spacing:.01em}
+.shelf__blurb{margin:6px 0 0;font:600 14px/1.3 var(--f-body)}
+.shelf__row{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:44px 20px;margin:0;padding:0 10px;align-items:end}
+.shelf__slot{position:relative;display:flex;justify-content:center}
+.shelf__slot::before{content:"";position:absolute;left:-10px;right:-10px;bottom:0;height:84px;z-index:0;
+  background:linear-gradient(180deg,#f4f1e8 0 12px,#bdb7a8 12px 15px,#ffffff 15px,#e9e5da);border-top:3px solid #0d0a18;border-bottom:3px solid #0d0a18;box-shadow:0 20px 24px rgba(0,0,0,.45)}
+.vhs{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;max-width:170px;padding:0;border:0;background:none;color:inherit;cursor:pointer;text-align:center}
+.vhs__case{position:relative;z-index:1;display:block;margin-bottom:-6px;width:100%;aspect-ratio:3/4.2;padding:7% 7% 9%;border-radius:4px 4px 3px 3px;
+  background:linear-gradient(90deg,#26222e,#0f0d14 8%,#1a1720 50%,#0f0d14 92%,#26222e);box-shadow:0 2px 0 #3b3646 inset,0 14px 18px rgba(0,0,0,.55);
+  transform-origin:50% 100%;transition:transform .28s var(--ease-out),box-shadow .28s}
+.vhs__case::before{content:"";position:absolute;left:12%;right:12%;top:2.4%;height:2.4%;border-radius:2px;background:repeating-linear-gradient(90deg,#3b3646 0 3px,transparent 3px 6px)}
+.vhs__img{position:relative;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:1px}
+.vhs__sleeve{position:absolute;inset:7% 7% 9%;background:linear-gradient(115deg,rgba(255,255,255,.35),rgba(255,255,255,.05) 30%,transparent 50%,rgba(255,255,255,.12) 80%,transparent);pointer-events:none}
+.vhs__dot{position:absolute;right:-8px;top:-8px;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:2.5px solid #0d0a18;font:400 14px/1 var(--f-tile);color:var(--ink);transform:rotate(12deg);box-shadow:0 2px 0 rgba(0,0,0,.3)}
+.vhs__dot--a{background:#ffd21f}
+.vhs__dot--b{background:#00e0cf}
+.vhs__tag{position:relative;z-index:2;display:flex;flex-direction:column;gap:3px;width:100%;margin-top:12px;padding:8px 6px 10px;color:var(--ink)}
+.vhs__no{font:700 11px/1 'Courier Prime',monospace;letter-spacing:.14em;color:#c8102e}
+.vhs__t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.5em;font:700 12.5px/1.25 var(--f-body)}
+.vhs:hover .vhs__case,.vhs:focus-visible .vhs__case{transform:translateY(-14px) rotate(-2deg);box-shadow:0 2px 0 #3b3646 inset,0 26px 30px rgba(0,0,0,.6)}
+.vhs:focus-visible{outline:none}
+.vhs:focus-visible .vhs__case{outline:4px solid var(--sun);outline-offset:4px}
+
+/* ---------- the rental counter dialog ---------- */
+.rent{width:min(100% - 24px,980px);max-height:calc(100% - 24px);padding:0;border:0;background:transparent;color:var(--ink);overflow:visible}
+.rent::backdrop{background:rgba(10,6,24,.78);backdrop-filter:blur(3px)}
+.rent[open]{animation:vs-rent .35s var(--ease-out)}
+@keyframes vs-rent{from{opacity:0;transform:translateY(24px) scale(.97)}}
+.rent__in{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);max-height:calc(100vh - 24px);overflow:auto;border:4px solid #0d0a18;border-radius:12px;
+  background:#fff7e4;box-shadow:12px 12px 0 #0d0a18}
+.rent__close{position:absolute;right:12px;top:12px;z-index:2;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:2.5px solid var(--ink);background:var(--sun);box-shadow:0 3px 0 var(--ink)}
+.rent__close svg{width:20px;height:20px}
+.rent__front{padding:22px;background:linear-gradient(90deg,#26222e,#0f0d14 8%,#1a1720 50%,#0f0d14 92%,#26222e)}
+.rent__img{display:block;width:100%;height:auto;border-radius:2px;box-shadow:0 10px 20px rgba(0,0,0,.5)}
+.rent__back{display:flex;flex-direction:column;gap:14px;padding:clamp(24px,3vw,40px)}
+.rent__no{margin:0;font:700 13px/1 'Courier Prime',monospace;letter-spacing:.2em;color:#c8102e;text-transform:uppercase}
+.rent__title{margin:0;padding-right:40px;font:400 clamp(30px,3vw,42px)/1.05 'Righteous',var(--f-tile)}
+.rent__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin:4px 0 0;border:2.5px solid var(--ink)}
+.rent__facts div{padding:10px 12px;border-bottom:2px solid var(--ink)}
+.rent__facts div:nth-child(odd){border-right:2px solid var(--ink)}
+.rent__facts div:last-child{grid-column:1/-1;border-right:0;border-bottom:0}
+.rent__facts dt{font:800 10.5px/1 var(--f-body);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-4)}
+.rent__facts dd{margin:5px 0 0;font:700 16px/1.25 var(--f-body)}
+.rent__note{margin:0;font:400 17px/1.55 'Courier Prime',monospace}
+.rent__rating{display:flex;align-items:center;gap:12px;margin:0;font:600 13px/1.35 var(--f-body);color:var(--ink-3)}
+.rent__rating span{flex:none;padding:6px 8px;border:2.5px solid var(--ink);font:900 16px/1 var(--f-body);letter-spacing:.04em;color:var(--ink)}
+.rent .buy{margin-top:6px}
+
+@media (max-width:749px){
+  .vs__ceiling{height:64px}
+  .vs__ceiling span{height:30px}
+  .vs__sign{padding-top:50px}
+  .vs__chain{height:54px}
+  .shelf__row{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:18px 8px 6px;margin:-18px -8px 0;scrollbar-width:none}
+  .shelf__row::-webkit-scrollbar{display:none}
+  .shelf__slot{flex:0 0 40%;scroll-snap-align:start}
+  .rent__in{grid-template-columns:minmax(0,1fr)}
+  .rent__front{padding:14px 14px 0;background:#1a1720}
+  .rent__img{max-height:46vh;width:auto;margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){.vs__ceiling span,.rent[open]{animation:none}.vhs__case{transition:none}}

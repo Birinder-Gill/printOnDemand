@@ -1,0 +1,153 @@
+/* About: CD booklet liner notes. */
+.sct-liner{background:#110a1f}
+.ln{position:relative;color:var(--paper)}
+
+/* ---------- stage: jewel case + disc ---------- */
+.ln__stage{position:relative;overflow:hidden;padding:clamp(64px,8vw,110px) var(--gutter) clamp(72px,8vw,110px);
+  background:
+    radial-gradient(40% 55% at 30% 52%,rgba(150,110,255,.38),transparent 70%),
+    radial-gradient(30% 40% at 46% 30%,rgba(255,47,142,.28),transparent 70%),
+    radial-gradient(35% 45% at 40% 78%,rgba(56,198,244,.22),transparent 70%),
+    linear-gradient(180deg,#160c29,#0e0818)}
+.ln__stage::before{content:"";position:absolute;inset:-20%;background:conic-gradient(from 210deg at 32% 50%,transparent 0 30deg,rgba(255,179,228,.09) 40deg,rgba(255,232,163,.09) 50deg,rgba(184,255,214,.09) 60deg,rgba(159,230,255,.09) 70deg,transparent 80deg 200deg,rgba(200,180,255,.07) 215deg,transparent 230deg);pointer-events:none}
+.ln__stage::after{content:"";position:absolute;inset:0;background:var(--grain) 0 0/200px 200px;opacity:.14;mix-blend-mode:overlay;pointer-events:none}
+.ln__stage-in{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(32px,5vw,90px);align-items:center;width:min(100%,1320px);margin:0 auto}
+
+.ln__art{position:relative;aspect-ratio:1.5/1}
+.jc{position:absolute;left:0;top:4%;width:72%;aspect-ratio:142/125;border-radius:6px;filter:drop-shadow(0 34px 40px rgba(0,0,0,.6)) drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+.jc__hinge{position:absolute;left:0;top:0;bottom:0;width:7.5%;border-radius:6px 0 0 6px;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.2) 0 2px,transparent 2px 7px),linear-gradient(90deg,#2a2534,#141019 60%,#2a2534)}
+.jc__insert{position:absolute;left:9%;right:1.6%;top:2.2%;bottom:2.2%;overflow:hidden;background:#17131f}
+.jc__img{width:100%;height:100%;object-fit:cover;object-position:50% 0}
+.jc__lid{position:absolute;inset:0;border-radius:6px;border:2px solid rgba(255,255,255,.4);
+  background:linear-gradient(112deg,rgba(255,255,255,.34) 0,rgba(255,255,255,.12) 13%,transparent 13.5% 58%,rgba(255,255,255,.14) 58.5% 63%,transparent 63.5%),
+    linear-gradient(180deg,rgba(255,255,255,.12),transparent 30%);
+  box-shadow:inset 0 0 0 5px rgba(255,255,255,.07),inset 0 0 0 6px rgba(255,255,255,.22),inset 0 0 24px rgba(255,255,255,.18)}
+.jc__lid::before{content:"";position:absolute;left:7.5%;top:0;bottom:0;width:2px;background:rgba(255,255,255,.35)}
+.jc__sticker{position:absolute;left:14%;top:-4%;display:grid;place-items:center;width:92px;height:92px;padding:10px;border-radius:50%;text-align:center;transform:rotate(-12deg);
+  background:var(--holo);color:var(--ink);border:2.5px solid var(--ink);box-shadow:0 6px 12px rgba(0,0,0,.35),inset 0 0 0 3px rgba(255,255,255,.6);
+  font:800 12.5px/1.05 var(--f-body);font-stretch:85%;letter-spacing:.08em;text-transform:uppercase}
+
+.cd{position:absolute;right:-2%;top:7%;width:58%;aspect-ratio:1;border-radius:50%;filter:drop-shadow(0 26px 30px rgba(0,0,0,.55));animation:ln-slide 1.2s .2s var(--ease-out) both}
+@keyframes ln-slide{from{transform:translateX(-46%)}}
+.cd::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;mix-blend-mode:screen;
+  background:conic-gradient(from 20deg,transparent 0 30deg,rgba(255,255,255,.28) 42deg,transparent 56deg 200deg,rgba(255,255,255,.2) 214deg,transparent 228deg);
+  -webkit-mask:radial-gradient(circle,#0000 7.6%,#000 8%);mask:radial-gradient(circle,#0000 7.6%,#000 8%)}
+.cd__spin{position:absolute;inset:0;border-radius:50%;animation:ln-spin 16s linear infinite}
+@keyframes ln-spin{to{transform:rotate(360deg)}}
+.cd__metal{position:absolute;inset:0;border-radius:50%;
+  background:repeating-radial-gradient(circle,rgba(255,255,255,.12) 0 1px,transparent 1px 3px),
+    conic-gradient(#e6e7ef,#bdeeff,#f4d0ff,#fff1c0,#d0ffe7,#e6e7ef,#ffd3ee,#c6d4ff,#e6e7ef);
+  -webkit-mask:radial-gradient(circle,#0000 7.6%,#000 8%);mask:radial-gradient(circle,#0000 7.6%,#000 8%)}
+.cd__print{position:absolute;inset:0;width:100%;height:100%}
+.cd__arc{font-family:var(--f-tile)}
+.cd__small{font-family:var(--f-body);font-weight:800}
+.cd__hub{position:absolute;inset:26%;border-radius:50%;
+  background:radial-gradient(circle,transparent 0 28.5%,rgba(255,255,255,.55) 29% 31%,rgba(220,230,255,.25) 31.5% 56%,rgba(255,255,255,.5) 57% 58.5%,rgba(200,210,230,.18) 59%);
+  -webkit-mask:radial-gradient(circle,#0000 28.6%,#000 29%);mask:radial-gradient(circle,#0000 28.6%,#000 29%)}
+
+.ln__intro{max-width:560px}
+.ln__kicker{display:inline-flex;margin:0 0 18px;padding:7px 14px 6px;border-radius:999px;background:var(--holo);color:var(--ink);font:800 12px/1 var(--f-body);letter-spacing:.24em;text-transform:uppercase}
+.ln__title{font:400 italic clamp(58px,7.4vw,118px)/.92 'Playfair Display',Georgia,serif;letter-spacing:-.02em;color:#fff;
+  text-shadow:0 0 40px rgba(170,130,255,.45)}
+.ln__tag{margin-top:22px;font:900 clamp(22px,2.4vw,32px)/1.05 var(--f-body);font-stretch:112%;color:var(--sun);letter-spacing:-.005em}
+.ln__lede{margin-top:18px;font-size:clamp(17px,1.4vw,19px);line-height:1.6;color:rgba(255,247,228,.86)}
+.ln__ctas{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin-top:32px}
+.ln__link{display:inline-flex;align-items:center;gap:8px;font:800 15px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--paper);text-decoration:none;
+  padding-bottom:5px;border-bottom:2px solid currentColor;transition:color .2s,gap .2s}
+.ln__link:hover{color:var(--sun);gap:12px}
+.ln__link svg{width:18px;height:18px}
+
+/* ---------- the unfolded booklet ---------- */
+.ln__booklet-wrap{position:relative;padding:clamp(70px,8vw,120px) var(--gutter) clamp(80px,9vw,130px);
+  background:radial-gradient(70% 50% at 50% 100%,rgba(150,110,255,.2),transparent 70%),linear-gradient(180deg,#0e0818,#1a1028)}
+.ln__booklet{display:flex;width:min(100%,1280px);margin:0 auto;perspective:2600px}
+.lnp{position:relative;flex:1 1 0;min-width:0;padding:clamp(34px,3.6vw,52px) clamp(26px,3vw,44px) 56px;box-shadow:0 30px 50px rgba(0,0,0,.5)}
+.lnp__folio{position:absolute;bottom:20px;left:0;right:0;text-align:center;font:400 italic 14px/1 'Playfair Display',serif;opacity:.7}
+.lnp__h{margin:0 0 22px;font:400 italic clamp(36px,3.4vw,50px)/1 'Playfair Display',Georgia,serif;letter-spacing:-.01em}
+.lnp--notes{transform-origin:right center;transform:rotateY(10deg);color:#221a2e;
+  background:linear-gradient(90deg,transparent 80%,rgba(0,0,0,.14)),
+    linear-gradient(90deg,var(--magenta) 0 12.5%,var(--sun) 12.5% 25%,var(--teal) 25% 37.5%,var(--grape) 37.5% 50%,var(--tangerine) 50% 62.5%,var(--sky) 62.5% 75%,var(--lime) 75% 87.5%,var(--magenta) 87.5%) 0 0/100% 12px no-repeat,
+    #f8f2e4}
+.lnp--notes::after{content:"";position:absolute;inset:0;background:var(--grain) 0 0/180px 180px;opacity:.08;mix-blend-mode:multiply;pointer-events:none}
+.lnp__body{font:400 16.5px/1.68 'Libre Franklin',var(--f-body);max-width:none}
+.lnp__body p{margin:0 0 1em}
+.lnp__body>p:first-child::first-letter{float:left;margin:6px 10px 0 0;font:400 italic 74px/.8 'Playfair Display',serif;color:var(--magenta)}
+.lnp__body h2,.lnp__body h3{margin:1.4em 0 .5em;font:700 13px/1.2 'Libre Franklin',sans-serif;letter-spacing:.2em;text-transform:uppercase}
+.lnp--credits{z-index:1;background:linear-gradient(90deg,rgba(255,255,255,.05),transparent 8%,transparent 92%,rgba(255,255,255,.05)),#17131f;color:var(--paper)}
+.lnp__credits{margin:0}
+.lnp__credit{padding:13px 0;border-top:1px solid rgba(255,247,228,.18)}
+.lnp__credit:last-child{border-bottom:1px solid rgba(255,247,228,.18)}
+.lnp__credit dt{margin-bottom:5px;font:700 11px/1 'Libre Franklin',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:var(--sun)}
+.lnp__credit dd{margin:0;font:400 16.5px/1.45 'Libre Franklin',sans-serif}
+.lnp__fine{margin-top:20px;font:400 12.5px/1.55 'Libre Franklin',sans-serif;color:rgba(255,247,228,.6)}
+.lnp--thanks{display:flex;flex-direction:column;transform-origin:left center;transform:rotateY(-10deg);color:#2a0618;
+  background:linear-gradient(90deg,rgba(0,0,0,.16),transparent 22%),radial-gradient(circle,rgba(255,255,255,.22) 1.5px,transparent 2px) 0 0/14px 14px,linear-gradient(160deg,#ff5ca6,#ff2f8e 50%,#e01577)}
+.lnp--thanks .lnp__h{color:#fff;text-shadow:3px 3px 0 #2a0618}
+.lnp__thanks{font:400 17px/1.6 'Libre Franklin',sans-serif;max-width:none}
+.lnp__thanks p{margin:0 0 1em}
+.lnp__strip{display:flex;gap:10px;margin:22px 0 6px}
+.lnp__shot{flex:1 1 0;min-width:0;padding:5px 5px 14px;background:#fff;box-shadow:0 6px 10px rgba(60,0,30,.35);transform:rotate(-4deg)}
+.lnp__shot:nth-child(2){transform:rotate(3deg) translateY(6px)}
+.lnp__shot:nth-child(3){transform:rotate(-2deg)}
+.lnp__shot:nth-child(4){transform:rotate(5deg) translateY(4px)}
+.lnp__shot img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top}
+.lnp__hidden{margin-top:auto;padding:18px 20px 16px;border:2.5px dashed rgba(42,6,24,.7);border-radius:10px;background:rgba(255,255,255,.14)}
+.lnp__hidden-k{margin:0 0 8px;font:700 11px/1 'Libre Franklin',sans-serif;letter-spacing:.26em;text-transform:uppercase}
+.lnp__hidden .rte{font:400 15.5px/1.55 'Libre Franklin',sans-serif;max-width:none}
+.lnp__hidden p{margin:0}
+.lnp__sign{margin-bottom:28px;margin-top:22px;text-align:right;font:400 26px/1 'Permanent Marker',cursive;color:#fff;transform:rotate(-3deg)}
+
+/* ---------- closing: the portable CD player ---------- */
+.ln__end{position:relative;overflow:hidden;padding:clamp(80px,9vw,130px) var(--gutter);
+  background:radial-gradient(50% 60% at 30% 50%,rgba(255,255,255,.5),transparent 70%),linear-gradient(135deg,#38c6f4,#8d5cf0 60%,#ff2f8e)}
+.ln__end::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-45deg,rgba(255,255,255,.08) 0 2px,transparent 2px 14px);pointer-events:none}
+.ln__end-in{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,6vw,100px);align-items:center;width:min(100%,1180px);margin:0 auto}
+.dm{position:relative;justify-self:center;width:min(440px,84vw);aspect-ratio:1/1.08;border-radius:48% 48% 44% 44%/46% 46% 40% 40%;
+  background:radial-gradient(70% 60% at 35% 25%,#ffffff,#d8dbe6 50%,#a3a7b8 85%,#8b8fa2);border:3px solid var(--ink);
+  box-shadow:inset 0 -14px 24px rgba(40,40,70,.3),inset 0 6px 0 rgba(255,255,255,.8),0 40px 60px rgba(40,10,80,.45),0 10px 0 #5f6378;transform:rotate(-6deg)}
+.dm__ring{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.dm__ring text{font-family:var(--f-body);font-weight:800;fill:#4a4e62}
+.dm__lid{position:absolute;left:13%;right:13%;top:10%;aspect-ratio:1;border-radius:50%;border:3px solid var(--ink);overflow:hidden;
+  background:linear-gradient(180deg,#2a2f45,#141726)}
+.dm__disc{position:absolute;inset:6%;display:grid;place-items:center;border-radius:50%;animation:ln-spin 3.2s linear infinite;
+  background:radial-gradient(circle,#141726 0 7%,rgba(255,255,255,.4) 7.5% 9%,rgba(210,220,240,.3) 9.5% 18%,transparent 18.5%),
+    radial-gradient(circle,transparent 0 18%,#ffd21f 18.5% 40%,#17131f 40.5% 41.5%,#ff2f8e 42%),#ff2f8e}
+.dm__disc img{width:34%;transform:translateY(-62%)}
+.dm__glass{position:absolute;inset:0;border-radius:50%;background:linear-gradient(140deg,rgba(130,200,255,.35),rgba(30,40,80,.35) 45%,rgba(10,15,30,.55));
+  box-shadow:inset 0 0 0 10px rgba(255,255,255,.06),inset 0 0 30px rgba(0,0,0,.6)}
+.dm__glass::after{content:"";position:absolute;left:12%;top:8%;width:46%;height:22%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.45),transparent);transform:rotate(-24deg)}
+.dm__brand{position:absolute;left:0;right:0;bottom:12%;text-align:center;font:400 22px/1 'Righteous',var(--f-tile);color:#fff;letter-spacing:.04em;text-shadow:0 2px 0 rgba(0,0,0,.4);transform:skewX(-10deg)}
+.dm__front{position:absolute;left:14%;right:14%;bottom:6%;display:flex;flex-direction:column;align-items:center;gap:10px}
+.dm__lcd{display:flex;align-items:center;gap:12px;padding:7px 14px;border:2px solid var(--ink);border-radius:6px;background:linear-gradient(180deg,#b7c8a0,#9fb488);box-shadow:inset 0 2px 4px rgba(0,0,0,.3)}
+.dm__lcd span{font:700 18px/1 'DSEG7',monospace;color:#1f2a14}
+.dm__lcd .dm__icon{font:400 14px/1 var(--f-body)}
+.dm__keys{display:flex;gap:8px}
+.dm__key{display:grid;place-items:center;min-width:40px;height:28px;padding:0 8px;border:2px solid var(--ink);border-radius:999px;background:linear-gradient(180deg,#f4f5fa,#c4c7d4);box-shadow:0 3px 0 var(--ink);font:400 10px/1 var(--f-body);letter-spacing:-.1em;color:var(--ink)}
+.dm__key--play{background:linear-gradient(180deg,#ffe56b,#f2c200)}
+.dm__jack{position:absolute;right:-3%;top:44%;width:24px;height:14px;border:3px solid var(--ink);border-radius:4px;background:linear-gradient(180deg,#c9ccd8,#7d8195)}
+.ln__close{max-width:520px;color:#fff}
+.ln__close .ln__kicker{background:#fff}
+.ln__close-h{font:400 italic clamp(56px,7vw,104px)/.92 'Playfair Display',Georgia,serif;letter-spacing:-.02em;text-shadow:0 4px 0 rgba(23,19,31,.25)}
+.ln__close-p{margin:18px 0 30px;font-size:clamp(17px,1.4vw,19px);line-height:1.6;color:rgba(255,255,255,.92)}
+
+/* ---------- smaller screens ---------- */
+@media (max-width:989px){
+  .ln__stage-in{grid-template-columns:minmax(0,1fr)}
+  .ln__art{max-width:640px;width:100%;margin:0 auto}
+  .ln__intro{max-width:640px;margin:0 auto}
+  .ln__booklet{flex-direction:column;gap:28px;perspective:none;max-width:640px}
+  .lnp--notes,.lnp--thanks{transform:none}
+  .lnp--notes{background:linear-gradient(90deg,var(--magenta) 0 12.5%,var(--sun) 12.5% 25%,var(--teal) 25% 37.5%,var(--grape) 37.5% 50%,var(--tangerine) 50% 62.5%,var(--sky) 62.5% 75%,var(--lime) 75% 87.5%,var(--magenta) 87.5%) 0 0/100% 12px no-repeat,#f8f2e4}
+  .lnp--thanks{background:radial-gradient(circle,rgba(255,255,255,.22) 1.5px,transparent 2px) 0 0/14px 14px,linear-gradient(160deg,#ff5ca6,#ff2f8e 50%,#e01577)}
+  .ln__end-in{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center}
+  .ln__close .buy{display:flex;justify-content:center}
+}
+@media (max-width:600px){
+  .jc__sticker{width:70px;height:70px;font-size:10px;padding:6px}
+  .dm__lcd span{font-size:15px}
+  .dm__key{min-width:32px;height:24px}
+  .dm__jack{display:none}
+}
+@media (prefers-reduced-motion:reduce){.cd,.cd__spin,.dm__disc{animation:none}}
+.no-motion .cd,.no-motion .cd__spin,.no-motion .dm__disc{animation:none!important}

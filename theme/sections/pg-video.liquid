@@ -1,0 +1,131 @@
+{%- comment -%}
+  "Inside the book" page: a neighborhood video store. Drop ceiling with light panels, a backlit lightbox sign with the
+  heading, arcade carpet on the walls, and one shelf (aisle) per section of the book with every puzzle face-out as a
+  rental tape. Pick one up and it opens at the counter: the page as the box art, the back of the box with the facts.
+  Puzzle data comes from the "puzzle" metaobjects; each shelf block names the section it shows.
+{%- endcomment -%}
+{{ 'pg-video.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'pg-video.js' | asset_url }}" defer></script>
+{%- liquid
+  assign heading = section.settings.heading | default: page.title
+  assign product = section.settings.product | default: settings.hero_product
+-%}
+<section class="vs" aria-labelledby="VsTitle-{{ section.id }}" data-vs>
+  <div class="vs__ceiling" aria-hidden="true"><span></span><span></span><span></span></div>
+  <header class="vs__head">
+    <div class="vs__sign">
+      <span class="vs__chain vs__chain--l" aria-hidden="true"></span><span class="vs__chain vs__chain--r" aria-hidden="true"></span>
+      <div class="vs__box">
+        <p class="vs__kicker">{{ section.settings.kicker }}</p>
+        <h1 class="vs__title" id="VsTitle-{{ section.id }}">{{ heading }}</h1>
+        <p class="vs__strip" aria-hidden="true"><span>{{ section.settings.strip }}</span></p>
+      </div>
+    </div>
+    {%- if section.settings.lede != blank -%}<p class="vs__lede">{{ section.settings.lede }}</p>{%- endif -%}
+    <nav class="vs__aisles" aria-label="{{ section.settings.aisles_label | escape }}">
+      <ul role="list">
+        {%- for block in section.blocks -%}
+          <li><a href="#Aisle-{{ section.id }}-{{ forloop.index }}" style="--c:{{ block.settings.color }}"><span>{{ forloop.index }}</span>{{ block.settings.label | default: block.settings.section }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  </header>
+
+  <div class="vs__store">
+    {%- for block in section.blocks -%}
+      {%- assign aisle = forloop.index -%}
+      <div class="shelf" id="Aisle-{{ section.id }}-{{ aisle }}" style="--c:{{ block.settings.color }}" {{ block.shopify_attributes }}>
+        <div class="shelf__sign">
+          <span class="shelf__aisle">Aisle {{ aisle }}</span>
+          <h2 class="shelf__name">{{ block.settings.label | default: block.settings.section }}</h2>
+          {%- if block.settings.blurb != blank -%}<p class="shelf__blurb">{{ block.settings.blurb }}</p>{%- endif -%}
+        </div>
+        <ul class="shelf__row" role="list">
+          {%- for n in (1..48) -%}
+            {%- liquid
+              if n < 10
+                assign h = 'puzzle-0' | append: n
+              else
+                assign h = 'puzzle-' | append: n
+              endif
+              assign p = shop.metaobjects.puzzle[h]
+            -%}
+            {%- if p != blank and p.section.value == block.settings.section -%}
+              {%- if n < 10 -%}{%- assign nn = '0' | append: n -%}{%- else -%}{%- assign nn = n -%}{%- endif -%}
+              <li class="shelf__slot">
+                <button class="vhs" type="button" aria-haspopup="dialog"
+                  data-no="{{ nn }}" data-title="{{ p.title.value | escape }}" data-category="{{ p.category.value | escape }}" data-section="{{ p.section.value | escape }}"
+                  data-side="{{ p.side.value }}" data-clues="{{ p.clues.value }}" data-hints="{{ p.hints.value }}" data-page="{{ p.page.value }}"
+                  data-note="{{ p.note.value | escape }}" data-img="{{ p.image.value | image_url: width: 900 }}">
+                  <span class="vhs__case">
+                    {{ p.image.value | image_url: width: 360 | image_tag: loading: 'lazy', widths: '200,280,360', sizes: '(min-width: 1100px) 150px, 34vw', alt: '', class: 'vhs__img' }}
+                    <span class="vhs__sleeve" aria-hidden="true"></span>
+                    <span class="vhs__dot vhs__dot--{{ p.side.value | downcase }}" aria-hidden="true">{{ p.side.value }}</span>
+                  </span>
+                  <span class="vhs__tag">
+                    <span class="vhs__no">No. {{ nn }}</span>
+                    <span class="vhs__t">{{ p.title.value }}</span>
+                  </span>
+                </button>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <dialog class="rent" data-rent aria-labelledby="RentTitle-{{ section.id }}">
+    <div class="rent__in">
+      <button class="rent__close" type="button" data-rent-close>{%- render 'icon', name: 'x' -%}<span class="visually-hidden">{{ 'general.close' | t }}</span></button>
+      <div class="rent__front"><img class="rent__img" data-rent-img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" width="900" height="1199"></div>
+      <div class="rent__back">
+        <p class="rent__no" data-rent-no></p>
+        <h2 class="rent__title" id="RentTitle-{{ section.id }}" data-rent-title></h2>
+        <dl class="rent__facts">
+          <div><dt>{{ section.settings.label_category }}</dt><dd data-rent-category></dd></div>
+          <div><dt>{{ section.settings.label_section }}</dt><dd data-rent-section></dd></div>
+          <div><dt>{{ section.settings.label_side }}</dt><dd data-rent-side></dd></div>
+          <div><dt>{{ section.settings.label_clues }}</dt><dd data-rent-clues></dd></div>
+          <div><dt>{{ section.settings.label_hints }}</dt><dd data-rent-hints></dd></div>
+        </dl>
+        <p class="rent__note" data-rent-note></p>
+        <p class="rent__rating" aria-hidden="true"><span>{{ section.settings.rating }}</span>{{ section.settings.rating_text }}</p>
+        {%- if product != blank -%}{%- render 'buy-button', product: product, id: 'RentBuy', label: section.settings.button_label -%}{%- endif -%}
+      </div>
+    </div>
+  </dialog>
+</section>
+
+{% schema %}
+{
+  "name": "Video store (inside the book)",
+  "class": "sct-video",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Now showing" },
+    { "type": "text", "id": "heading", "label": "Heading (blank = page title)" },
+    { "type": "text", "id": "strip", "label": "Strip under the sign", "default": "48 titles · 6 aisles · No late fees" },
+    { "type": "textarea", "id": "lede", "label": "Intro" },
+    { "type": "text", "id": "aisles_label", "label": "Aisle menu label (screen readers)", "default": "Aisles" },
+    { "type": "text", "id": "label_category", "label": "Label: category", "default": "Category" },
+    { "type": "text", "id": "label_section", "label": "Label: section", "default": "Section" },
+    { "type": "text", "id": "label_side", "label": "Label: side", "default": "Side" },
+    { "type": "text", "id": "label_clues", "label": "Label: clues", "default": "Clues" },
+    { "type": "text", "id": "label_hints", "label": "Label: hints", "default": "Hints" },
+    { "type": "text", "id": "rating", "label": "Rating box", "default": "PG-90" },
+    { "type": "text", "id": "rating_text", "label": "Rating text", "default": "Contains mild nostalgia and strong opinions about theme songs." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Take it home" }
+  ],
+  "blocks": [
+    { "type": "shelf", "name": "Shelf (section)", "settings": [
+      { "type": "text", "id": "section", "label": "Section name (as in the puzzle data)", "default": "Television" },
+      { "type": "text", "id": "label", "label": "Sign text (blank = section name)" },
+      { "type": "text", "id": "blurb", "label": "Small line on the sign" },
+      { "type": "color", "id": "color", "label": "Sign color", "default": "#38c6f4" }
+    ] }
+  ],
+  "presets": [ { "name": "Video store (inside the book)" } ]
+}
+{% endschema %}

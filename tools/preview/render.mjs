@@ -106,6 +106,8 @@ F('font_face', () => ''); F('font_url', () => ''); F('font_modify', f => f);
 F('time_tag', (d, f) => `<time>${d}</time>`);
 F('format_address', () => '');
 F('highlight', (s) => s);
+F('default_errors', e => e ? `<ul><li>${[].concat(e).join('</li><li>')}</li></ul>` : '');
+F('newline_to_br', s => String(s ?? '').replace(/\n/g, '<br />\n'));
 F('weight_with_unit', (g) => `${(Number(g) / 1000).toFixed(2)} kg`);
 F('sort_natural', a => [...a].sort());
 F('customer_login_link', t => `<a href="/account/login">${t}</a>`);

@@ -1,0 +1,58 @@
+{%- comment -%}
+  Shipping page header: the top of a corrugated box. Brown packing tape runs across it, there are red handling
+  stamps, and the page heading is printed on the shipping label (from the shop, to "You" in marker).
+{%- endcomment -%}
+{{ 'pg-parcel.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign heading = section.settings.heading | default: page.title
+  assign brand = settings.brand_name | default: shop.name
+-%}
+<section class="box" aria-labelledby="BoxTitle-{{ section.id }}">
+  <div class="box__tape" aria-hidden="true"><span>{{ section.settings.tape_text }}</span><span>{{ section.settings.tape_text }}</span><span>{{ section.settings.tape_text }}</span><span>{{ section.settings.tape_text }}</span></div>
+  <div class="box__in">
+    <div class="box__stamps" aria-hidden="true">
+      <span class="box__stamp box__stamp--up"><span class="box__arrows">&#8593;&#8593;</span>{{ section.settings.stamp_1 }}</span>
+      <span class="box__stamp box__stamp--care">{{ section.settings.stamp_2 }}</span>
+    </div>
+    <div class="lbl">
+      <div class="lbl__row lbl__row--top">
+        <p class="lbl__from"><span class="lbl__k">From</span>{{ brand }}</p>
+        <p class="lbl__svc" aria-hidden="true">{{ section.settings.service }}</p>
+      </div>
+      <div class="lbl__row lbl__row--to">
+        <p class="lbl__k">Ship to</p>
+        <p class="lbl__you" aria-hidden="true">{{ section.settings.to_name }}</p>
+      </div>
+      <div class="lbl__main">
+        <p class="lbl__k">{{ section.settings.kicker }}</p>
+        <h1 class="lbl__title" id="BoxTitle-{{ section.id }}">{{ heading }}</h1>
+        {%- if section.settings.sub != blank -%}<p class="lbl__sub">{{ section.settings.sub }}</p>{%- endif -%}
+      </div>
+      <div class="lbl__row lbl__row--code" aria-hidden="true">
+        <span class="lbl__bars"></span>
+        <span class="lbl__trk">{{ section.settings.tracking }}</span>
+      </div>
+    </div>
+    <span class="box__sticker" aria-hidden="true">{{ section.settings.sticker }}</span>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Parcel (page header)",
+  "class": "sct-parcel",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small line above the heading", "default": "Contents" },
+    { "type": "text", "id": "heading", "label": "Heading (blank = page title)" },
+    { "type": "text", "id": "sub", "label": "Line under the heading", "default": "How your book gets to you, and what to do if something's off." },
+    { "type": "text", "id": "to_name", "label": "Ship to (in marker)", "default": "You!" },
+    { "type": "text", "id": "service", "label": "Service box", "default": "Book rate" },
+    { "type": "text", "id": "tracking", "label": "Tracking line", "default": "TRK 1990 1999 0048 0651" },
+    { "type": "text", "id": "tape_text", "label": "Text on the tape", "default": "Handle with care · Puzzles inside" },
+    { "type": "text", "id": "stamp_1", "label": "Stamp 1", "default": "This side up" },
+    { "type": "text", "id": "stamp_2", "label": "Stamp 2", "default": "Fragile: nostalgia" },
+    { "type": "text", "id": "sticker", "label": "Round sticker", "default": "Hardcover inside" }
+  ],
+  "presets": [ { "name": "Parcel (page header)" } ]
+}
+{% endschema %}

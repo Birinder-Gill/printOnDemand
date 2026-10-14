@@ -1,0 +1,144 @@
+{
+  "sections": {
+    "hall": {
+      "type": "pg-lockers",
+      "settings": {
+        "kicker": "FAQ",
+        "heading": "Got questions?",
+        "sub": "Pass a note. Somebody already did.",
+        "stickers": "smiley,,alien,,,yinyang,,pizza,,skate"
+      }
+    },
+    "notes": {
+      "type": "s-notes",
+      "settings": {
+        "kicker": "Open one",
+        "heading": "The answers",
+        "lede": "Twelve notes, folded the way they taught us. Click one to read it.",
+        "to_label": "Read this:",
+        "open_label": "Unfold"
+      },
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "How hard are the puzzles?",
+            "answer": "<p>Friendly, not fiendish. Every answer is a single word of 5 to 12 letters, and the tougher ones come with a hint printed upside down at the foot of the page.</p>",
+            "sign": "— K."
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "Do I need to have grown up in America?",
+            "answer": "<p>It helps. The clues are about American TV, movies, music, toys, food, sports and slang from 1990 to 1999.</p>",
+            "sign": ""
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "Is there an answer key?",
+            "answer": "<p>Yes. Every solved grid is in the back, in a section called Cheat Codes.</p>",
+            "sign": "— J."
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I write in it?",
+            "answer": "<p>Please do. There's one puzzle per page, with room around the grid.</p>",
+            "sign": ""
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "How big is it?",
+            "answer": "<p>8.25 × 11 inches, hardcover, with 80 full-color pages.</p>",
+            "sign": ""
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "Is it a good gift?",
+            "answer": "<p>That's the idea. There's an autograph page up front, so you can sign it before you give it.</p>",
+            "sign": "H.A.G.S.!"
+          }
+        },
+        "q7": {
+          "type": "faq",
+          "settings": {
+            "question": "Do I have to go in order?",
+            "answer": "<p>No. Start anywhere. Every puzzle stands on its own.</p>",
+            "sign": ""
+          }
+        },
+        "q8": {
+          "type": "faq",
+          "settings": {
+            "question": "What makes it different from other crossword books?",
+            "answer": "<p>Every page has its own design: a cereal box, a tape case, a mall directory, a newscast. No two pages look alike.</p>",
+            "sign": ""
+          }
+        },
+        "q9": {
+          "type": "faq",
+          "settings": {
+            "question": "How does shipping work?",
+            "answer": "<p>Shipping options and costs are shown at checkout, before you pay.</p>",
+            "sign": ""
+          }
+        },
+        "q10": {
+          "type": "faq",
+          "settings": {
+            "question": "Where's my order?",
+            "answer": "<p>Your shipping confirmation email has a tracking link. Can't find it? <a href=\"/pages/contact\">Leave us a message</a> with your order number.</p>",
+            "sign": ""
+          }
+        },
+        "q11": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I order more than one?",
+            "answer": "<p>Yes. Change the quantity on the book's page or in your cart. Buying a stack for a team or a party? <a href=\"/pages/contact\">Send us a note</a>.</p>",
+            "sign": "— M."
+          }
+        },
+        "q12": {
+          "type": "faq",
+          "settings": {
+            "question": "What if something's wrong with my copy?",
+            "answer": "<p>Write to us with a photo and your order number and we'll sort it out. The details are in our <a href=\"/policies/refund-policy\">refund policy</a>.</p>",
+            "sign": ""
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11",
+        "q12"
+      ]
+    },
+    "pager": {
+      "type": "s-pager",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hall",
+    "notes",
+    "pager"
+  ]
+}

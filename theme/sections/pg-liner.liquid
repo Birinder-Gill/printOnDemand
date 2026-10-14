@@ -1,0 +1,181 @@
+{%- comment -%}
+  About page as a CD booklet. Top: a closed jewel case with the cover as its insert and the disc sliding out,
+  spinning. Middle: the booklet unfolded into three panels (the page's own text as the notes, the credits, the
+  thank-yous). Bottom: a portable CD player, lid open on the disc, next to the buy button.
+{%- endcomment -%}
+{{ 'pg-liner.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign product = section.settings.product | default: settings.hero_product
+  assign heading = section.settings.heading | default: page.title
+-%}
+<section class="ln" aria-labelledby="LnTitle-{{ section.id }}">
+  <div class="ln__stage">
+    <div class="ln__stage-in">
+      <div class="ln__art" aria-hidden="true">
+        <div class="cd">
+          <div class="cd__spin">
+          <div class="cd__metal"></div>
+          <svg class="cd__print" viewBox="0 0 200 200">
+            <defs>
+              <path id="CdArc-{{ section.id }}" d="M100 100m-80 0a80 80 0 1 1 160 0a80 80 0 1 1-160 0"/>
+              <mask id="CdMask-{{ section.id }}"><rect width="200" height="200" fill="#fff"/><circle cx="100" cy="100" r="35" fill="#000"/></mask>
+            </defs>
+            <g mask="url(#CdMask-{{ section.id }})">
+              <circle cx="100" cy="100" r="97" fill="#ff2f8e"/>
+              <circle cx="100" cy="100" r="97" fill="none" stroke="#17131f" stroke-width="2"/>
+              <circle cx="100" cy="100" r="58" fill="#ffd21f"/>
+              <circle cx="100" cy="100" r="58" fill="none" stroke="#17131f" stroke-width="2.4"/>
+              {%- for i in (0..11) -%}
+                {%- assign a = i | times: 30 -%}
+                <rect x="96" y="44" width="8" height="8" fill="#17131f" transform="rotate({{ a }} 100 100) rotate(45 100 48)" opacity=".85"/>
+              {%- endfor -%}
+            </g>
+            <text class="cd__arc" font-size="10.5" letter-spacing="2.2" fill="#fff7e4"><textPath href="#CdArc-{{ section.id }}" startOffset="0">{{ section.settings.disc_text | upcase | escape }}</textPath></text>
+            <image href="{{ 'logo-90s.svg' | asset_url }}" x="70" y="58" width="60" height="35"/>
+            <text x="100" y="152" text-anchor="middle" class="cd__small" font-size="7" letter-spacing="1.6" fill="#17131f">{{ section.settings.disc_small | upcase | escape }}</text>
+          </svg>
+          <div class="cd__hub"></div>
+          </div>
+        </div>
+        <div class="jc">
+          <div class="jc__hinge"></div>
+          <div class="jc__insert">
+            {%- if section.settings.insert_image != blank -%}
+              {{ section.settings.insert_image | image_url: width: 1000 | image_tag: alt: '', class: 'jc__img', widths: '500,750,1000', sizes: '(min-width: 990px) 40vw, 80vw', fetchpriority: 'high' }}
+            {%- endif -%}
+          </div>
+          <div class="jc__lid"></div>
+          <span class="jc__sticker">{{ section.settings.sticker }}</span>
+        </div>
+      </div>
+
+      <div class="ln__intro">
+        <p class="ln__kicker">{{ section.settings.kicker }}</p>
+        <h1 class="ln__title" id="LnTitle-{{ section.id }}">{{ heading }}</h1>
+        {%- if section.settings.tagline != blank -%}<p class="ln__tag">{{ section.settings.tagline }}</p>{%- endif -%}
+        {%- if section.settings.lede != blank -%}<p class="ln__lede">{{ section.settings.lede }}</p>{%- endif -%}
+        <div class="ln__ctas">
+          {%- if product != blank -%}{%- render 'buy-button', product: product, id: 'LnBuy', label: section.settings.button_label -%}{%- endif -%}
+          {%- if section.settings.link_label != blank and section.settings.link != blank -%}
+            <a class="ln__link" href="{{ section.settings.link }}">{{ section.settings.link_label }}{%- render 'icon', name: 'arrow-right' -%}</a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ln__booklet-wrap">
+    <div class="ln__booklet">
+      <article class="lnp lnp--notes">
+        <p class="lnp__folio" aria-hidden="true">1</p>
+        <h2 class="lnp__h">{{ section.settings.notes_heading }}</h2>
+        <div class="lnp__body rte">
+          {%- if page.content != blank -%}{{ page.content }}{%- else -%}{{ section.settings.notes_fallback }}{%- endif -%}
+        </div>
+      </article>
+
+      <div class="lnp lnp--credits">
+        <p class="lnp__folio" aria-hidden="true">2</p>
+        <h2 class="lnp__h">{{ section.settings.credits_heading }}</h2>
+        <dl class="lnp__credits">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'credit' -%}
+              <div class="lnp__credit" {{ block.shopify_attributes }}><dt>{{ block.settings.role }}</dt><dd>{{ block.settings.value }}</dd></div>
+            {%- endif -%}
+          {%- endfor -%}
+        </dl>
+        <p class="lnp__fine">{{ section.settings.fine_print }}</p>
+      </div>
+
+      <div class="lnp lnp--thanks">
+        <p class="lnp__folio" aria-hidden="true">3</p>
+        <h2 class="lnp__h">{{ section.settings.thanks_heading }}</h2>
+        <div class="lnp__thanks rte">{{ section.settings.thanks_text }}</div>
+        <div class="lnp__strip" aria-hidden="true">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'photo' and block.settings.image != blank -%}
+              <span class="lnp__shot" {{ block.shopify_attributes }}>{{ block.settings.image | image_url: width: 360 | image_tag: alt: '', loading: 'lazy', widths: '240,360', sizes: '120px' }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- if section.settings.sign != blank -%}<p class="lnp__sign">{{ section.settings.sign }}</p>{%- endif -%}
+        {%- if section.settings.hidden_track != blank -%}
+          <div class="lnp__hidden"><p class="lnp__hidden-k">{{ section.settings.hidden_label }}</p><div class="rte">{{ section.settings.hidden_track }}</div></div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="ln__end">
+    <div class="ln__end-in">
+      <div class="dm" aria-hidden="true">
+        <svg class="dm__ring" viewBox="0 0 100 108"><path id="DmArc-{{ section.id }}" d="M11.9 34A40.5 40.5 0 0 1 88.1 34" fill="none"/><text font-size="3.1" letter-spacing=".7"><textPath href="#DmArc-{{ section.id }}" startOffset="50%" text-anchor="middle">{{ section.settings.esp_text | upcase | escape }}</textPath></text></svg>
+        <div class="dm__lid">
+          <div class="dm__disc"><img src="{{ 'logo-90s.svg' | asset_url }}" alt="" width="120" height="71" loading="lazy"></div>
+          <div class="dm__glass"></div>
+          <span class="dm__brand">{{ section.settings.player_name }}</span>
+        </div>
+        <div class="dm__front">
+          <div class="dm__lcd"><span class="dm__trk">01</span><span class="dm__time">0:00</span><span class="dm__icon">&#9654;</span></div>
+          <div class="dm__keys"><span class="dm__key dm__key--play">&#9654;&#10074;&#10074;</span><span class="dm__key">&#9632;</span><span class="dm__key">&#9664;&#9664;</span><span class="dm__key">&#9654;&#9654;</span></div>
+        </div>
+        <span class="dm__jack"></span>
+      </div>
+      <div class="ln__close">
+        <p class="ln__kicker">{{ section.settings.close_kicker }}</p>
+        <h2 class="ln__close-h">{{ section.settings.close_heading }}</h2>
+        {%- if section.settings.close_text != blank -%}<p class="ln__close-p">{{ section.settings.close_text }}</p>{%- endif -%}
+        {%- if product != blank -%}{%- render 'buy-button', product: product, id: 'LnBuy2', label: section.settings.button_label, size: 'lg' -%}{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "CD liner notes (about)",
+  "class": "sct-liner",
+  "max_blocks": 14,
+  "settings": [
+    { "type": "header", "content": "Jewel case" },
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "image_picker", "id": "insert_image", "label": "Case insert (square, cropped from the top)" },
+    { "type": "text", "id": "sticker", "label": "Sticker on the case", "default": "Gift edition" },
+    { "type": "text", "id": "disc_text", "label": "Text around the disc", "default": "90s America Crossword ★ The throwback puzzle book ★" },
+    { "type": "text", "id": "disc_small", "label": "Small text on the disc", "default": "48 puzzles · 1990–1999" },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Liner notes" },
+    { "type": "text", "id": "heading", "label": "Heading (blank = page title)" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "You were there. Prove it." },
+    { "type": "textarea", "id": "lede", "label": "Intro" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "text", "id": "link_label", "label": "Second link label", "default": "Look inside" },
+    { "type": "url", "id": "link", "label": "Second link" },
+    { "type": "header", "content": "Booklet" },
+    { "type": "text", "id": "notes_heading", "label": "Notes heading", "default": "The notes" },
+    { "type": "richtext", "id": "notes_fallback", "label": "Notes (used when the page has no text)", "default": "<p>Write the story of the book in the page's content.</p>" },
+    { "type": "text", "id": "credits_heading", "label": "Credits heading", "default": "Credits" },
+    { "type": "textarea", "id": "fine_print", "label": "Fine print under the credits" },
+    { "type": "text", "id": "thanks_heading", "label": "Thanks heading", "default": "Special thanks" },
+    { "type": "richtext", "id": "thanks_text", "label": "Thanks text" },
+    { "type": "text", "id": "sign", "label": "Sign-off" },
+    { "type": "text", "id": "hidden_label", "label": "Hidden track label", "default": "Hidden track" },
+    { "type": "richtext", "id": "hidden_track", "label": "Hidden track text" },
+    { "type": "header", "content": "Closing" },
+    { "type": "text", "id": "player_name", "label": "Name on the CD player", "default": "Disc-Go" },
+    { "type": "text", "id": "esp_text", "label": "Text on the player's rim", "default": "45 sec anti-skip · Digital mega bass" },
+    { "type": "text", "id": "close_kicker", "label": "Closing kicker", "default": "Track 01" },
+    { "type": "text", "id": "close_heading", "label": "Closing heading", "default": "Press play." },
+    { "type": "textarea", "id": "close_text", "label": "Closing text" }
+  ],
+  "blocks": [
+    { "type": "credit", "name": "Credit", "settings": [
+      { "type": "text", "id": "role", "label": "Role", "default": "Puzzles" },
+      { "type": "text", "id": "value", "label": "Credit", "default": "48 crosswords" }
+    ] },
+    { "type": "photo", "name": "Photo strip image", "limit": 4, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" }
+    ] }
+  ],
+  "presets": [ { "name": "CD liner notes (about)" } ]
+}
+{% endschema %}

@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "main": {
+      "type": "pg-contact",
+      "settings": {
+        "kicker": "Contact",
+        "heading": "Leave a message",
+        "pad_top": "Important message",
+        "slip_title": "While you were out",
+        "to_name": "The 90s America Crossword team",
+        "while_line": "Somebody called. Fill in the rest.",
+        "label_name": "Name",
+        "label_email": "Email",
+        "label_phone": "Phone",
+        "topics_label": "Regarding",
+        "topics": "My order\nThe book\nGifts and bulk orders\nJust saying hi",
+        "label_message": "Message",
+        "button_label": "Leave message",
+        "stamp": "Message taken",
+        "machine_name": "Callback",
+        "machine_model": "TAM-90",
+        "tape_label": "Greeting",
+        "play_label": "Play greeting",
+        "greeting_label": "Outgoing message",
+        "other_text": "<p><strong>About an order?</strong> Include your order number (it's in your confirmation email) and we'll find it faster.</p>"
+      }
+    }
+  },
+  "order": ["main"]
+}

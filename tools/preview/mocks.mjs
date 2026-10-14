@@ -45,7 +45,7 @@ const linklists = {
 const page = (title, handle, content) => ({ id: 900 + handle.length, title, handle, url: `/pages/${handle}`, content, author: '', published_at: '2026-10-13', template_suffix: null });
 const lorem = '<p>Forty-eight crosswords about the 1990s.</p><h2>A heading</h2><p>Another paragraph with <a href="#">a link</a>.</p><ul><li>One</li><li>Two</li></ul>';
 const pages = {
-  about: page('Liner notes', 'about', lorem), faq: page('FAQ', 'faq', lorem), contact: page('Contact', 'contact', '<p>Questions about an order or the book? Leave a message.</p>'),
+  about: page('Liner notes', 'about', fs.readFileSync('/home/claude/store/data/pages/about.html', 'utf8')), faq: page('FAQ', 'faq', lorem), contact: page('Contact', 'contact', fs.readFileSync('/home/claude/store/data/pages/contact.html', 'utf8')),
   'shipping-returns': page('Shipping & returns', 'shipping-returns', lorem), 'inside-the-book': page('Inside the book', 'inside-the-book', lorem),
 };
 
