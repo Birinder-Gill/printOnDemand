@@ -105,8 +105,8 @@
       if (body) { $('[data-cart-body]', drawer).innerHTML = body.innerHTML; stampReceipts(drawer); }
     }
     const main = $('[data-cart-page]');
-    if (main && sections['main-cart']) {
-      const doc = new DOMParser().parseFromString(sections['main-cart'], 'text/html');
+    if (main && sections[main.dataset.section]) {
+      const doc = new DOMParser().parseFromString(sections[main.dataset.section], 'text/html');
       const nb = $('[data-cart-page]', doc);
       if (nb) { main.innerHTML = nb.innerHTML; stampReceipts(main); }
     }

@@ -11,7 +11,7 @@
     </div>
 
     {%- if cart.item_count > 0 -%}
-      <form action="{{ routes.cart_url }}" method="post" class="rcpt__form" novalidate data-cart-form>
+      <form action="{{ routes.cart_url }}" method="post" class="rcpt__form"{% unless compact %} id="CartPageForm"{% endunless %} novalidate data-cart-form>
         <ul class="rcpt__lines" role="list">
           {%- for item in cart.items -%}
             {%- liquid

@@ -266,8 +266,10 @@ export async function renderTemplate(name) {
   const scope = mocks.scopeFor(base, suffix);
   scope.settings = themeSettings();
   scope.template = { name: base, suffix: suffix || null, directory: null, toString() { return name; } };
-  const jsonFile = `${THEME}/templates/${name}.json`;
-  const liqFile = `${THEME}/templates/${name}.liquid`;
+  let tname = name;
+  if (!fs.existsSync(`${THEME}/templates/${name}.json`) && !fs.existsSync(`${THEME}/templates/${name}.liquid`)) tname = base; // e.g. cart.empty -> cart.json with an empty cart
+  const jsonFile = `${THEME}/templates/${tname}.json`;
+  const liqFile = `${THEME}/templates/${tname}.liquid`;
   let content = '', layout = 'theme';
   if (fs.existsSync(jsonFile)) {
     const t = readJSON(jsonFile);
