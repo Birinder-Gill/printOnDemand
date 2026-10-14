@@ -1,0 +1,138 @@
+{%- comment -%}
+  The six sections of the book as six TV channels, in a living room late at night: a CRT on a stand with a VCR
+  blinking 12:00, the section's opener spread letterboxed on screen with a green on-screen display, static between
+  channels, the TV's glow changing colour on the wall, a remote, and a TV-listings digest page for the channel.
+{%- endcomment -%}
+{%- liquid
+  assign first = section.blocks.first
+-%}
+{{ 's-channels.css' | asset_url | stylesheet_tag }}
+
+<section class="ch on-dark" data-channels aria-labelledby="ChTitle-{{ section.id }}" style="--glow: {{ first.settings.glow | default: '#3b7bff' }}">
+  <div class="ch__wall" aria-hidden="true"><span class="ch__tvglow"></span><span class="ch__lamp"></span></div>
+  <div class="ch__wrap">
+    <div class="ch__set">
+      <div class="ch__intro guide guide--top">
+        <span class="guide__tape guide__tape--l" aria-hidden="true"></span><span class="guide__tape guide__tape--r" aria-hidden="true"></span>
+        <div class="guide__mast"><span>{{ section.settings.masthead }}</span><span class="guide__date">{{ section.settings.dateline }}</span></div>
+        <h2 class="guide__title" id="ChTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+        <p class="guide__lede">{{ section.settings.intro }}</p>
+      </div>
+
+      <div class="ch__tvwrap">
+        <div class="tvset" data-tv>
+          <div class="tvset__cab">
+            <div class="tvset__bezel">
+              <div class="tvset__screen">
+                {%- for block in section.blocks -%}
+                  <figure class="tvset__ch{% if forloop.first %} is-on{% endif %}" data-ch="{{ forloop.index0 }}" data-glow="{{ block.settings.glow }}" {{ block.shopify_attributes }}>
+                    {%- if block.settings.image != blank -%}
+                      {{ block.settings.image | image_url: width: 1500 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1500', sizes: '(min-width: 1100px) 52vw, 92vw', alt: block.settings.image_alt }}
+                    {%- endif -%}
+                  </figure>
+                {%- endfor -%}
+                <canvas class="tvset__static" width="160" height="120" aria-hidden="true"></canvas>
+                <div class="tvset__glass" aria-hidden="true"></div>
+                <p class="tvset__osd tvset__osd--ch" aria-hidden="true">CH <span data-osd-ch>{{ first.settings.number }}</span></p>
+                <p class="tvset__osd tvset__osd--stereo" aria-hidden="true">STEREO</p>
+                <p class="tvset__osd tvset__osd--name" aria-hidden="true" data-osd-name>{{ first.settings.name }}</p>
+              </div>
+            </div>
+            <div class="tvset__panel" aria-hidden="true">
+              <span class="tvset__grille"></span>
+              <span class="tvset__label">Stereo</span>
+              <span class="tvset__keys"><i></i><i></i><i></i><i></i></span>
+              <span class="tvset__power"><i></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="ch__stand" aria-hidden="true">
+          <div class="deck">
+            <span class="deck__door"></span>
+            <span class="deck__clock">12:00</span>
+            <span class="deck__keys"><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="deck__label">VHS Hi-Fi Stereo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="remote" role="group" aria-label="{{ section.settings.remote_label | escape }}">
+        <span class="remote__ir" aria-hidden="true"></span>
+        <span class="remote__power" aria-hidden="true"></span>
+        <div class="remote__pad">
+          {%- for block in section.blocks -%}
+            <button class="remote__key" type="button" data-go="{{ forloop.index0 }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Channel {{ block.settings.number }}, {{ block.settings.name }}">
+              <span class="remote__n" aria-hidden="true">{{ forloop.index }}</span><span class="remote__l" aria-hidden="true">{{ block.settings.short }}</span>
+            </button>
+          {%- endfor -%}
+        </div>
+        <div class="remote__rocker">
+          <button class="remote__ch" type="button" data-step="-1" aria-label="Previous channel"><span aria-hidden="true">CH &#9660;</span></button>
+          <button class="remote__ch" type="button" data-step="1" aria-label="Next channel"><span aria-hidden="true">CH &#9650;</span></button>
+        </div>
+        <p class="remote__hint">{{ section.settings.remote_hint }}</p>
+      </div>
+
+      <div class="ch__listing guide guide--bottom" aria-live="polite">
+        {%- for block in section.blocks -%}
+          {%- assign lines = block.settings.listings | newline_to_br | split: '<br />' -%}
+          <article class="guide__ch" data-guide="{{ forloop.index0 }}"{% unless forloop.first %} hidden{% endunless %}>
+            <header class="guide__chhead">
+              <span class="guide__num" aria-hidden="true">{{ block.settings.number }}</span>
+              <h3 class="guide__name"><span class="visually-hidden">Channel {{ block.settings.number }}: </span>{{ block.settings.name }}</h3>
+              <span class="guide__count">{{ block.settings.count }}</span>
+            </header>
+            <p class="guide__intro">{{ block.settings.intro }}</p>
+            <ol class="guide__list" role="list">
+              {%- for line in lines -%}
+                {%- assign parts = line | strip | split: '|' -%}
+                {%- if parts.size > 0 -%}
+                  {%- assign mins = forloop.index0 | times: 30 | plus: 480 -%}
+                  {%- assign hh = mins | divided_by: 60 -%}
+                  {%- assign mm = mins | modulo: 60 -%}
+                  <li class="guide__row">
+                    <span class="guide__time">{{ hh }}:{% if mm < 10 %}0{% endif %}{{ mm }}</span>
+                    <span class="guide__show">{{ parts[0] | strip }}</span>
+                    <span class="guide__nums"><span class="visually-hidden">puzzles </span>{{ parts[1] | strip }}</span>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ol>
+          </article>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 's-channels.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Channel lineup (TV)",
+  "class": "sct-channels",
+  "max_blocks": 9,
+  "settings": [
+    { "type": "text", "id": "masthead", "label": "Listings masthead", "default": "The Lineup" },
+    { "type": "text", "id": "dateline", "label": "Listings date line", "default": "Tonight, all night" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Six channels. One decade." },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "The 48 puzzles are grouped like a night of channel surfing. Pick up the remote." },
+    { "type": "text", "id": "remote_label", "label": "Remote accessible name", "default": "Change the channel" },
+    { "type": "text", "id": "remote_hint", "label": "Remote hint", "default": "Arrow keys work too." }
+  ],
+  "blocks": [
+    { "type": "channel", "name": "Channel", "settings": [
+      { "type": "text", "id": "number", "label": "Channel number", "default": "01" },
+      { "type": "text", "id": "name", "label": "Name", "default": "Television" },
+      { "type": "text", "id": "short", "label": "Remote label", "default": "TV" },
+      { "type": "text", "id": "count", "label": "Puzzle count", "default": "8 puzzles" },
+      { "type": "textarea", "id": "intro", "label": "Intro" },
+      { "type": "textarea", "id": "listings", "label": "Listings", "info": "One per line: topic|puzzle numbers" },
+      { "type": "image_picker", "id": "image", "label": "Screen image" },
+      { "type": "text", "id": "image_alt", "label": "Screen image description" },
+      { "type": "color", "id": "glow", "label": "Glow on the wall", "default": "#3b7bff" }
+    ] }
+  ],
+  "presets": [ { "name": "Channel lineup (TV)", "blocks": [ { "type": "channel" } ] } ]
+}
+{% endschema %}

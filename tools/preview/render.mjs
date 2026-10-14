@@ -209,7 +209,7 @@ async function renderSection(type, id, data, scope) {
     blocks.push({ id: bid, type: b.type, settings: bset, shopify_attributes: `data-block="${bid}"` });
   }
   const section = { id, settings, blocks, index: ++sectionCounter, location: data.location || 'template' };
-  const html = await engine.parseAndRender(src, { ...scope, section });
+  const html = await engine.parseAndRender(src, { ...scope, section }, { globals: globalsOf(scope) });
   const cls = schema.class ? ` ${schema.class}` : '';
   const tag = schema.tag || 'div';
   return `<${tag} id="shopify-section-${id}" class="shopify-section${cls}">${html}</${tag}>`;
@@ -221,7 +221,7 @@ function resolveSetting(s, obj) {
   else if (s.type === 'collection') obj[s.id] = v ? mocks.collections[v] || null : null;
   else if (s.type === 'link_list') obj[s.id] = v ? mocks.linklists[v] || null : null;
   else if (s.type === 'page') obj[s.id] = v ? mocks.pages[v] || null : null;
-  else if ((s.type === 'url') && v === undefined) obj[s.id] = null;
+  else if (s.type === 'url') obj[s.id] = v === undefined || v === null || v === '' ? null : String(v).replace(/^shopify:\/\/(products|pages|collections|blogs)\//, '/$1/').replace(/^shopify:\/\/policies\//, '/policies/');
 }
 
 engine.registerTag('section', class extends Tag {
@@ -245,6 +245,8 @@ engine.registerTag('sections', class extends Tag {
 });
 engine.registerTag('content_for', class extends Tag { *render() { return ''; } });
 
+const GLOBAL_KEYS = ['shop', 'routes', 'cart', 'settings', 'request', 'localization', 'linklists', 'all_products', 'collections', 'pages', 'template', 'customer', 'page_title', 'canonical_url', 'product', 'collection', 'page', 'blog', 'article', 'search', 'powered_by_link'];
+function globalsOf(scope) { const g = {}; for (const k of GLOBAL_KEYS) if (scope[k] !== undefined) g[k] = scope[k]; return g; }
 // ---------- page rendering -------------------------------------------------------------------------------------
 function themeSettings() {
   const s = {};
@@ -276,11 +278,11 @@ export async function renderTemplate(name) {
     let src = fs.readFileSync(liqFile, 'utf8');
     const lm = src.match(/\{%-?\s*layout\s+(none|['"][\w-]+['"])\s*-?%\}/);
     if (lm) { layout = lm[1] === 'none' ? null : lm[1].slice(1, -1); src = src.replace(lm[0], ''); }
-    content = await engine.parseAndRender(src, scope);
+    content = await engine.parseAndRender(src, scope, { globals: globalsOf(scope) });
   } else throw new Error('no template ' + name);
   if (!layout) return content;
   const lsrc = fs.readFileSync(`${THEME}/layout/${layout}.liquid`, 'utf8');
-  return engine.parseAndRender(lsrc, { ...scope, content_for_layout: content, content_for_header: mocks.content_for_header });
+  return engine.parseAndRender(lsrc, { ...scope, content_for_layout: content, content_for_header: mocks.content_for_header }, { globals: globalsOf(scope) });
 }
 
 if (process.argv[1] && process.argv[1].endsWith('render.mjs')) {

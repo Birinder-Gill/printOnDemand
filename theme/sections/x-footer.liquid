@@ -1,0 +1,93 @@
+{%- comment -%}
+  Footer, styled as the VCR blue screen at the end of the tape: on-screen display in the corners,
+  a red THANKS bar, menus as the on-screen menu with a moving cursor, and a tape counter that rewinds
+  to 0:00:00 when the footer comes into view.
+{%- endcomment -%}
+{%- liquid
+  assign brand = settings.brand_name | default: shop.name
+-%}
+<footer class="vcr on-dark" data-vcr>
+  <div class="vcr__screen">
+    <div class="vcr__osd vcr__osd--tl" aria-hidden="true"><span class="vcr__rew">&#9664;&#9664;</span> {{ section.settings.osd_mode }}</div>
+    <div class="vcr__osd vcr__osd--tr" aria-hidden="true"><span>SP</span><span>{{ section.settings.osd_channel }}</span></div>
+
+    <p class="vcr__bar"><span>{{ section.settings.bar_text }}</span></p>
+
+    <div class="vcr__grid">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'menu' -%}
+            {%- if block.settings.menu != blank -%}
+              <nav class="vcr__menu" aria-label="{{ block.settings.heading | escape }}" {{ block.shopify_attributes }}>
+                <h2 class="vcr__h">{{ block.settings.heading }}</h2>
+                <ul role="list">
+                  {%- for link in block.settings.menu.links -%}
+                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              </nav>
+            {%- endif -%}
+          {%- when 'signup' -%}
+            <div class="vcr__signup" {{ block.shopify_attributes }}>
+              <h2 class="vcr__h">{{ block.settings.heading }}</h2>
+              {%- form 'customer', id: 'FooterSignup', class: 'vcr__form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                {%- if form.posted_successfully? -%}
+                  <p class="vcr__ok" role="status">{{ 'newsletter.success' | t }}</p>
+                {%- else -%}
+                  <label class="visually-hidden" for="FooterEmail">{{ 'newsletter.label' | t }}</label>
+                  <div class="vcr__field">
+                    <input id="FooterEmail" type="email" name="contact[email]" autocomplete="email" required placeholder="{{ 'newsletter.placeholder' | t }}" spellcheck="false"{% if form.errors %} aria-invalid="true" aria-describedby="FooterEmailError"{% endif %}>
+                    <button type="submit">{{ 'newsletter.submit' | t }} <span aria-hidden="true">&#9654;</span></button>
+                  </div>
+                  {%- if form.errors -%}<p class="vcr__err" id="FooterEmailError">{{ 'newsletter.error' | t }}</p>{%- endif -%}
+                {%- endif -%}
+              {%- endform -%}
+              <p class="vcr__small">{{ block.settings.note }}</p>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    <p class="vcr__rewind">{{ section.settings.sign_off }}</p>
+
+    <div class="vcr__osd vcr__osd--bl" aria-hidden="true">STEREO</div>
+    <div class="vcr__osd vcr__osd--br" aria-hidden="true"><span data-vcr-counter>0:00:00</span></div>
+    <div class="vcr__noise" aria-hidden="true"></div>
+  </div>
+
+  <div class="vcr__legal">
+    <p>&copy; {{ 'now' | date: '%Y' }} {{ brand }}</p>
+    <ul role="list">
+      {%- for policy in shop.policies -%}
+        <li><a href="{{ policy.url }}">{{ policy.title }}</a></li>
+      {%- endfor -%}
+      {%- if section.settings.show_powered -%}<li>{{ powered_by_link }}</li>{%- endif -%}
+    </ul>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "VCR blue-screen footer",
+  "class": "sct-footer",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "osd_mode", "label": "Top left on-screen text", "default": "REW" },
+    { "type": "text", "id": "osd_channel", "label": "Top right on-screen text", "default": "CH 03" },
+    { "type": "text", "id": "bar_text", "label": "Red bar", "default": "Thanks for watching" },
+    { "type": "text", "id": "sign_off", "label": "Sign-off", "default": "Be kind, rewind." },
+    { "type": "checkbox", "id": "show_powered", "label": "Show Powered by Shopify", "default": false }
+  ],
+  "blocks": [
+    { "type": "menu", "name": "Menu", "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Menu" },
+      { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+    ] },
+    { "type": "signup", "name": "Email signup", "limit": 1, "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Get a page when the next book drops" },
+      { "type": "text", "id": "note", "label": "Small print", "default": "One email per new book. Unsubscribe anytime." }
+    ] }
+  ]
+}
+{% endschema %}

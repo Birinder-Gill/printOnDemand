@@ -8,7 +8,7 @@ img{height:auto}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 h1,h2,h3,h4,h5,h6,p,ul,ol,dl,dd,figure,blockquote{margin:0}
-ul[role=list],ol[role=list]{list-style:none;padding:0}
+:where(ul[role=list],ol[role=list]){list-style:none;padding:0}
 a{color:inherit}
 table{border-collapse:collapse}
 

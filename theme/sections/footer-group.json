@@ -1,0 +1,17 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "x-footer",
+      "settings": { "osd_mode": "REW", "osd_channel": "CH 03", "bar_text": "Thanks for watching", "sign_off": "Be kind, rewind.", "show_powered": false },
+      "blocks": {
+        "menu_main": { "type": "menu", "settings": { "heading": "Menu", "menu": "main-menu" } },
+        "menu_help": { "type": "menu", "settings": { "heading": "Help", "menu": "footer" } },
+        "signup": { "type": "signup", "settings": { "heading": "Get a page when the next book drops", "note": "One email per new book. Unsubscribe anytime." } }
+      },
+      "block_order": ["menu_main", "menu_help", "signup"]
+    }
+  },
+  "order": ["footer"]
+}

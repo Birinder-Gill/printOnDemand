@@ -1,0 +1,70 @@
+{%- comment -%}
+  The receipt: used by the cart drawer (compact) and the cart page. Expects `brand`.
+{%- endcomment -%}
+<div class="rcpt{% if compact %} rcpt--compact{% endif %}" data-receipt>
+  <div class="rcpt__paper">
+    <div class="rcpt__top">
+      <img class="rcpt__logo" src="{{ 'logo-90s.svg' | asset_url }}" alt="" width="104" height="58" loading="lazy">
+      <p class="rcpt__store">{{ brand }}</p>
+      <p class="rcpt__dept">The gift shop &middot; Toy &amp; book dept.</p>
+      <p class="rcpt__meta"><span data-rcpt-date>&nbsp;</span><span>Reg 03</span></p>
+    </div>
+
+    {%- if cart.item_count > 0 -%}
+      <form action="{{ routes.cart_url }}" method="post" class="rcpt__form" novalidate data-cart-form>
+        <ul class="rcpt__lines" role="list">
+          {%- for item in cart.items -%}
+            {%- liquid
+              assign less = item.quantity | minus: 1
+              assign more = item.quantity | plus: 1
+            -%}
+            <li class="rcpt__line" data-line="{{ forloop.index }}">
+              <a class="rcpt__thumb" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+                {%- if item.image -%}{{ item.image | image_url: width: 180 | image_tag: alt: '', width: 72, height: 72, loading: 'lazy' }}{%- endif -%}
+              </a>
+              <div class="rcpt__desc">
+                <p class="rcpt__name"><a href="{{ item.url }}">{{ item.product.title }}</a></p>
+                {%- unless item.product.has_only_default_variant -%}<p class="rcpt__var">{{ item.variant.title }}</p>{%- endunless -%}
+                {%- for p in item.properties -%}{%- unless p.last == blank or p.first contains '_' -%}<p class="rcpt__var">{{ p.first }}: {{ p.last }}</p>{%- endunless -%}{%- endfor -%}
+                <p class="rcpt__each">{{ item.quantity }} @ {{ item.final_price | money }}</p>
+              </div>
+              <p class="rcpt__amt">{{ item.final_line_price | money }}</p>
+              <div class="rcpt__qty">
+                <button class="rcpt__key" type="button" data-line-qty="{{ less }}" aria-label="{{ 'products.decrease_quantity' | t }}">{%- render 'icon', name: 'minus' -%}</button>
+                <label class="visually-hidden" for="Qty-{{ forloop.index }}-{{ compact }}">{{ 'products.quantity' | t }}</label>
+                <input class="rcpt__num" id="Qty-{{ forloop.index }}-{{ compact }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric" data-line-input>
+                <button class="rcpt__key" type="button" data-line-qty="{{ more }}" aria-label="{{ 'products.increase_quantity' | t }}">{%- render 'icon', name: 'plus' -%}</button>
+                <a class="rcpt__void" href="{{ item.url_to_remove }}" data-line-qty="0" aria-label="{{ 'cart.remove_item' | t: title: item.product.title | escape }}">{{ 'cart.remove' | t }}</a>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        <dl class="rcpt__totals">
+          <div class="rcpt__row"><dt>{{ 'cart.subtotal' | t }}</dt><dd>{{ cart.total_price | money }}</dd></div>
+          {%- if cart.cart_level_discount_applications.size > 0 -%}
+            {%- for d in cart.cart_level_discount_applications -%}
+              <div class="rcpt__row"><dt>{{ d.title }}</dt><dd>-{{ d.total_allocated_amount | money }}</dd></div>
+            {%- endfor -%}
+          {%- endif -%}
+          <div class="rcpt__row rcpt__row--muted"><dt>Tax &amp; shipping</dt><dd>At checkout</dd></div>
+        </dl>
+        <p class="rcpt__count">{{ 'cart.item_count' | t: count: cart.item_count }}</p>
+        <button type="submit" name="checkout" class="btn btn--lg btn--block rcpt__checkout">{{ 'cart.checkout' | t }}</button>
+      </form>
+    {%- else -%}
+      <div class="rcpt__empty">
+        <p class="rcpt__nosale" aria-hidden="true">No sale</p>
+        <p class="rcpt__empty-text"><strong>{{ 'cart.empty' | t }}.</strong> {{ 'cart.empty_note' | t }}</p>
+        {%- assign shop_url = routes.all_products_collection_url -%}
+        {%- if settings.hero_product != blank -%}{%- assign shop_url = settings.hero_product.url -%}{%- endif -%}
+        <a class="btn btn--block" href="{{ shop_url }}">{{ 'cart.continue' | t }}</a>
+      </div>
+    {%- endif -%}
+
+    <div class="rcpt__foot">
+      <p>{{ settings.cart_note_label }}</p>
+      <div class="rcpt__barcode" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>

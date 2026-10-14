@@ -1,0 +1,16 @@
+{%- comment -%}
+  Looks up one puzzle metaobject by number and prints its fields as data attributes for a card button.
+  Usage: {% render 'puzzle-card-data', n: 7 %}  (outputs attributes only)
+  Metaobject type "puzzle", handles puzzle-01 ... puzzle-48.
+{%- endcomment -%}
+{%- liquid
+  if n < 10
+    assign h = 'puzzle-0' | append: n
+  else
+    assign h = 'puzzle-' | append: n
+  endif
+  assign p = shop.metaobjects.puzzle[h]
+-%}
+{%- if p != blank -%}
+data-no="{{ n }}" data-title="{{ p.title.value | escape }}" data-category="{{ p.category.value | escape }}" data-section="{{ p.section.value | escape }}" data-side="{{ p.side.value }}" data-clues="{{ p.clues.value }}" data-hints="{{ p.hints.value }}" data-page="{{ p.page.value }}" data-note="{{ p.note.value | escape }}" data-img="{{ p.image.value | image_url: width: 900 }}"
+{%- endif -%}

@@ -1,0 +1,193 @@
+{%- comment -%}
+  "No two pages alike": the 48 puzzle pages (and 6 extra pages as insert cards) as a collector's trading-card
+  binder lying on a Memphis bedspread. Left: the set checklist in the inside-cover pocket. Right: 9-pocket
+  sleeves, six pages of them. Any card opens in a screw-down display case, where it can be flipped to its back.
+  Puzzle data comes from the "puzzle" metaobjects (handles puzzle-01 ... puzzle-48); inserts are blocks.
+{%- endcomment -%}
+{%- liquid
+  assign inserts = section.blocks | where: 'type', 'insert'
+  assign total = inserts.size | plus: 48
+  assign pages = total | plus: 8 | divided_by: 9
+-%}
+{{ 's-binder.css' | asset_url | stylesheet_tag }}
+
+<section class="bd" data-binder aria-labelledby="BdTitle-{{ section.id }}">
+  <div class="bd__wrap">
+    <header class="bd__head">
+      <p class="bd__set"><span>{{ section.settings.set_label }}</span></p>
+      <h2 class="bd__title" id="BdTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <p class="bd__lede">{{ section.settings.lede }}</p>
+    </header>
+
+    <div class="bd__binder">
+      <div class="bd__left">
+        <div class="bd__pocket">
+          <div class="bd__checklist">
+            <p class="bd__cl-head"><span>{{ section.settings.checklist_label }}</span><span>{{ total }} cards</span></p>
+            <ol class="bd__cl" role="list">
+              {%- for n in (1..48) -%}
+                {%- liquid
+                  if n < 10
+                    assign h = 'puzzle-0' | append: n
+                  else
+                    assign h = 'puzzle-' | append: n
+                  endif
+                  assign p = shop.metaobjects.puzzle[h]
+                -%}
+                {%- if p != blank -%}
+                  <li><button type="button" class="bd__cl-item" data-open="{{ forloop.index0 }}"><span class="bd__box" aria-hidden="true"></span><span class="bd__cl-n">{{ n }}</span><span class="bd__cl-t">{{ p.title.value }}</span></button></li>
+                {%- endif -%}
+              {%- endfor -%}
+              {%- for b in inserts -%}
+                <li><button type="button" class="bd__cl-item is-insert" data-open="{{ forloop.index0 | plus: 48 }}"><span class="bd__box" aria-hidden="true"></span><span class="bd__cl-n">{{ b.settings.code }}</span><span class="bd__cl-t">{{ b.settings.title }}</span></button></li>
+              {%- endfor -%}
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="bd__rings" aria-hidden="true"><i></i><i></i><i></i></div>
+
+      <div class="bd__right">
+        <div class="bd__stack">
+          {%- for pg in (1..pages) -%}
+            {%- assign first_k = pg | minus: 1 | times: 9 -%}
+            {%- assign last_k = first_k | plus: 8 -%}
+            <div class="bd__sleeve{% if pg == 1 %} is-on{% endif %}" data-sheet="{{ forloop.index0 }}" role="group" aria-label="Binder page {{ pg }} of {{ pages }}"{% unless pg == 1 %} hidden{% endunless %}>
+              {%- for k in (first_k..last_k) -%}
+                {%- if k < 48 -%}
+                  {%- liquid
+                    assign n = k | plus: 1
+                    if n < 10
+                      assign h = 'puzzle-0' | append: n
+                    else
+                      assign h = 'puzzle-' | append: n
+                    endif
+                    assign p = shop.metaobjects.puzzle[h]
+                  -%}
+                  {%- if p != blank -%}
+                    <div class="bd__slot">
+                      <button class="card" type="button" style="--r: {{ k | modulo: 5 | minus: 2 | times: 0.4 }}deg"
+                        data-card="{{ k }}" data-no="{{ n }}" data-code="No. {{ n }}" data-title="{{ p.title.value | escape }}" data-category="{{ p.category.value | escape }}"
+                        data-section="{{ p.section.value | escape }}" data-side="{{ p.side.value | escape }}" data-clues="{{ p.clues.value }}" data-hints="{{ p.hints.value }}"
+                        data-page="{{ p.page.value }}" data-note="{{ p.note.value | escape }}" data-img="{{ p.image.value | image_url: width: 900 }}"
+                        aria-haspopup="dialog" aria-label="Card {{ n }}: {{ p.title.value | escape }}">
+                        <span class="card__face">
+                          {{ p.image.value | image_url: width: 420 | image_tag: loading: 'lazy', widths: '220, 320, 420', sizes: '(min-width: 1100px) 160px, 30vw', alt: '' }}
+                          <span class="card__holo" aria-hidden="true"></span>
+                          <span class="card__no" aria-hidden="true">{{ n }}</span>
+                        </span>
+                      </button>
+                    </div>
+                  {%- else -%}
+                    <div class="bd__slot is-empty" aria-hidden="true"></div>
+                  {%- endif -%}
+                {%- else -%}
+                  {%- assign bi = k | minus: 48 -%}
+                  {%- assign b = inserts[bi] -%}
+                  {%- if b -%}
+                    <div class="bd__slot" {{ b.shopify_attributes }}>
+                      <button class="card card--insert" type="button" style="--r: {{ k | modulo: 5 | minus: 2 | times: 0.4 }}deg"
+                        data-card="{{ k }}" data-no="{{ b.settings.code }}" data-code="{{ b.settings.code }}" data-title="{{ b.settings.title | escape }}" data-category="{{ section.settings.insert_label | escape }}"
+                        data-section="{{ b.settings.where | escape }}" data-side="" data-clues="" data-hints="" data-page="{{ b.settings.page }}" data-note="{{ b.settings.note | escape }}"
+                        data-img="{{ b.settings.image | image_url: width: 900 }}" aria-haspopup="dialog" aria-label="Insert card {{ b.settings.code }}: {{ b.settings.title | escape }}">
+                        <span class="card__face">
+                          {%- if b.settings.image != blank -%}{{ b.settings.image | image_url: width: 420 | image_tag: loading: 'lazy', widths: '220, 320, 420', sizes: '(min-width: 1100px) 160px, 30vw', alt: '' }}{%- endif -%}
+                          <span class="card__holo card__holo--insert" aria-hidden="true"></span>
+                          <span class="card__no" aria-hidden="true">{{ b.settings.code }}</span>
+                        </span>
+                      </button>
+                    </div>
+                  {%- else -%}
+                    <div class="bd__slot is-empty" aria-hidden="true"></div>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="bd__nav">
+          <button class="bd__turn" type="button" data-turn="-1" aria-label="Previous page">{%- render 'icon', name: 'caret-left' -%}</button>
+          <div class="bd__tabs" role="tablist" aria-label="Binder pages">
+            {%- for pg in (1..pages) -%}
+              {%- assign a = pg | minus: 1 | times: 9 | plus: 1 -%}
+              {%- assign z = pg | times: 9 -%}
+              {%- if z > 48 -%}{%- assign tab = a | append: '–48+' -%}{%- else -%}{%- assign tab = a | append: '–' | append: z -%}{%- endif -%}
+              {%- if a > 48 -%}{%- assign tab = 'Extras' -%}{%- endif -%}
+              <button class="bd__tab" type="button" role="tab" data-tab="{{ forloop.index0 }}" aria-selected="{% if pg == 1 %}true{% else %}false{% endif %}">{{ tab }}</button>
+            {%- endfor -%}
+          </div>
+          <button class="bd__turn" type="button" data-turn="1" aria-label="Next page">{%- render 'icon', name: 'caret-right' -%}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="case" data-case aria-labelledby="CaseTitle-{{ section.id }}">
+    <div class="case__in">
+      <button class="case__x" type="button" data-case-close>{%- render 'icon', name: 'x' -%}<span class="visually-hidden">{{ 'general.close' | t }}</span></button>
+      <div class="case__stage">
+        <div class="case__holder">
+          <span class="case__screw case__screw--1" aria-hidden="true"></span><span class="case__screw case__screw--2" aria-hidden="true"></span>
+          <span class="case__screw case__screw--3" aria-hidden="true"></span><span class="case__screw case__screw--4" aria-hidden="true"></span>
+          <div class="case__card" data-case-card>
+            <div class="case__front"><img data-case-img alt="" width="900" height="1200"><span class="case__holo" aria-hidden="true"></span></div>
+            <div class="case__back" aria-hidden="true">
+              <div class="cb__top"><span class="cb__ball" data-case-no2></span><div><p class="cb__title" data-case-title2></p><p class="cb__cat" data-case-cat2></p></div></div>
+              <table class="cb__stats"><thead><tr><th>Clues</th><th>Hints</th><th>Page</th><th>Side</th></tr></thead><tbody><tr><td data-case-clues2></td><td data-case-hints2></td><td data-case-page2></td><td data-case-side2></td></tr></tbody></table>
+              <p class="cb__note" data-case-note2></p>
+              <p class="cb__foot">{{ section.settings.back_footer }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="case__info">
+        <p class="case__kicker"><span data-case-code></span> <span class="case__of">of {{ total }}</span></p>
+        <h3 class="case__title" id="CaseTitle-{{ section.id }}" data-case-title></h3>
+        <dl class="case__facts">
+          <div><dt>Topic</dt><dd data-case-cat></dd></div>
+          <div><dt>Section</dt><dd data-case-section></dd></div>
+          <div data-case-hide><dt>Clues</dt><dd data-case-clues></dd></div>
+          <div data-case-hide><dt>Hints</dt><dd data-case-hints></dd></div>
+        </dl>
+        <p class="case__note" data-case-note></p>
+        <div class="case__ctrl">
+          <button class="case__btn" type="button" data-case-step="-1">{%- render 'icon', name: 'caret-left' -%}<span class="visually-hidden">Previous card</span></button>
+          <button class="btn btn--sm btn--paper case__flip" type="button" data-case-flip aria-pressed="false">{{ section.settings.flip_label }}</button>
+          <button class="case__btn" type="button" data-case-step="1">{%- render 'icon', name: 'caret-right' -%}<span class="visually-hidden">Next card</span></button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<script src="{{ 's-binder.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Card binder",
+  "class": "sct-binder",
+  "max_blocks": 9,
+  "settings": [
+    { "type": "text", "id": "set_label", "label": "Set label", "default": "Series 1: the complete set" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "No two pages alike." },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "Forty-eight puzzles, forty-eight page designs, each one a different piece of the decade. Pick any card for a closer look." },
+    { "type": "text", "id": "checklist_label", "label": "Checklist heading", "default": "Checklist" },
+    { "type": "text", "id": "insert_label", "label": "Insert topic label", "default": "Extra page" },
+    { "type": "text", "id": "flip_label", "label": "Flip button", "default": "Flip the card" },
+    { "type": "text", "id": "back_footer", "label": "Card back footer", "default": "90s America Crossword, Gift Edition" }
+  ],
+  "blocks": [
+    { "type": "insert", "name": "Insert card", "settings": [
+      { "type": "text", "id": "code", "label": "Card code", "default": "I1" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Title page" },
+      { "type": "text", "id": "where", "label": "Where it is", "default": "Front of the book" },
+      { "type": "text", "id": "page", "label": "Page", "default": "1" },
+      { "type": "textarea", "id": "note", "label": "Description" },
+      { "type": "image_picker", "id": "image", "label": "Image" }
+    ] }
+  ],
+  "presets": [ { "name": "Card binder" } ]
+}
+{% endschema %}
