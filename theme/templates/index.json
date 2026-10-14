@@ -7,7 +7,7 @@
         "heading": "Loud books\nfor [quiet]\nhours.",
         "text": "Puzzle books and gift books, designed page by page and made to be given. For the hour you put the phone down.",
         "cta_label": "Browse the catalog",
-        "cta_link": "shopify://collections/all",
+        "cta_link": "/collections/all",
         "cta2_label": "About the press",
         "cta2_link": "shopify://pages/about",
         "product": "90s-america-crossword-gift-edition",
@@ -76,8 +76,7 @@
             "status": "In the works",
             "title": "The next book",
             "text": "A new puzzle book is on the press. Join the mailing list to hear the day it's out.",
-            "link_label": "Get the email",
-            "link": "#signup"
+            "link_label": "Get the email"
           }
         }
       },

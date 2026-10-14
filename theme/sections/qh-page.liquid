@@ -8,7 +8,7 @@
           <div class="qpage__card" {{ block.shopify_attributes }}>
             <p class="q-label qpage__card-h">{{ block.settings.heading }}</p>
             <div class="qpage__card-b">{{ block.settings.text }}</div>
-            {%- if block.settings.link_label != blank -%}<a class="q-arrowlink" href="{{ block.settings.link }}">{{ block.settings.link_label }}{% render 'qh-arrow', class: '' %}</a>{%- endif -%}
+            {%- if block.settings.link_label != blank -%}<a class="q-arrowlink" href="{{ block.settings.link | default: '#signup' }}">{{ block.settings.link_label }}{% render 'qh-arrow', class: '' %}</a>{%- endif -%}
           </div>
         {%- endfor -%}
       </aside>
@@ -29,7 +29,7 @@
       { "type": "text", "id": "heading", "label": "Heading", "default": "Good to know" },
       { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Add a short fact here.</p>" },
       { "type": "text", "id": "link_label", "label": "Link label" },
-      { "type": "url", "id": "link", "label": "Link" } ] }
+      { "type": "url", "id": "link", "label": "Link", "info": "Leave empty to point at the newsletter." } ] }
   ],
   "max_blocks": 6,
   "presets": [{ "name": "Page content" }]
