@@ -1,0 +1,53 @@
+{%- comment -%}
+  More from the press: other books from a collection, minus the one on this page. With no other book yet it
+  says so plainly and points to the mailing list.
+{%- endcomment -%}
+{%- liquid
+  assign coll = section.settings.collection | default: collections.all
+  assign shown = 0
+-%}
+{{ 'qh-catalog.css' | asset_url | stylesheet_tag }}
+<section class="qrel qs-{{ section.settings.scheme }} q-sect" aria-labelledby="Rel-{{ section.id }}">
+  <div class="q-wrap q-pad">
+    <div class="q-head">
+      {%- if section.settings.index != blank -%}<span class="q-head__idx q-label">{{ section.settings.index }}</span>{%- endif -%}
+      <h2 class="q-h2" id="Rel-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <div class="q-head__aside"><a class="q-arrowlink" href="{{ routes.all_products_collection_url }}">{{ section.settings.link_label }}{% render 'qh-arrow', class: '' %}</a></div>
+    </div>
+    <ul class="qcat__grid" role="list">
+      {%- for p in coll.products -%}
+        {%- if p.id != product.id and shown < section.settings.limit -%}
+          {%- assign shown = shown | plus: 1 -%}
+          <li class="qcat__item">{%- render 'qh-card', product: p, index: forloop.index0, sizes: '(min-width: 990px) 30vw, (min-width: 600px) 50vw, 100vw' -%}</li>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if shown == 0 -%}
+        <li class="qrel__none">
+          <p class="qrel__big">{{ section.settings.empty_heading }}</p>
+          <p class="qrel__text">{{ section.settings.empty_text }}</p>
+          <a class="q-btn" href="#signup">{{ section.settings.empty_cta }}{% render 'qh-arrow' %}</a>
+        </li>
+      {%- endif -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "More from the press",
+  "class": "sct-related",
+  "settings": [
+    { "type": "text", "id": "index", "label": "Index label", "default": "[++]" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "More from the press" },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Leave empty to use every product." },
+    { "type": "range", "id": "limit", "label": "Books to show", "min": 1, "max": 6, "step": 1, "default": 3 },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "The whole catalog" },
+    { "type": "text", "id": "empty_heading", "label": "Heading when there are no other books", "default": "This is the only one. For now." },
+    { "type": "text", "id": "empty_text", "label": "Text when there are no other books", "default": "The next title is on the press. Join the mailing list and we'll write the day it's out." },
+    { "type": "text", "id": "empty_cta", "label": "Button when there are no other books", "default": "Get the email" },
+    { "type": "select", "id": "scheme", "label": "Color", "default": "paper", "options": [
+      { "value": "paper", "label": "Paper" }, { "value": "white", "label": "White" }, { "value": "yellow", "label": "Yellow" }, { "value": "ink", "label": "Ink" } ] }
+  ],
+  "presets": [{ "name": "More from the press" }]
+}
+{% endschema %}

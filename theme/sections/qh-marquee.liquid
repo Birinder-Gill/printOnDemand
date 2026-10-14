@@ -1,0 +1,36 @@
+{%- comment -%} Marquee band: huge words crawling across a colored band, alternating solid and outlined. {%- endcomment -%}
+{%- liquid
+  assign words = section.settings.words | newline_to_br | split: '<br />'
+-%}
+<div class="qmq qs-{{ section.settings.scheme }}{% if section.settings.reverse %} qmq--rev{% endif %}" role="presentation">
+  <div class="q-marquee" style="--q-marq: {{ section.settings.speed }}s">
+    {%- for k in (1..2) -%}
+      <div class="q-marquee__track qmq__track" aria-hidden="true">
+        {%- for w in words -%}
+          {%- assign t = w | strip -%}
+          {%- if t != blank -%}
+            {%- assign odd = forloop.index | modulo: 2 -%}
+            <span class="qmq__w{% if odd == 0 %} qmq__w--o{% endif %}">{{ t }}</span>
+            <svg class="qmq__mark" viewBox="0 0 64 64" focusable="false"><circle cx="32" cy="32" r="27" fill="#ffd400" stroke="#0d0d0d" stroke-width="5"/><path d="M32 32V5A27 27 0 0 1 45.5 8.6Z" fill="#ff2a1f" stroke="#0d0d0d" stroke-width="5" stroke-linejoin="miter"/><circle cx="32" cy="32" r="4.5" fill="#0d0d0d"/></svg>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+  <p class="visually-hidden">{{ section.settings.words | newline_to_br | replace: '<br />', ', ' }}</p>
+</div>
+
+{% schema %}
+{
+  "name": "Marquee band",
+  "class": "sct-marquee",
+  "settings": [
+    { "type": "textarea", "id": "words", "label": "Words", "default": "Puzzle books\nGift books\nHardcovers\nNo screens required", "info": "One per line." },
+    { "type": "select", "id": "scheme", "label": "Color", "default": "blue", "options": [
+      { "value": "blue", "label": "Cobalt" }, { "value": "red", "label": "Red" }, { "value": "yellow", "label": "Yellow" }, { "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" } ] },
+    { "type": "range", "id": "speed", "label": "Seconds per loop", "min": 10, "max": 80, "step": 2, "default": 36 },
+    { "type": "checkbox", "id": "reverse", "label": "Run the other way", "default": false }
+  ],
+  "presets": [{ "name": "Marquee band" }]
+}
+{% endschema %}

@@ -1,0 +1,106 @@
+{%- comment -%}
+  Footer: ink slab. Logo and a short line, menus as ruled columns, socials, then the name of the press set
+  edge to edge (SVG text stretched to the exact width), and a mono small-print bar.
+{%- endcomment -%}
+{%- liquid
+  assign brand = settings.brand_name | default: shop.name
+  assign socials = 'instagram,tiktok,pinterest,facebook' | split: ','
+  assign has_social = false
+  for s in socials
+    assign key = 'social_' | append: s
+    if settings[key] != blank
+      assign has_social = true
+    endif
+  endfor
+-%}
+<footer class="qft qs-ink">
+  <div class="q-wrap qft__grid">
+    <div class="qft__about">
+      <a class="qft__logo" href="{{ routes.root_url }}">{%- render 'qh-logo', word: true -%}<span class="visually-hidden">{{ brand }}</span></a>
+      {%- if section.settings.about != blank -%}<div class="qft__blurb">{{ section.settings.about }}</div>{%- endif -%}
+    </div>
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'menu' -%}
+          {%- if block.settings.menu != blank -%}
+            <nav class="qft__col" aria-label="{{ block.settings.heading | escape }}" {{ block.shopify_attributes }}>
+              <h2 class="qft__h q-label">{{ block.settings.heading }}</h2>
+              <ul class="qft__links" role="list">
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            </nav>
+          {%- endif -%}
+        {%- when 'text' -%}
+          <div class="qft__col qft__col--text" {{ block.shopify_attributes }}>
+            <h2 class="qft__h q-label">{{ block.settings.heading }}</h2>
+            <div class="qft__text">{{ block.settings.text }}</div>
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+    {%- if has_social -%}
+      <div class="qft__col">
+        <h2 class="qft__h q-label">{{ 'general.follow' | t }}</h2>
+        <ul class="qft__links" role="list">
+          {%- for s in socials -%}
+            {%- assign key = 'social_' | append: s -%}
+            {%- if settings[key] != blank -%}
+              <li><a href="{{ settings[key] }}" target="_blank" rel="noopener">{{ s | capitalize | replace: 'Tiktok', 'TikTok' }}<span class="visually-hidden"> ({{ 'accessibility.new_window' | t }})</span></a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="qft__giant" aria-hidden="true">
+    <svg viewBox="0 0 1000 128" preserveAspectRatio="none" focusable="false">
+      <text x="0" y="112" textLength="1000" lengthAdjust="spacingAndGlyphs">{{ brand | upcase }}</text>
+    </svg>
+  </div>
+
+  <div class="qft__bar">
+    <div class="q-wrap qft__bar-in q-label">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ brand }}</p>
+      <ul class="qft__policies" role="list">
+        {%- for policy in shop.policies -%}
+          <li><a href="{{ policy.url }}">{{ policy.title }}</a></li>
+        {%- endfor -%}
+      </ul>
+      {%- if section.settings.sign_off != blank -%}<p class="qft__sign">{{ section.settings.sign_off }}</p>{%- endif -%}
+      {%- if section.settings.show_powered -%}<p>{{ powered_by_link }}</p>{%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "sct-footer",
+  "settings": [
+    { "type": "richtext", "id": "about", "label": "About line", "default": "<p>Quiet Hour Press makes puzzle books and gift books, designed page by page and made to be given.</p>" },
+    { "type": "text", "id": "sign_off", "label": "Sign-off", "default": "Loud books for quiet hours" },
+    { "type": "checkbox", "id": "show_powered", "label": "Show “Powered by Shopify”", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Write to us" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Questions about an order or a book? Use the contact page.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 4
+}
+{% endschema %}

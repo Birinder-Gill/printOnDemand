@@ -1,0 +1,2 @@
+{%- comment -%} Display text helper: escapes, turns [words] into highlight boxes and newlines into breaks. {%- endcomment -%}
+{{- text | escape | replace: '[', '<span class="q-hl">' | replace: ']', '</span>' | newline_to_br -}}

@@ -1,30 +1,52 @@
 {
   "sections": {
-    "main": {
-      "type": "pg-contact",
+    "intro": {
+      "type": "qh-intro",
       "settings": {
         "kicker": "Contact",
-        "heading": "Leave a message",
-        "pad_top": "Important message",
-        "slip_title": "While you were out",
-        "to_name": "The 90s America Crossword team",
-        "while_line": "Somebody called. Fill in the rest.",
-        "label_name": "Name",
-        "label_email": "Email",
-        "label_phone": "Phone",
-        "topics_label": "Regarding",
-        "topics": "My order\nThe book\nGifts and bulk orders\nJust saying hi",
-        "label_message": "Message",
-        "button_label": "Leave message",
-        "stamp": "Message taken",
-        "machine_name": "Callback",
-        "machine_model": "TAM-90",
-        "tape_label": "Greeting",
-        "play_label": "Play greeting",
-        "greeting_label": "Outgoing message",
-        "other_text": "<p><strong>About an order?</strong> Include your order number (it's in your confirmation email) and we'll find it faster.</p>"
+        "heading": "Write to [us].",
+        "text": "<p>Questions about an order, a book, or a stack of books for a gift? Send a message and a real person writes back.</p>",
+        "meta": "",
+        "scheme": "red"
       }
+    },
+    "main": {
+      "type": "qh-contact",
+      "settings": {
+        "form_heading": "Send a message"
+      },
+      "blocks": {
+        "c1": {
+          "type": "cell",
+          "settings": {
+            "label": "Replies",
+            "text": "<p>We answer every message, usually within two working days.</p>"
+          }
+        },
+        "c2": {
+          "type": "cell",
+          "settings": {
+            "label": "About an order?",
+            "text": "<p>Include your order number (it's in your confirmation email) and we'll find it faster.</p>"
+          }
+        },
+        "c3": {
+          "type": "cell",
+          "settings": {
+            "label": "Gifts and bulk orders",
+            "text": "<p>Buying several copies for a team, a party or a shop? Tell us how many and where they're going.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ]
     }
   },
-  "order": ["main"]
+  "order": [
+    "intro",
+    "main"
+  ]
 }

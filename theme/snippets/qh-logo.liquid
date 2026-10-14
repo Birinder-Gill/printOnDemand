@@ -1,0 +1,16 @@
+{%- comment -%}
+  Quiet Hour Press mark: a clock face with one hour (12 to 1) cut out in red, on an ink tile.
+  {% render 'qh-logo', class: 'x', word: true %}  word: also set the wordmark next to the tile.
+{%- endcomment -%}
+<span class="qlogo {{ class }}">
+  <svg class="qlogo__mark" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false">
+    <rect width="64" height="64" fill="#0d0d0d"/>
+    <circle cx="32" cy="32" r="22" fill="#ffd400"/>
+    <path d="M32 32V10A22 22 0 0 1 43 12.95Z" fill="#ff2a1f"/>
+    <path d="M32 32V10M32 32 43 12.95" stroke="#0d0d0d" stroke-width="3.2" stroke-linecap="square"/>
+    <circle cx="32" cy="32" r="3.6" fill="#0d0d0d"/>
+  </svg>
+  {%- if word -%}
+    <span class="qlogo__word"><span>Quiet Hour</span><span>Press</span></span>
+  {%- endif -%}
+</span>

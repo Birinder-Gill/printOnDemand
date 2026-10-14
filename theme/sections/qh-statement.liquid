@@ -1,0 +1,23 @@
+{%- comment -%} Statement band: one line set as big as the screen allows, with [bracketed] words boxed. {%- endcomment -%}
+<section class="qstate qs-{{ section.settings.scheme }} q-sect">
+  <div class="q-wrap qstate__in">
+    {%- if section.settings.kicker != blank -%}<p class="q-label qstate__k">{{ section.settings.kicker }}</p>{%- endif -%}
+    <p class="qstate__t">{% render 'qh-hl', text: section.settings.text %}</p>
+    {%- if section.settings.small != blank -%}<p class="q-label qstate__s">{{ section.settings.small }}</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Statement",
+  "class": "sct-statement",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small heading", "default": "A note from the press" },
+    { "type": "textarea", "id": "text", "label": "Statement", "default": "Put the phone down.\nPick a [pencil] up.", "info": "Put [brackets] around words to box them." },
+    { "type": "text", "id": "small", "label": "Small print", "default": "Made for the hour after dinner" },
+    { "type": "select", "id": "scheme", "label": "Color", "default": "red", "options": [
+      { "value": "red", "label": "Red" }, { "value": "blue", "label": "Cobalt" }, { "value": "yellow", "label": "Yellow" }, { "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" } ] }
+  ],
+  "presets": [{ "name": "Statement" }]
+}
+{% endschema %}

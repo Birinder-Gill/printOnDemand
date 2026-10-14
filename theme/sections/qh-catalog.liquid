@@ -1,0 +1,89 @@
+{%- comment -%}
+  The catalog: every book from a collection as a numbered card that opens the book's own page.
+  A lone book gets the wide card. "In the works" blocks fill the shelf with honest placeholders for the next
+  titles (they link to the mailing list), and disappear when you remove them.
+{%- endcomment -%}
+{%- liquid
+  assign coll = section.settings.collection | default: collections.all
+  assign limit = section.settings.limit
+  assign count = coll.products.size
+  if count > limit
+    assign count = limit
+  endif
+  assign total = coll.all_products_count | default: coll.products_count
+  assign idx = section.settings.index
+-%}
+{{ 'qh-catalog.css' | asset_url | stylesheet_tag }}
+<section class="qcat qs-{{ section.settings.scheme }} q-sect" id="catalog" aria-labelledby="Cat-{{ section.id }}">
+  <div class="q-wrap q-pad">
+    <div class="q-head">
+      {%- if idx != blank -%}<span class="q-head__idx q-label">{{ idx }}</span>{%- endif -%}
+      <h2 class="q-h2" id="Cat-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <div class="q-head__aside">
+        <p class="q-label qcat__count"><span class="qcat__n q-num">{{ total | prepend: '00' | slice: -2, 2 }}</span> {% if total == 1 %}{{ section.settings.count_one }}{% else %}{{ section.settings.count_many }}{% endif %}</p>
+        {%- if section.settings.link_label != blank -%}<a class="q-arrowlink" href="{{ coll.url }}">{{ section.settings.link_label }}{% render 'qh-arrow', class: '' %}</a>{%- endif -%}
+      </div>
+    </div>
+
+    <ul class="qcat__grid{% if count == 1 %} qcat__grid--solo{% endif %}" role="list">
+      {%- for p in coll.products limit: limit -%}
+        <li class="qcat__item q-rise{% if count == 1 %} qcat__item--wide{% endif %}" style="--d: {{ forloop.index0 | times: 80 }}ms">
+          {%- if count == 1 -%}
+            {%- render 'qh-card', product: p, index: forloop.index0, class: 'q-card--wide', sizes: '(min-width: 990px) 34vw, 100vw' -%}
+          {%- else -%}
+            {%- render 'qh-card', product: p, index: forloop.index0, sizes: '(min-width: 990px) 30vw, (min-width: 600px) 50vw, 100vw' -%}
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+      {%- for block in section.blocks -%}
+        <li class="qcat__item q-rise" {{ block.shopify_attributes }}>
+          <article class="qcat__soon">
+            <div class="q-card__top q-label"><span>No. {{ block.settings.number }}</span><span>{{ block.settings.status }}</span></div>
+            <div class="qcat__soon-art q-hatch" aria-hidden="true"><span class="qcat__soon-q">?</span></div>
+            <div class="q-card__body">
+              <h3 class="q-card__title">{{ block.settings.title }}</h3>
+              {%- if block.settings.text != blank -%}<p class="q-card__line">{{ block.settings.text }}</p>{%- endif -%}
+              {%- if block.settings.link_label != blank -%}
+                <div class="q-card__foot"><a class="q-arrowlink" href="{{ block.settings.link | default: '#signup' }}">{{ block.settings.link_label }}{% render 'qh-arrow', class: '' %}</a></div>
+              {%- endif -%}
+            </div>
+          </article>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Catalog",
+  "class": "sct-catalog",
+  "settings": [
+    { "type": "text", "id": "index", "label": "Index label", "default": "[01]" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The catalog" },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Leave empty to show every product." },
+    { "type": "range", "id": "limit", "label": "Books to show", "min": 1, "max": 24, "step": 1, "default": 12 },
+    { "type": "text", "id": "count_one", "label": "Count label (one)", "default": "title in print" },
+    { "type": "text", "id": "count_many", "label": "Count label (many)", "default": "titles in print" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Browse all" },
+    { "type": "select", "id": "scheme", "label": "Color", "default": "paper", "options": [
+      { "value": "paper", "label": "Paper" }, { "value": "white", "label": "White" }, { "value": "yellow", "label": "Yellow" }, { "value": "ink", "label": "Ink" } ] }
+  ],
+  "blocks": [
+    {
+      "type": "upcoming",
+      "name": "In the works",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "002" },
+        { "type": "text", "id": "status", "label": "Status", "default": "In the works" },
+        { "type": "text", "id": "title", "label": "Title", "default": "The next book" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "A new puzzle book is on the press. Join the mailing list to hear the day it's out." },
+        { "type": "text", "id": "link_label", "label": "Link label", "default": "Get the email" },
+        { "type": "url", "id": "link", "label": "Link", "info": "Defaults to the newsletter at the foot of the page." }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "Catalog", "blocks": [{ "type": "upcoming" }] }]
+}
+{% endschema %}

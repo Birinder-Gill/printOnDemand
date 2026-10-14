@@ -1,0 +1,174 @@
+{%- comment -%}
+  Product main, brutalist: breadcrumbs, a framed gallery with ruled thumbnails, and a buy box laid out like a
+  spec sheet. Per-book data comes from the product and optional metafields:
+    custom.catalog_number  "001"            custom.highlights  multi-line text, one point per line
+    custom.specs           multi-line text, one "Label: Value" per line (falls back to the Spec row blocks)
+{%- endcomment -%}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign parts = product.title | split: ' — '
+  assign name = parts.first
+  assign sub = ''
+  if parts.size > 1
+    assign sub = parts.last
+  endif
+  assign num = product.metafields.custom.catalog_number.value
+  assign hl_src = product.metafields.custom.highlights.value | default: section.settings.highlights
+  assign highlights = hl_src | newline_to_br | split: '<br />'
+  assign specs_src = product.metafields.custom.specs.value
+  assign specs = specs_src | newline_to_br | split: '<br />'
+  assign media_count = product.media.size
+-%}
+{{ 'qh-product.css' | asset_url | stylesheet_tag }}
+<nav class="q-crumbs" aria-label="{{ 'general.breadcrumbs' | t }}">
+  <ol class="q-wrap">
+    <li><a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a></li>
+    <li><a href="{{ routes.all_products_collection_url }}">{{ 'general.catalog' | t }}</a></li>
+    <li><span aria-current="page">{% if num != blank %}No. {{ num }}: {% endif %}{{ name }}</span></li>
+  </ol>
+</nav>
+
+<section class="qpm" aria-labelledby="ProductTitle" data-buybox>
+  <div class="qpm__grid">
+    <div class="qpm__media" data-qgallery>
+      <div class="qpm__stage">
+        <ul class="qpm__slides" role="list" data-qslides>
+          {%- for m in product.media -%}
+            <li class="qpm__slide" data-qslide="{{ forloop.index0 }}" data-media-id="{{ m.id }}">
+              {%- if forloop.first -%}
+                {{ m | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '500,800,1100,1400,1600', sizes: '(min-width: 990px) 52vw, 100vw', alt: m.alt }}
+              {%- else -%}
+                {{ m | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '500,800,1100,1400,1600', sizes: '(min-width: 990px) 52vw, 100vw', alt: m.alt }}
+              {%- endif -%}
+            </li>
+          {%- else -%}
+            <li class="qpm__slide qpm__slide--empty">{{ 'product-1' | placeholder_svg_tag: 'qpm__ph' }}</li>
+          {%- endfor -%}
+        </ul>
+        {%- if media_count > 1 -%}
+          <div class="qpm__nav">
+            <button class="qpm__step" type="button" data-qstep="-1" aria-label="{{ 'general.previous' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button>
+            <p class="qpm__count q-num" aria-live="polite"><span data-qcount>01</span>/{{ media_count | prepend: '0' | slice: -2, 2 }}</p>
+            <button class="qpm__step" type="button" data-qstep="1" aria-label="{{ 'general.next' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h16M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button>
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if media_count > 1 -%}
+        <ul class="qpm__thumbs" role="list">
+          {%- for m in product.media -%}
+            <li><button class="qpm__thumb" type="button" data-qgo="{{ forloop.index0 }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="{{ 'products.view_gallery_image' | t: index: forloop.index }}">
+              {{ m | image_url: width: 200 | image_tag: loading: 'lazy', alt: '', width: 100, height: 100 }}
+            </button></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <div class="qpm__info">
+      <div class="qpm__tags">
+        {%- if num != blank -%}<span class="q-tag q-tag--fill">No. {{ num }}</span>{%- endif -%}
+        {%- if product.type != blank -%}<span class="q-tag">{{ product.type }}</span>{%- endif -%}
+        <span class="q-tag qpm__avail{% unless variant.available %} is-out{% endunless %}">{% if variant.available %}{{ 'products.available' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</span>
+      </div>
+      <h1 class="qpm__title" id="ProductTitle">{{ name }}{% if sub != blank %}<span class="visually-hidden">: {{ sub }}</span>{% endif %}</h1>
+      {%- if sub != blank -%}<p class="qpm__sub" aria-hidden="true">{{ sub }}</p>{%- endif -%}
+
+      <div class="qpm__price q-price">
+        <span class="visually-hidden">{{ 'products.price' | t }}</span>
+        <span class="q-price__now" data-variant-price>{{ variant.price | money_without_trailing_zeros }}</span>
+        <s class="q-price__was" data-variant-compare{% unless variant.compare_at_price > variant.price %} hidden{% endunless %}>{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money_without_trailing_zeros }}{% endif %}</s>
+        <span class="qpm__tax q-label">{% if cart.taxes_included %}{{ 'products.taxes_included' | t }} {% endif %}{{ 'products.shipping_at_checkout' | t }}</span>
+      </div>
+
+      {%- assign hl_count = 0 -%}
+      {%- for h in highlights -%}{%- assign t = h | strip -%}{%- if t != blank -%}{%- assign hl_count = hl_count | plus: 1 -%}{%- endif -%}{%- endfor -%}
+      {%- if hl_count > 0 -%}
+        <ul class="qpm__hl" role="list">
+          {%- for h in highlights -%}{%- assign t = h | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- form 'product', product, id: 'ProductForm', class: 'qpm__form', novalidate: 'novalidate' -%}
+        {%- if product.has_only_default_variant -%}
+          <input type="hidden" name="id" value="{{ variant.id }}">
+        {%- else -%}
+          <fieldset class="qpm__variants">
+            <legend class="q-label">{{ product.options | join: ' / ' }}</legend>
+            <div class="qpm__pills">
+              {%- for v in product.variants -%}
+                <label class="qpm__pill{% unless v.available %} is-out{% endunless %}">
+                  <input type="radio" name="id" value="{{ v.id }}" data-variant-pill data-price="{{ v.price | money_without_trailing_zeros }}" data-compare="{% if v.compare_at_price > v.price %}{{ v.compare_at_price | money_without_trailing_zeros }}{% endif %}" data-available="{{ v.available }}"{% if v.featured_media %} data-media="{{ v.featured_media.id }}"{% endif %}{% if v.id == variant.id %} checked{% endif %}>
+                  <span>{{ v.title }}</span>
+                </label>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endif -%}
+        <div class="qpm__row">
+          <div class="q-qty">
+            <button type="button" data-qty-step="-1" aria-label="{{ 'products.decrease_quantity' | t }}"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 8h12" stroke="currentColor" stroke-width="2.6"/></svg></button>
+            <label class="visually-hidden" for="ProductQty">{{ 'products.quantity' | t }}</label>
+            <input id="ProductQty" type="number" name="quantity" value="1" min="1" max="99" inputmode="numeric">
+            <button type="button" data-qty-step="1" aria-label="{{ 'products.increase_quantity' | t }}"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="2.6"/></svg></button>
+          </div>
+          <button class="q-btn q-btn--lg qpm__add" type="submit" name="add"{% unless variant.available %} disabled{% endunless %}>
+            <span data-add-label>{% if variant.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</span>
+            <span class="q-btn__price" data-variant-price>{{ variant.price | money_without_trailing_zeros }}</span>
+          </button>
+        </div>
+        {%- if section.settings.show_dynamic -%}<div class="qpm__dynamic">{{ form | payment_button }}</div>{%- endif -%}
+        <p class="q-msg q-msg--err" data-form-error hidden role="alert"></p>
+      {%- endform -%}
+
+      {%- assign spec_count = 0 -%}
+      {%- for s in specs -%}{%- if s contains ':' -%}{%- assign spec_count = spec_count | plus: 1 -%}{%- endif -%}{%- endfor -%}
+      {%- if spec_count > 0 or section.blocks.size > 0 -%}
+        <div class="qpm__sheet">
+          <p class="qpm__sheet-h q-label">{{ section.settings.specs_heading }}</p>
+          <dl class="qpm__specs">
+            {%- if spec_count > 0 -%}
+              {%- for s in specs -%}
+                {%- if s contains ':' -%}
+                  {%- assign kv = s | split: ':' -%}
+                  {%- assign k = kv.first | strip -%}
+                  {%- assign val = s | remove_first: kv.first | remove_first: ':' | strip -%}
+                  <div class="qpm__spec"><dt class="q-label">{{ k }}</dt><dd>{{ val }}</dd></div>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in section.blocks -%}
+                <div class="qpm__spec" {{ block.shopify_attributes }}><dt class="q-label">{{ block.settings.label }}</dt><dd>{{ block.settings.value }}</dd></div>
+              {%- endfor -%}
+            {%- endif -%}
+          </dl>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="qpm__bar" data-qbar hidden>
+    <p class="qpm__bar-t"><span class="q-label">{% if num != blank %}No. {{ num }}{% endif %}</span><span class="qpm__bar-n">{{ name }}</span></p>
+    <button class="q-btn q-btn--sm" type="submit" form="ProductForm"{% unless variant.available %} disabled{% endunless %}><span>{{ 'products.add_to_cart' | t }}</span><span class="q-btn__price" data-variant-price>{{ variant.price | money_without_trailing_zeros }}</span></button>
+  </div>
+</section>
+
+<script type="application/ld+json">{{ product | structured_data }}</script>
+<script src="{{ 'qh-product.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Product: spec sheet",
+  "class": "sct-qpm",
+  "settings": [
+    { "type": "textarea", "id": "highlights", "label": "Highlights (one per line)", "info": "Used when the product has no custom.highlights metafield." },
+    { "type": "text", "id": "specs_heading", "label": "Spec sheet heading", "default": "Spec sheet" },
+    { "type": "checkbox", "id": "show_dynamic", "label": "Show the express checkout button", "default": true }
+  ],
+  "blocks": [
+    { "type": "spec", "name": "Spec row", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Format" },
+      { "type": "text", "id": "value", "label": "Value", "default": "Hardcover" } ] }
+  ],
+  "max_blocks": 12
+}
+{% endschema %}

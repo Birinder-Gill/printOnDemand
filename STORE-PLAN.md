@@ -1,5 +1,37 @@
-# 90s America Crossword: Shopify store plan
+# Quiet Hour Press: Shopify store plan
 
+**Direction change (user, 14 Oct 2026):** the store is no longer a one-product site. It is **Quiet Hour Press**, a press
+selling puzzle and gift books; *90s America Crossword* is product No. 001. One page per product. The store shell is
+**loud brutalism** in the **Primary** palette. The crossword's page keeps its handcrafted 90s sections inside the
+brutalist frame ("a product with its own packaging"). The original brief below still applies to those 90s sections.
+
+## Brutalist system (store shell)
+- Tokens in `assets/qh.css` (`--q-*`): paper #f2eee3, white #fffdf7, ink #0d0d0d, red #ff2a1f, cobalt #1f3bff,
+  yellow #ffd400. 3px ink rules (2.5px on phones), hard offset shadows (8px / 6px), zero radius.
+- Type: Archivo variable (wdth 125 + wght 900 for display, uppercase, tight leading), Archivo body,
+  Space Mono 700 for labels, numbers and prices.
+- Color schemes `.qs-paper|white|ink|red|blue|yellow` set --bg/--fg/--line/--hi; sections pick one in settings.
+  Red takes ink text, cobalt takes white text (contrast). Red never carries small text on paper.
+- Components: `.q-btn` (yellow, ink border, hard shadow that collapses on press), `.q-card` (numbered product card,
+  `snippets/qh-card.liquid`), `.q-tag`, `.q-stamp`, `.q-acc` accordion, `.q-inline` input+button bar, `.q-qty`,
+  `.q-marquee`, `.q-crumbs`, `.q-intro` page band, `.q-rte`. `[brackets]` in display text = boxed highlight
+  (`snippets/qh-hl.liquid`). Logo: clock face with one hour (12 to 1) cut out in red (`snippets/qh-logo.liquid`).
+- Product data per book (metafields, namespace custom): catalog_number ("001"), tagline, cutout (transparent image
+  for color panels), highlights (multi-line), specs (multi-line "Label: Value").
+- Chrome: qh-announce (mono crawl), qh-header (ruled cells; phone menu = cobalt index), cart-drawer (ruled slab,
+  section id must stay `cart-drawer`), qh-signup (newsletter band, id #signup), qh-footer (giant SVG wordmark).
+- Home: qh-hero (clock + featured book), qh-marquee, qh-catalog (+ honest "in the works" tiles), qh-spotlight,
+  qh-rules, qh-statement.
+- Products: `product.json` = reusable brutalist book page (qh-product, qh-story, qh-marquee, qh-faq, qh-related;
+  qh-pages "Look inside" is available to add). Each new book gets its own `product.<handle>.json` built from it.
+  `product.90s-crossword.json` = qh-world placard + the 90s sections (hero grid, blister card, flipbook, channels,
+  binder, game show, track list, facts, cheats, yearbook, manual, notes, order form, infomercial) + qh-related.
+- Store templates: cart (qh-cart-page), collection (qh-collection), list-collections, search, 404, password,
+  page, page.about (the press), page.contact, page.faq, page.shipping, blog, article, gift_card: all brutalist.
+  Crossword sub-pages keep their 90s design under a qh-world placard: page.inside (video store), page.liner
+  (liner notes, moved from page.about).
+
+## Original brief (90s America Crossword)
 The brief (user, 13 Oct 2026): build the Shopify store for the premium hardcover gift edition of *90s America Crossword:
 The Throwback Puzzle Book*. Loud retro vibe, "do not hold back". A unique theme and design language for every section.
 Real expensive vibe: every section and page should look handcrafted with precision, as if it took its time. Quality over

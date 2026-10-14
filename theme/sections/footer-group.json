@@ -2,16 +2,54 @@
   "type": "footer",
   "name": "Footer group",
   "sections": {
+    "signup": {
+      "type": "qh-signup",
+      "settings": {
+        "scheme": "yellow",
+        "kicker": "The mailing list",
+        "heading": "New books. No noise.",
+        "note": "One email when a new title is out. Unsubscribe anytime."
+      }
+    },
     "footer": {
-      "type": "x-footer",
-      "settings": { "osd_mode": "REW", "osd_channel": "CH 03", "bar_text": "Thanks for watching", "sign_off": "Be kind, rewind.", "show_powered": false },
-      "blocks": {
-        "menu_main": { "type": "menu", "settings": { "heading": "Menu", "menu": "main-menu" } },
-        "menu_help": { "type": "menu", "settings": { "heading": "Help", "menu": "footer" } },
-        "signup": { "type": "signup", "settings": { "heading": "Get a page when the next book drops", "note": "One email per new book. Unsubscribe anytime." } }
+      "type": "qh-footer",
+      "settings": {
+        "about": "<p>Quiet Hour Press makes puzzle books and gift books, designed page by page and made to be given.</p>",
+        "sign_off": "Loud books for quiet hours",
+        "show_powered": false
       },
-      "block_order": ["menu_main", "menu_help", "signup"]
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu"
+          }
+        },
+        "help": {
+          "type": "menu",
+          "settings": {
+            "heading": "Help",
+            "menu": "footer"
+          }
+        },
+        "write": {
+          "type": "text",
+          "settings": {
+            "heading": "Write to us",
+            "text": "<p>Questions about an order or a book? <a href=\"/pages/contact\">Send us a message</a> and we'll write back.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "shop",
+        "help",
+        "write"
+      ]
     }
   },
-  "order": ["footer"]
+  "order": [
+    "signup",
+    "footer"
+  ]
 }

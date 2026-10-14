@@ -1,4 +1,15 @@
 {
-  "sections": { "main": { "type": "main-404", "settings": {} } },
-  "order": ["main"]
+  "sections": {
+    "main": {
+      "type": "qh-404",
+      "settings": {
+        "kicker": "Error 404 · Page not found",
+        "heading": "This page took\nthe [hour] off.",
+        "text": "The link may be old, or the page moved. The books are all still here."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
 }

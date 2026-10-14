@@ -1,0 +1,57 @@
+{%- comment -%}
+  Exhibit placard for a book that brings its own world (its sections below use their own design language):
+  breadcrumbs, the catalog number on a red tile, a line about what comes next, and a jump to the buy box.
+{%- endcomment -%}
+{%- liquid
+  assign wp = section.settings.product | default: product
+  assign num = wp.metafields.custom.catalog_number.value | default: section.settings.number
+  assign name = wp.title | split: ' — ' | first
+-%}
+<nav class="q-crumbs" aria-label="{{ 'general.breadcrumbs' | t }}">
+  <ol class="q-wrap">
+    <li><a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a></li>
+    <li><a href="{{ routes.all_products_collection_url }}">{{ 'general.catalog' | t }}</a></li>
+    {%- if page -%}
+      {%- if wp -%}<li><a href="{{ wp.url }}">{% if num != blank %}No. {{ num }}: {% endif %}{{ name }}</a></li>{%- endif -%}
+      <li><span aria-current="page">{{ page.title }}</span></li>
+    {%- else -%}
+      <li><span aria-current="page">{% if num != blank %}No. {{ num }}: {% endif %}{{ name }}</span></li>
+    {%- endif -%}
+  </ol>
+</nav>
+<div class="qworld qs-ink">
+  <div class="qworld__in">
+    {%- if num != blank -%}<p class="qworld__num" aria-hidden="true"><span class="q-label">No.</span>{{ num }}</p>{%- endif -%}
+    <div class="qworld__copy">
+      <p class="qworld__t">{% render 'qh-hl', text: section.settings.heading %}</p>
+      {%- if section.settings.text != blank -%}<p class="qworld__s q-label">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    {%- if section.settings.jump_label != blank -%}
+      <a class="qworld__jump" href="{{ section.settings.jump_target }}">
+        <span>{{ section.settings.jump_label }}</span>
+        {%- assign first_char = section.settings.jump_target | slice: 0 -%}
+        {%- if first_char == '#' -%}
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M12 3v16M5 13l7 7 7-7"/></svg>
+        {%- else -%}
+          <svg class="is-side" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3 12h16M13 5l7 7-7 7"/></svg>
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Exhibit placard",
+  "class": "sct-world",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Book", "info": "On a product page this defaults to that product." },
+    { "type": "text", "id": "number", "label": "Catalog number", "info": "Used when the product has no custom.catalog_number metafield." },
+    { "type": "textarea", "id": "heading", "label": "Line", "default": "This book comes with its [own world]." },
+    { "type": "text", "id": "text", "label": "Small print", "default": "Scroll down. The rest of this page is designed like the book." },
+    { "type": "text", "id": "jump_label", "label": "Jump link label", "default": "Skip to buying" },
+    { "type": "text", "id": "jump_target", "label": "Jump link target", "default": "#ProductTitle", "info": "An anchor on this page (like #ProductTitle) or a path (like /collections/all)." }
+  ],
+  "presets": [{ "name": "Exhibit placard" }]
+}
+{% endschema %}

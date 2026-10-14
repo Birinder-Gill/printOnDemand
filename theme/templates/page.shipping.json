@@ -1,97 +1,98 @@
 {
   "sections": {
-    "parcel": {
-      "type": "pg-parcel",
+    "intro": {
+      "type": "qh-intro",
       "settings": {
-        "kicker": "Contents",
-        "heading": "",
-        "sub": "How your book gets to you, and what to do if something's off.",
-        "to_name": "You!",
-        "service": "Book rate",
-        "tracking": "TRK 1990 1999 0048 0651",
-        "tape_text": "Handle with care · Puzzles inside",
-        "stamp_1": "This side up",
-        "stamp_2": "Fragile: nostalgia",
-        "sticker": "Hardcover inside"
+        "kicker": "Help",
+        "heading": "Shipping &\n[returns].",
+        "text": "<p>How your books get to you, and what happens if something goes wrong.</p>",
+        "meta": "",
+        "scheme": "yellow"
       }
     },
-    "form": {
-      "type": "s-orderform",
-      "settings": {},
+    "main": {
+      "type": "qh-page",
+      "settings": {
+        "scheme": "white"
+      },
       "blocks": {
-        "b1": {
-          "type": "box",
+        "c1": {
+          "type": "card",
           "settings": {
-            "label": "Shipping",
-            "text": "<p>Shipping options and costs are shown at checkout, before you pay.</p>",
-            "link_label": "",
-            "link": "",
-            "wide": false
+            "heading": "Refund policy",
+            "text": "<p>The full terms for returns and refunds.</p>",
+            "link_label": "Read the policy",
+            "link": "shopify://policies/refund-policy"
           }
         },
-        "b2": {
-          "type": "box",
+        "c2": {
+          "type": "card",
           "settings": {
-            "label": "Order updates",
-            "text": "<p>You'll get an email confirming your order, and another one when it ships.</p>",
-            "link_label": "",
-            "link": "",
-            "wide": false
-          }
-        },
-        "b3": {
-          "type": "box",
-          "settings": {
-            "label": "Returns & refunds",
-            "text": "<p>Returns and refunds follow our refund policy.</p>",
-            "link_label": "Read the refund policy",
-            "link": "shopify://policies/refund-policy",
-            "wide": false
-          }
-        },
-        "b4": {
-          "type": "box",
-          "settings": {
-            "label": "Questions",
-            "text": "<p>Write to us from the contact page with your order number, and we'll get back to you.</p>",
+            "heading": "Questions",
+            "text": "<p>Write to us with your order number and we'll get back to you.</p>",
             "link_label": "Contact us",
-            "link": "shopify://pages/contact",
-            "wide": false
-          }
-        },
-        "b5": {
-          "type": "box",
-          "settings": {
-            "label": "Sending it as a gift",
-            "text": "<p>Enter the recipient's address at checkout. Want to sign it yourself first? Ship it to you, then use the autograph page up front.</p>",
-            "link_label": "",
-            "link": "",
-            "wide": false
-          }
-        },
-        "b6": {
-          "type": "box",
-          "settings": {
-            "label": "Damaged or misprinted copy",
-            "text": "<p>It happens, rarely. Send us a photo and your order number and we'll make it right.</p>",
-            "link_label": "Shipping policy",
-            "link": "shopify://policies/shipping-policy",
-            "wide": false
+            "link": "shopify://pages/contact"
           }
         }
       },
       "block_order": [
-        "b1",
-        "b2",
-        "b5",
-        "b3",
-        "b6",
-        "b4"
+        "c1",
+        "c2"
+      ]
+    },
+    "rules": {
+      "type": "qh-rules",
+      "settings": {
+        "index": "[01]",
+        "heading": "The short version",
+        "aside": "",
+        "scheme": "paper"
+      },
+      "blocks": {
+        "r1": {
+          "type": "rule",
+          "settings": {
+            "title": "Shipping",
+            "text": "Options and costs are shown at checkout, before you pay.",
+            "invert": false
+          }
+        },
+        "r2": {
+          "type": "rule",
+          "settings": {
+            "title": "Order updates",
+            "text": "One email when you order, another when it ships, with tracking.",
+            "invert": true
+          }
+        },
+        "r3": {
+          "type": "rule",
+          "settings": {
+            "title": "Gifts",
+            "text": "Enter the recipient's address at checkout. Add a note to the order if you'd like one included.",
+            "invert": false
+          }
+        },
+        "r4": {
+          "type": "rule",
+          "settings": {
+            "title": "Damaged copy",
+            "text": "It happens, rarely. Send a photo and your order number and we'll make it right.",
+            "invert": false
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
       ]
     }
   },
   "order": [
-    "parcel",
-    "form"
+    "intro",
+    "main",
+    "rules"
   ]
 }

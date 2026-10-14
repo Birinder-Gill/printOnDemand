@@ -1,48 +1,108 @@
 {
   "sections": {
-    "main": {
-      "type": "pg-liner",
-      "blocks": {
-        "c1": { "type": "credit", "settings": { "role": "Puzzles", "value": "48 crosswords in six sections, two per category" } },
-        "c2": { "type": "credit", "settings": { "role": "Clues", "value": "651, written for people who were there" } },
-        "c3": { "type": "credit", "settings": { "role": "Hints", "value": "71, printed upside down. No peeking." } },
-        "c4": { "type": "credit", "settings": { "role": "Answer key", "value": "In the back, laid out like a game magazine's cheat codes" } },
-        "c5": { "type": "credit", "settings": { "role": "Page design", "value": "A different piece of the decade on every page" } },
-        "c6": { "type": "credit", "settings": { "role": "Format", "value": "Hardcover, 8.25 × 11 in, 80 full-color pages" } },
-        "p1": { "type": "photo", "settings": { "image": "shopify://shop_images/nac-pz-03.jpg" } },
-        "p2": { "type": "photo", "settings": { "image": "shopify://shop_images/nac-pz-18.jpg" } },
-        "p3": { "type": "photo", "settings": { "image": "shopify://shop_images/nac-pz-29.jpg" } },
-        "p4": { "type": "photo", "settings": { "image": "shopify://shop_images/nac-pz-44.jpg" } }
-      },
-      "block_order": ["c1", "c2", "c3", "c4", "c5", "c6", "p1", "p2", "p3", "p4"],
+    "intro": {
+      "type": "qh-intro",
       "settings": {
-        "product": "90s-america-crossword-gift-edition",
-        "insert_image": "shopify://shop_images/nac-cover-front.jpg",
-        "sticker": "Gift edition",
-        "disc_text": "90s America Crossword ★ The throwback puzzle book ★",
-        "disc_small": "48 puzzles · 1990–1999",
-        "kicker": "Liner notes",
-        "heading": "",
-        "tagline": "You were there. Prove it.",
-        "lede": "Forty-eight crosswords about the decade of dial-up, boy bands and blowing into cartridges. Here's how the book came together.",
-        "button_label": "Add to cart",
-        "link_label": "Look inside",
-        "link": "shopify://pages/inside-the-book",
-        "notes_heading": "The notes",
-        "credits_heading": "Credits",
-        "fine_print": "Not affiliated with any show, film, band, toy or brand named in the clues. All names belong to their owners.",
-        "thanks_heading": "Special thanks",
-        "thanks_text": "<p>To everyone who ever taped a show off the TV, rewound a rental before returning it, or knew every word of a song they'd never admit to liking.</p><p>This one's for you.</p>",
-        "sign": "Rewind, play again.",
-        "hidden_label": "Hidden track",
-        "hidden_track": "<p>Keep turning after puzzle 48. The answer key is laid out like the cheat codes page of a 90s game magazine.</p>",
-        "player_name": "Disc-Go",
-        "esp_text": "45 sec anti-skip · Digital mega bass",
-        "close_kicker": "Track 01",
-        "close_heading": "Press play.",
-        "close_text": "The hardcover gift edition, with a page up front for your message. Wrap it, sign it, give it."
+        "kicker": "About the press",
+        "heading": "Loud books\nfor [quiet] hours.",
+        "text": "<p>One subject per book. Every page designed. Answers in the back.</p>",
+        "meta": "Puzzle books\nGift books\nHardcovers",
+        "scheme": "yellow"
+      }
+    },
+    "main": {
+      "type": "qh-page",
+      "settings": {
+        "scheme": "white"
+      },
+      "blocks": {
+        "c1": {
+          "type": "card",
+          "settings": {
+            "heading": "In print",
+            "text": "<p>No. 001: 90s America Crossword, the gift edition hardcover.</p>",
+            "link_label": "See the book",
+            "link": "shopify://products/90s-america-crossword-gift-edition"
+          }
+        },
+        "c2": {
+          "type": "card",
+          "settings": {
+            "heading": "Next up",
+            "text": "<p>The next title is on the press. The mailing list hears first.</p>",
+            "link_label": "Get the email",
+            "link": "#signup"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2"
+      ]
+    },
+    "rules": {
+      "type": "qh-rules",
+      "settings": {
+        "index": "[01]",
+        "heading": "House rules",
+        "aside": "How every Quiet Hour Press book gets made.",
+        "scheme": "paper"
+      },
+      "blocks": {
+        "r1": {
+          "type": "rule",
+          "settings": {
+            "title": "One idea per book",
+            "text": "Each book picks one subject and goes all the way with it. No filler chapters, no padding.",
+            "invert": false
+          }
+        },
+        "r2": {
+          "type": "rule",
+          "settings": {
+            "title": "Every page designed",
+            "text": "Pages are laid out one at a time, so no two spreads look alike.",
+            "invert": true
+          }
+        },
+        "r3": {
+          "type": "rule",
+          "settings": {
+            "title": "Answers in the back",
+            "text": "Every puzzle book has a full answer key. Stuck is fine. Stuck forever is not.",
+            "invert": false
+          }
+        },
+        "r4": {
+          "type": "rule",
+          "settings": {
+            "title": "Made to be given",
+            "text": "Hardcovers built to be wrapped, signed and handed over.",
+            "invert": false
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ]
+    },
+    "statement": {
+      "type": "qh-statement",
+      "settings": {
+        "kicker": "A note from the press",
+        "text": "Put the phone down.\nPick a [pencil] up.",
+        "small": "Made for the hour after dinner",
+        "scheme": "blue"
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "intro",
+    "main",
+    "rules",
+    "statement"
+  ]
 }

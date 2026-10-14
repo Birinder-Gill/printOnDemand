@@ -23,7 +23,8 @@ const product = {
   content: '', featured_media: productMedia[0] || null, featured_image: productMedia[0] || null, media: productMedia, images: productMedia,
   variants: [variant], selected_variant: null, selected_or_first_available_variant: variant, first_available_variant: variant,
   has_only_default_variant: true, options: ['Title'], options_with_values: [{ name: 'Title', position: 1, values: ['Default Title'], selected_value: 'Default Title' }],
-  requires_selling_plan: false, selling_plan_groups: [], metafields: {}, quantity_price_breaks_configured: false,
+  requires_selling_plan: false, selling_plan_groups: [], quantity_price_breaks_configured: false,
+  metafields: { custom: { catalog_number: { value: '001' }, tagline: { value: '48 crosswords about the 1990s. Gift edition hardcover.' }, cutout: { value: imageObj('shopify://shop_images/nac-hero-book.png', '') } } },
   'quantity_price_breaks_configured?': false, gift_card: false, 'gift_card?': false,
 };
 
@@ -37,7 +38,7 @@ const emptyCart = { item_count: 0, items: [], total_price: 0, items_subtotal_pri
 const link = (title, url, extra = {}) => ({ title, url, active: false, current: false, child_active: false, links: [], levels: 0, type: 'http_link', handle: title.toLowerCase().replace(/\W+/g, '-'), ...extra });
 const linklists = {
   'main-menu': { handle: 'main-menu', title: 'Main menu', levels: 1, links: [
-    link('The book', `/products/${HANDLE}`), link('Look inside', '/pages/inside-the-book'), link('Liner notes', '/pages/about'), link('FAQ', '/pages/faq'), link('Contact', '/pages/contact')] },
+    link('Catalog', '/collections/all'), link('90s Crossword', `/products/${HANDLE}`), link('About', '/pages/about'), link('FAQ', '/pages/faq'), link('Contact', '/pages/contact')] },
   footer: { handle: 'footer', title: 'Footer menu', levels: 1, links: [
     link('Shipping & returns', '/pages/shipping-returns'), link('FAQ', '/pages/faq'), link('Contact', '/pages/contact'), link('Search', '/search')] },
 };
@@ -45,11 +46,15 @@ const linklists = {
 const page = (title, handle, content) => ({ id: 900 + handle.length, title, handle, url: `/pages/${handle}`, content, author: '', published_at: '2026-10-13', template_suffix: null });
 const lorem = '<p>Forty-eight crosswords about the 1990s.</p><h2>A heading</h2><p>Another paragraph with <a href="#">a link</a>.</p><ul><li>One</li><li>Two</li></ul>';
 const pages = {
-  about: page('Liner notes', 'about', fs.readFileSync('/home/claude/store/data/pages/about.html', 'utf8')), faq: page('FAQ', 'faq', lorem), contact: page('Contact', 'contact', fs.readFileSync('/home/claude/store/data/pages/contact.html', 'utf8')),
-  'shipping-returns': page('Shipping & returns', 'shipping-returns', lorem), 'inside-the-book': page('Inside the book', 'inside-the-book', lorem),
+  about: page('About', 'about', fs.existsSync('/home/claude/store/data/pages/about-press.html') ? fs.readFileSync('/home/claude/store/data/pages/about-press.html', 'utf8') : lorem),
+  liner: page('Liner notes', 'liner-notes', fs.readFileSync('/home/claude/store/data/pages/about.html', 'utf8')), faq: page('FAQ', 'faq', lorem), contact: page('Contact', 'contact', fs.readFileSync('/home/claude/store/data/pages/contact-press.html', 'utf8')),
+  'shipping-returns': page('Shipping & returns', 'shipping-returns', fs.readFileSync('/home/claude/store/data/pages/shipping.html', 'utf8')), 'inside-the-book': page('Inside the book', 'inside-the-book', lorem),
 };
 
-const collection = { id: 55, title: 'The Gift Shop', handle: 'all', url: '/collections/all', description: '<p>Everything in the shop.</p>', products: [product], products_count: 1, all_products_count: 1,
+const N = +(process.env.MOCK_N || 1);
+const extra = [];
+for (let i = 2; i <= N; i++) extra.push({ ...product, id: 7700000 + i, title: ['Decades Word Search — Pocket Edition', 'The 80s Logic Book', 'Road Trip Puzzle Pad', 'Gift Book of Riddles'][i - 2] || `Book ${i}`, handle: `book-${i}`, url: `/products/book-${i}`, price: 149900 + i * 10000, metafields: { custom: { catalog_number: { value: String(i).padStart(3, '0') }, tagline: { value: 'A stand-in product for layout testing.' }, cutout: { value: imageObj('shopify://shop_images/nac-book-fore.png', '') } } } });
+const collection = { id: 55, title: 'The Catalog', handle: 'all', url: '/collections/all', description: '<p>Every book from the press.</p>', products: [product, ...extra], products_count: 1 + extra.length, all_products_count: 1 + extra.length,
   image: null, featured_image: productMedia[0] || null, sort_by: 'manual', default_sort_by: 'manual', sort_options: [], filters: [], current_type: null, current_vendor: null };
 
 const puzzles = JSON.parse(fs.readFileSync('/home/claude/store/tools/puzzles.json', 'utf8'));
@@ -65,7 +70,7 @@ const shop = { metaobjects: { puzzle: puzzleObjs }, name: 'My Store 10', url: 'h
   currency: 'INR', money_format: 'Rs. {{amount}}', money_with_currency_format: 'Rs. {{amount}} INR', description: '', permanent_domain: 'i7d9cn-v1.myshopify.com',
   refund_policy: { title: 'Refund policy', url: '/policies/refund-policy' }, privacy_policy: { title: 'Privacy policy', url: '/policies/privacy-policy' },
   terms_of_service: { title: 'Terms of service', url: '/policies/terms-of-service' }, shipping_policy: { title: 'Shipping policy', url: '/policies/shipping-policy' },
-  contact_policy: null, policies: [], brand: { logo: null }, published_locales: [{ iso_code: 'en', primary: true }], customer_accounts_enabled: true, 'customer_accounts_enabled?': true };
+  contact_policy: null, policies: [{ title: 'Refund policy', url: '/policies/refund-policy' }, { title: 'Shipping policy', url: '/policies/shipping-policy' }, { title: 'Privacy policy', url: '/policies/privacy-policy' }, { title: 'Terms of service', url: '/policies/terms-of-service' }], brand: { logo: null }, published_locales: [{ iso_code: 'en', primary: true }], customer_accounts_enabled: true, 'customer_accounts_enabled?': true };
 
 const routes = { root_url: '/', cart_url: '/cart', cart_add_url: '/cart/add', cart_change_url: '/cart/change', cart_update_url: '/cart/update', cart_clear_url: '/cart/clear',
   search_url: '/search', predictive_search_url: '/search/suggest', account_url: '/account', account_login_url: '/account/login', account_logout_url: '/account/logout',
@@ -87,8 +92,8 @@ export const mocks = {
     if (base === 'product') { s.product = product; s.page_title = product.title; s.request.path = product.url; }
     if (base === 'list-collections') { const arr = [collection, { ...collection, id: 56, title: 'Gift ideas', handle: 'gifts', url: '/collections/gifts', products_count: 1 }]; arr.all = collection; s.collections = arr; }
     if (base === 'collection') { s.collection = collection; s.page_title = collection.title; }
-    if (base === 'page') { const p = pages[suffix === 'about' ? 'about' : suffix === 'faq' ? 'faq' : suffix === 'contact' ? 'contact' : suffix === 'shipping' ? 'shipping-returns' : suffix === 'inside' ? 'inside-the-book' : 'about']; s.page = { ...p, template_suffix: suffix || null }; s.page_title = p.title; s.request.path = p.url; }
-    if (base === 'search') { s.search = { performed: true, terms: 'popcorn', results: [product], results_count: 1, types: ['product'] }; }
+    if (base === 'page') { const p = pages[suffix === 'about' ? 'about' : suffix === 'liner' ? 'liner' : suffix === 'faq' ? 'faq' : suffix === 'contact' ? 'contact' : suffix === 'shipping' ? 'shipping-returns' : suffix === 'inside' ? 'inside-the-book' : 'about']; s.page = { ...p, template_suffix: suffix || null }; s.page_title = p.title; s.request.path = p.url; }
+    if (base === 'search') { s.search = { performed: true, terms: 'crossword', results: [product, ...extra].map(x => ({ ...x, object_type: 'product' })), results_count: 1 + extra.length, types: ['product'] }; }
     if (base === '404') { s.page_title = '404 Not Found'; }
     if (base === 'blog' || base === 'article') {
       const art = { id: 1, title: 'Notes from the tape deck', handle: 'notes', url: '/blogs/news/notes', author: 'The editors', published_at: '2026-10-13', created_at: '2026-10-13', excerpt: '<p>Short excerpt.</p>', content: lorem, image: null, tags: ['notes'], comments_count: 0, comments_enabled: false };

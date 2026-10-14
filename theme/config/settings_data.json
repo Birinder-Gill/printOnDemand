@@ -1,14 +1,16 @@
 {
   "current": {
-    "brand_name": "90s America Crossword",
+    "brand_name": "Quiet Hour Press",
     "hero_product": "90s-america-crossword-gift-edition",
     "cart_type": "drawer",
     "motion_enabled": true,
-    "sections": {}
+    "sections": {},
+    "brand_tagline": "Loud books for quiet hours"
   },
   "presets": {
-    "Throwback": {
-      "brand_name": "90s America Crossword",
+    "Quiet Hour Press": {
+      "brand_name": "Quiet Hour Press",
+      "brand_tagline": "Loud books for quiet hours",
       "hero_product": "90s-america-crossword-gift-edition",
       "cart_type": "drawer",
       "motion_enabled": true

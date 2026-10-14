@@ -1,0 +1,106 @@
+{%- comment -%}
+  Home hero. Left: the press's line set huge, with [bracketed] words boxed. Right: a cobalt panel with a giant
+  clock face (the logo's one-hour wedge sweeps open on load) and the featured book on it, plus a caption bar
+  that links to that book's own page. Under it, a strip of ruled cells.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product | default: settings.hero_product
+  assign img = section.settings.image
+  if img == blank and p != blank
+    assign img = p.metafields.custom.cutout.value | default: p.featured_media
+  endif
+  assign num = p.metafields.custom.catalog_number.value
+  assign pname = p.title | split: ' — ' | first
+  assign halt = section.settings.image_alt | default: pname | escape
+-%}
+{{ 'qh-hero.css' | asset_url | stylesheet_tag }}
+<section class="qhero" aria-labelledby="Hero-{{ section.id }}">
+  <div class="qhero__grid">
+    <div class="qhero__copy">
+      {%- if section.settings.kicker != blank -%}
+        <p class="qhero__kicker q-label"><span class="qhero__dot" aria-hidden="true"></span>{{ section.settings.kicker }}</p>
+      {%- endif -%}
+      <h1 class="qhero__title" id="Hero-{{ section.id }}">{% render 'qh-hl', text: section.settings.heading %}</h1>
+      <div class="qhero__foot">
+        {%- if section.settings.text != blank -%}<p class="q-lede qhero__lede">{{ section.settings.text }}</p>{%- endif -%}
+        <div class="qhero__ctas">
+          {%- if section.settings.cta_label != blank -%}
+            <a class="q-btn q-btn--lg" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta_label }}{% render 'qh-arrow' %}</a>
+          {%- endif -%}
+          {%- if section.settings.cta2_label != blank -%}
+            <a class="q-arrowlink" href="{{ section.settings.cta2_link | default: routes.root_url }}">{{ section.settings.cta2_label }}{% render 'qh-arrow', class: '' %}</a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="qhero__stage qs-blue">
+      <div class="qhero__clock" aria-hidden="true">
+        <svg viewBox="0 0 200 200" focusable="false">
+          <circle cx="100" cy="100" r="96" fill="#ffd400" stroke="#0d0d0d" stroke-width="4"/>
+          <g stroke="#0d0d0d" stroke-width="4" stroke-linecap="square">
+            {%- for i in (0..11) -%}
+              {%- assign deg = i | times: 30 -%}
+              <path d="M100 8v{% if i == 0 or i == 3 or i == 6 or i == 9 %}16{% else %}9{% endif %}" transform="rotate({{ deg }} 100 100)"/>
+            {%- endfor -%}
+          </g>
+          <path class="qhero__wedge" d="M100 100V4A96 96 0 0 1 148 16.86Z" fill="#ff2a1f" stroke="#0d0d0d" stroke-width="4" stroke-linejoin="miter"/>
+          <circle cx="100" cy="100" r="7" fill="#0d0d0d"/>
+        </svg>
+      </div>
+      {%- if img -%}
+        <div class="qhero__book">
+          {{ img | image_url: width: 1200 | image_tag: widths: '480,720,960,1200', sizes: '(min-width: 990px) 34vw, 80vw', alt: halt, fetchpriority: 'high', class: 'qhero__img' }}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.stamp != blank -%}
+        <p class="q-stamp qhero__stamp">{% render 'qh-hl', text: section.settings.stamp %}</p>
+      {%- endif -%}
+      {%- if p != blank -%}
+        <a class="qhero__caption" href="{{ p.url }}">
+          <span class="q-label">{% if num != blank %}No. {{ num }}{% else %}{{ 'products.view' | t }}{% endif %}</span>
+          <span class="qhero__cap-title">{{ pname }}</span>
+          <span class="qhero__cap-price q-num">{{ p.price | money_without_trailing_zeros }}</span>
+          {%- render 'qh-arrow', class: 'qhero__cap-arrow' -%}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <ul class="qhero__strip" role="list">
+      {%- for block in section.blocks -%}
+        <li class="qhero__cell" {{ block.shopify_attributes }}>
+          <span class="q-label qhero__cell-n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <span class="qhero__cell-t">{{ block.settings.text }}</span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "class": "sct-hero",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small heading", "default": "Quiet Hour Press · Puzzle & gift books" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Loud books\nfor [quiet]\nhours.", "info": "One line per row. Put [brackets] around words to box them." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Puzzle books and gift books, designed page by page and made to be given. For the hour you put the phone down." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Browse the catalog" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+    { "type": "text", "id": "cta2_label", "label": "Second link label", "default": "About the press" },
+    { "type": "url", "id": "cta2_link", "label": "Second link" },
+    { "type": "header", "content": "Featured book" },
+    { "type": "product", "id": "product", "label": "Book", "info": "Defaults to the featured book in theme settings." },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Best with a transparent background. Defaults to the book's cutout or first photo." },
+    { "type": "text", "id": "image_alt", "label": "Image description" },
+    { "type": "textarea", "id": "stamp", "label": "Stamp", "default": "Out\nnow" }
+  ],
+  "blocks": [
+    { "type": "cell", "name": "Strip cell", "settings": [ { "type": "text", "id": "text", "label": "Text", "default": "Puzzle books" } ] }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "Hero", "blocks": [ { "type": "cell" }, { "type": "cell", "settings": { "text": "Gift books" } }, { "type": "cell", "settings": { "text": "Designed page by page" } }, { "type": "cell", "settings": { "text": "Made to be given" } } ] }]
+}
+{% endschema %}

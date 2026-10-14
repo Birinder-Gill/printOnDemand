@@ -21,7 +21,12 @@
       "login_form_error": "Wrong password!",
       "login_form_submit": "Enter",
       "admin_link_html": "Are you the store owner? <a href=\"/admin\" class=\"link underlined-link\">Log in here</a>"
-    }
+    },
+    "main_menu": "Main",
+    "follow": "Follow",
+    "breadcrumbs": "Breadcrumbs",
+    "catalog": "Catalog",
+    "pagination": "Pagination"
   },
   "products": {
     "add_to_cart": "Add to cart",
@@ -38,28 +43,40 @@
     "taxes_note": "Taxes included. Shipping calculated at checkout.",
     "view_gallery_image": "Show image {{ index }}",
     "zoom": "Open full size",
-    "media_count": "Image {{ index }} of {{ count }}"
+    "media_count": "Image {{ index }} of {{ count }}",
+    "view": "View book",
+    "choose": "Choose",
+    "in_stock": "Ready to ship",
+    "details": "Details",
+    "no_number": "Book",
+    "available": "Available",
+    "taxes_included": "Taxes included.",
+    "shipping_at_checkout": "Shipping calculated at checkout."
   },
   "cart": {
     "title": "Your cart",
     "empty": "Your cart is empty",
-    "empty_note": "Nothing rung up yet.",
-    "continue": "Shop the book",
+    "empty_note": "Nothing in here yet.",
+    "continue": "Browse the catalog",
     "subtotal": "Subtotal",
     "taxes_shipping": "Taxes and shipping are added at checkout.",
     "checkout": "Check out",
     "remove": "Remove",
     "remove_item": "Remove {{ title }}",
-    "item_count": { "one": "{{ count }} item", "other": "{{ count }} items" },
+    "item_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
     "update_error": "That didn't go through. Please try again.",
     "note": "Order note",
-    "view_cart": "View cart"
+    "view_cart": "View cart",
+    "empty_big": "Empty"
   },
   "newsletter": {
     "label": "Email",
     "placeholder": "Your email",
-    "submit": "Send",
-    "success": "Got it. We'll page you.",
+    "submit": "Join",
+    "success": "You're on the list. We'll write when a new book is out.",
     "error": "Please enter a valid email address."
   },
   "contact": {
@@ -69,14 +86,23 @@
     "message": "Message",
     "send": "Send message",
     "success": "Message received. We'll get back to you soon.",
-    "error": "Please check the highlighted fields."
+    "error": "Please check the highlighted fields.",
+    "order": "Order number (optional)"
   },
   "search": {
     "heading": "Search",
     "placeholder": "Search the shop",
     "submit": "Search",
     "results_for": "Results for “{{ terms }}”",
-    "no_results": "No matches for “{{ terms }}”."
+    "no_results": "No matches for “{{ terms }}”.",
+    "count": {
+      "one": "{{ count }} result",
+      "other": "{{ count }} results"
+    },
+    "page": "Page",
+    "article": "Journal",
+    "try": "Try a shorter word, or browse the whole catalog.",
+    "hint": "Type a title, a subject or a word from a book."
   },
   "gift_card": {
     "title": "Your gift card",
@@ -86,15 +112,29 @@
     "balance": "Balance",
     "expired": "Expired",
     "print": "Print",
-    "shop": "Shop now"
+    "shop": "Shop now",
+    "initial": "Started at {{ value }}"
   },
   "blogs": {
     "read_more": "Read more",
-    "back": "Back to the zine",
-    "by": "By {{ author }}"
+    "back": "Back to the journal",
+    "by": "By {{ author }}",
+    "posts": "posts",
+    "empty": "No posts yet."
   },
   "accessibility": {
     "new_window": "Opens in a new window.",
     "unit_price_separator": "per"
+  },
+  "collections": {
+    "sort_by": "Sort",
+    "apply": "Apply",
+    "empty": "Nothing on this shelf yet.",
+    "title_one": "title",
+    "title_many": "titles"
+  },
+  "password": {
+    "title": "opening soon",
+    "owner": "Store owner"
   }
 }

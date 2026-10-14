@@ -3,7 +3,7 @@
   on a turntable, everything you get with starburst checks, the price on a red TV-tube badge, and the buy bar.
 {%- endcomment -%}
 {%- liquid
-  assign product = section.settings.product | default: settings.hero_product
+  assign product = section.settings.product | default: product | default: settings.hero_product
   assign items = section.settings.items | newline_to_br | split: '<br />'
 -%}
 {{ 's-infomercial.css' | asset_url | stylesheet_tag }}

@@ -1,7 +1,17 @@
 {
   "sections": {
-    "main": { "type": "main-collection", "settings": { "per_page": 12, "page_number": 214, "kicker": "The 1990s catalog", "burst": "New this year!", "item_label": "Item", "each_label": "ea.", "choose_label": "Choose options", "crayon_note": "THIS ONE!!", "empty_text": "Nothing on this page yet. Check back soon.", "index_label": "Also in this catalog", "index_links": "main-menu" } },
-    "pager": { "type": "s-pager", "settings": {} }
+    "main": {
+      "type": "qh-collection",
+      "settings": {
+        "kicker": "The catalog",
+        "count_one": "title",
+        "count_many": "titles",
+        "per_page": 24,
+        "scheme": "yellow"
+      }
+    }
   },
-  "order": ["main", "pager"]
+  "order": [
+    "main"
+  ]
 }

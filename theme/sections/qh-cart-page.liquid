@@ -1,0 +1,23 @@
+{%- comment -%} Cart page: lines on the left, a sticky totals slab on the right. Re-rendered by global.js. {%- endcomment -%}
+<section class="qcp" aria-labelledby="CartTitle">
+  <div class="q-intro">
+    <div class="q-wrap q-intro__in">
+      <div>
+        <p class="q-intro__kicker"><span class="q-tag">{{ 'cart.item_count' | t: count: cart.item_count }}</span></p>
+        <h1 class="q-h1" id="CartTitle">{{ 'cart.title' | t }}</h1>
+      </div>
+      <a class="q-arrowlink q-intro__meta" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}{% render 'qh-arrow', class: '' %}</a>
+    </div>
+  </div>
+  <div class="qcp__body" data-cart-page data-section="{{ section.id }}">
+    {%- render 'qh-cart' -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "class": "sct-cart",
+  "settings": []
+}
+{% endschema %}

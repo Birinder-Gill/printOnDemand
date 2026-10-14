@@ -1,11 +1,10 @@
 {%- layout none -%}
 {%- comment -%}
-  Gift card: an arcade game card. Holographic plastic with a magnetic stripe, the balance on a red LED readout,
-  the code embossed, a QR code to scan at the counter, and the usual buttons (copy, print, wallet, shop).
+  Gift card: a thick ruled card in the press colors. Balance huge, the code in a mono strip, QR code for the
+  counter, and the usual actions (copy, shop, print, wallet).
 {%- endcomment -%}
 {%- liquid
   assign brand = settings.brand_name | default: shop.name
-  assign balance = gift_card.balance | money_without_currency | remove: ','
 -%}
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
@@ -17,52 +16,69 @@
     <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}">
     {% render 'font-faces' %}
     {{ 'base.css' | asset_url | stylesheet_tag }}
-    {{ 'gift-card.css' | asset_url | stylesheet_tag }}
+    {{ 'qh.css' | asset_url | stylesheet_tag }}
+    {{ 'qh-chrome.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
     {{ content_for_header }}
+    <style>
+      .gc{width:min(100% - 32px,760px);margin:0 auto;padding:40px 0 64px;display:grid;gap:28px}
+      .gc__top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+      .gc__top a{color:inherit;text-decoration:none}
+      .gcard{border:var(--q-bw) solid var(--q-ink);background:var(--q-yellow);box-shadow:14px 14px 0 var(--q-ink);display:grid;grid-template-columns:1fr auto;position:relative;overflow:hidden}
+      .gcard.is-dead{filter:grayscale(1)}
+      .gcard__main{padding:26px 28px;display:grid;gap:14px}
+      .gcard__amt{font-weight:900;font-stretch:125%;font-size:clamp(3rem,10vw,5.6rem);line-height:.85;letter-spacing:-.04em;margin:0}
+      .gcard__side{width:clamp(90px,18vw,150px);background:var(--q-red);border-left:var(--q-bw) solid var(--q-ink);display:grid;place-items:center}
+      .gcard__side svg{width:70%;height:auto}
+      .gcard__code{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 28px;background:var(--q-ink);color:var(--q-paper)}
+      .gcard__code b{font-family:var(--q-mono);font-size:clamp(1.05rem,3.2vw,1.5rem);letter-spacing:.12em;color:var(--q-yellow)}
+      .gcard__stamp{position:absolute;right:20%;top:24px;transform:rotate(-10deg);background:var(--q-red);border:var(--q-bw) solid var(--q-ink);padding:6px 12px;font-weight:900;font-stretch:120%;text-transform:uppercase}
+      .gc__actions{display:flex;flex-wrap:wrap;gap:8px}
+      .gc__qr{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+      .gc__qr #QrCode{border:var(--q-bw) solid var(--q-ink);padding:10px;background:#fff}
+      .gc__fine{color:var(--q-mute)}
+      @media print{.gc__actions{display:none}.gcard{box-shadow:none}}
+    </style>
   </head>
-  <body class="gc-body">
+  <body class="qh">
     <main class="gc" id="MainContent">
-      <header class="gc__head">
-        <img class="gc__logo" src="{{ 'logo-90s.svg' | asset_url }}" alt="{{ brand | escape }}" width="200" height="118">
-        <h1 class="gc__title">{{ 'gift_card.title' | t }}</h1>
-      </header>
+      <div class="gc__top">
+        <a href="{{ shop.url }}">{%- render 'qh-logo', word: true -%}<span class="visually-hidden">{{ brand }}</span></a>
+        <h1 class="q-label">{{ 'gift_card.title' | t }}</h1>
+      </div>
 
       <div class="gcard{% if gift_card.expired or gift_card.enabled == false %} is-dead{% endif %}">
-        <div class="gcard__face">
-          <span class="gcard__holo" aria-hidden="true"></span>
-          <p class="gcard__brand" aria-hidden="true">{{ brand }}<small>Play card</small></p>
-          <div class="gcard__led">
-            <span class="gcard__lbl">{{ 'gift_card.balance' | t }}</span>
-            <span class="gcard__amt" aria-hidden="true"><span class="gcard__ghost">{{ balance | replace: '0', '8' | replace: '1', '8' | replace: '2', '8' | replace: '3', '8' | replace: '4', '8' | replace: '5', '8' | replace: '6', '8' | replace: '7', '8' | replace: '9', '8' }}</span>{{ balance }}</span>
-            <span class="visually-hidden">{{ gift_card.balance | money }}</span>
-          </div>
-          {%- if gift_card.expired -%}<p class="gcard__stamp">{{ 'gift_card.expired' | t }}</p>{%- endif -%}
-          <p class="gcard__code"><span class="gcard__lbl">{{ 'gift_card.code' | t }}</span><span class="gcard__emb" id="GcCode">{{ gift_card.code | format_code }}</span></p>
-          <span class="gcard__chip" aria-hidden="true"></span>
+        <div class="gcard__main">
+          <p class="q-label">{{ 'gift_card.balance' | t }}</p>
+          <p class="gcard__amt">{{ gift_card.balance | money_without_trailing_zeros }}</p>
+          {%- if gift_card.balance != gift_card.initial_value -%}<p class="q-label">{{ 'gift_card.initial' | t: value: gift_card.initial_value | money_without_trailing_zeros }}</p>{%- endif -%}
         </div>
-        <div class="gcard__back" aria-hidden="true"><span class="gcard__stripe"></span><span class="gcard__sig">{{ brand }}</span></div>
+        <div class="gcard__side" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="#ffd400" stroke="#0d0d0d" stroke-width="4"/><path d="M32 32V5A27 27 0 0 1 45.5 8.6Z" fill="#fffdf7" stroke="#0d0d0d" stroke-width="4"/><circle cx="32" cy="32" r="4.5" fill="#0d0d0d"/></svg>
+        </div>
+        <p class="gcard__code"><span class="q-label">{{ 'gift_card.code' | t }}</span><b id="GcCode">{{ gift_card.code | format_code }}</b></p>
+        {%- if gift_card.expired -%}<p class="gcard__stamp">{{ 'gift_card.expired' | t }}</p>{%- endif -%}
       </div>
 
       <div class="gc__actions">
-        <button class="btn" type="button" data-copy="{{ gift_card.code }}">{{ 'gift_card.copy' | t }}</button>
-        <a class="btn btn--white" href="{{ shop.url }}">{{ 'gift_card.shop' | t }}</a>
-        <button class="btn btn--white" type="button" onclick="window.print()">{{ 'gift_card.print' | t }}</button>
+        <button class="q-btn" type="button" data-copy="{{ gift_card.code }}">{{ 'gift_card.copy' | t }}</button>
+        <a class="q-btn q-btn--paper" href="{{ shop.url }}">{{ 'gift_card.shop' | t }}</a>
+        <button class="q-btn q-btn--paper" type="button" onclick="window.print()">{{ 'gift_card.print' | t }}</button>
       </div>
-      <p class="gc__copied" role="status" aria-live="polite" data-copied></p>
+      <p class="q-label" role="status" aria-live="polite" data-copied></p>
 
       <div class="gc__qr">
         <div id="QrCode" data-identifier="{{ gift_card.qr_identifier }}"></div>
         {%- if gift_card.pass_url -%}
-          <a class="gc__wallet" href="{{ gift_card.pass_url }}"><img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="Add to Apple Wallet"></a>
+          <a href="{{ gift_card.pass_url }}"><img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="Add to Apple Wallet"></a>
         {%- endif -%}
       </div>
-      <p class="gc__fine">{{ brand }} &middot; {{ shop.domain }}</p>
+      <p class="gc__fine q-label">{{ brand }} &middot; {{ shop.domain }}</p>
     </main>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         var el = document.getElementById('QrCode');
-        if (el && window.QRCode) new QRCode(el, { text: el.dataset.identifier, width: 132, height: 132, colorDark: '#17131f', colorLight: '#fff7e4' });
+        if (el && window.QRCode) new QRCode(el, { text: el.dataset.identifier, width: 132, height: 132, colorDark: '#0d0d0d', colorLight: '#ffffff' });
         var b = document.querySelector('[data-copy]'), out = document.querySelector('[data-copied]');
         if (b) b.addEventListener('click', function () {
           if (navigator.clipboard) navigator.clipboard.writeText(b.dataset.copy).then(function () { out.textContent = {{ 'gift_card.copied' | t | json }}; });

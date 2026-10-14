@@ -1,0 +1,40 @@
+{%- comment -%} Collections index: each collection as a big ruled tile with its count, colors cycling. {%- endcomment -%}
+<section class="qcolls" aria-labelledby="CollsTitle">
+  <div class="q-intro">
+    <div class="q-wrap q-intro__in">
+      <div>
+        <p class="q-intro__kicker"><span class="q-tag">{{ section.settings.kicker }}</span></p>
+        <h1 class="q-h1" id="CollsTitle">{{ section.settings.heading }}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="q-wrap q-pad-s">
+    <ul class="qcolls__grid" role="list">
+      {%- for c in collections -%}
+        {%- assign tone = forloop.index0 | modulo: 3 -%}
+        <li>
+          <a class="qcolls__tile qcolls__tile--{{ tone }}" href="{{ c.url }}">
+            <span class="q-label qcolls__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="qcolls__img" aria-hidden="true">
+              {%- assign cimg = c.featured_image | default: c.products.first.featured_media -%}
+              {%- if cimg -%}{{ cimg | image_url: width: 700 | image_tag: loading: 'lazy', alt: '', widths: '350,700', sizes: '(min-width: 990px) 30vw, 90vw' }}{%- endif -%}
+            </span>
+            <span class="qcolls__t">{{ c.title }}</span>
+            <span class="qcolls__c q-label">{{ c.products_count }} {% if c.products_count == 1 %}{{ 'collections.title_one' | t }}{% else %}{{ 'collections.title_many' | t }}{% endif %} {% render 'qh-arrow', class: '' %}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "class": "sct-collections",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small heading", "default": "Quiet Hour Press" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shelves" }
+  ]
+}
+{% endschema %}

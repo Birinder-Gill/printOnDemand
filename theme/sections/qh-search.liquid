@@ -1,0 +1,60 @@
+{%- comment -%} Search: a full-width input bar, then products as cards and pages/articles as ruled rows. {%- endcomment -%}
+{{ 'qh-catalog.css' | asset_url | stylesheet_tag }}
+<section class="qsearch" aria-labelledby="SearchTitle">
+  <div class="q-intro qs-blue">
+    <div class="q-wrap q-intro__in qsearch__in">
+      <div>
+        <p class="q-intro__kicker"><span class="q-tag">{{ settings.brand_name | default: shop.name }}</span></p>
+        <h1 class="q-h1" id="SearchTitle">{% if search.performed %}{{ 'search.results_for' | t: terms: search.terms }}{% else %}{{ 'search.heading' | t }}{% endif %}</h1>
+      </div>
+      <form class="qsearch__form" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="SearchQ">{{ 'search.placeholder' | t }}</label>
+        <div class="q-inline qsearch__bar">
+          <input class="q-input" id="SearchQ" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}" autocomplete="off">
+          <button class="q-btn" type="submit">{{ 'search.submit' | t }}{% render 'qh-arrow' %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {%- if search.performed -%}
+    {%- paginate search.results by 24 -%}
+      <div class="q-wrap q-pad-s">
+        <p class="q-label qsearch__count">{{ 'search.count' | t: count: search.results_count }}</p>
+        {%- if search.results_count > 0 -%}
+          {%- assign prods = search.results | where: 'object_type', 'product' -%}
+          {%- if prods.size > 0 -%}
+            <ul class="qcat__grid" role="list">
+              {%- for p in prods -%}
+                <li class="qcat__item">{%- render 'qh-card', product: p, index: forloop.index0, sizes: '(min-width: 990px) 30vw, (min-width: 600px) 50vw, 100vw' -%}</li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+          {%- assign others = search.results | where: 'object_type', 'page' -%}
+          {%- assign arts = search.results | where: 'object_type', 'article' -%}
+          {%- if others.size > 0 or arts.size > 0 -%}
+            <ul class="qsearch__rows" role="list">
+              {%- for r in others -%}<li><a href="{{ r.url }}"><span class="q-label">{{ 'search.page' | t }}</span><span class="qsearch__rt">{{ r.title }}</span>{% render 'qh-arrow', class: '' %}</a></li>{%- endfor -%}
+              {%- for r in arts -%}<li><a href="{{ r.url }}"><span class="q-label">{{ 'search.article' | t }}</span><span class="qsearch__rt">{{ r.title }}</span>{% render 'qh-arrow', class: '' %}</a></li>{%- endfor -%}
+            </ul>
+          {%- endif -%}
+        {%- else -%}
+          <div class="qrel__none">
+            <p class="qrel__big">{{ 'search.no_results' | t: terms: search.terms }}</p>
+            <p class="qrel__text">{{ 'search.try' | t }}</p>
+            <a class="q-btn" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}{% render 'qh-arrow' %}</a>
+          </div>
+        {%- endif -%}
+        {%- render 'qh-pagination', paginate: paginate -%}
+      </div>
+    {%- endpaginate -%}
+  {%- else -%}
+    <div class="q-wrap q-pad-s">
+      <p class="qrel__text">{{ 'search.hint' | t }}</p>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{ "name": "Search", "class": "sct-search", "settings": [] }
+{% endschema %}

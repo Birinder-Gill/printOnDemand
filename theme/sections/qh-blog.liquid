@@ -1,0 +1,40 @@
+{%- comment -%} Journal (blog): ruled index of posts with date, title, excerpt and an image cell. {%- endcomment -%}
+<section class="qblog" aria-labelledby="BlogTitle">
+  <div class="q-intro qs-red">
+    <div class="q-wrap q-intro__in">
+      <div>
+        <p class="q-intro__kicker"><span class="q-tag">{{ section.settings.kicker }}</span></p>
+        <h1 class="q-h1" id="BlogTitle">{{ blog.title }}</h1>
+      </div>
+      <p class="q-intro__meta q-label">{{ blog.articles_count }} {{ 'blogs.posts' | t }}</p>
+    </div>
+  </div>
+  {%- paginate blog.articles by 12 -%}
+    <div class="q-wrap q-pad-s">
+      <ol class="qblog__list" role="list">
+        {%- for a in blog.articles -%}
+          <li class="qblog__item">
+            <article class="qblog__post">
+              <p class="q-label qblog__date"><time datetime="{{ a.published_at | date: '%Y-%m-%d' }}">{{ a.published_at | date: '%d %b %Y' }}</time></p>
+              <div class="qblog__main">
+                <h2 class="qblog__t"><a href="{{ a.url }}">{{ a.title }}</a></h2>
+                {%- if a.excerpt_or_content != blank -%}<p class="qblog__ex">{{ a.excerpt_or_content | strip_html | truncatewords: 34 }}</p>{%- endif -%}
+                <span class="q-arrowlink" aria-hidden="true">{{ 'blogs.read_more' | t }}{% render 'qh-arrow', class: '' %}</span>
+              </div>
+              <div class="qblog__img">
+                {%- if a.image -%}{{ a.image | image_url: width: 700 | image_tag: loading: 'lazy', alt: '', widths: '350,700', sizes: '(min-width: 990px) 28vw, 90vw' }}{%- else -%}<span class="qblog__ph" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{%- endif -%}
+              </div>
+            </article>
+          </li>
+        {%- else -%}
+          <li class="qrel__none"><p class="qrel__big">{{ 'blogs.empty' | t }}</p></li>
+        {%- endfor -%}
+      </ol>
+      {%- render 'qh-pagination', paginate: paginate -%}
+    </div>
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{ "name": "Journal", "class": "sct-blog", "settings": [ { "type": "text", "id": "kicker", "label": "Small heading", "default": "The journal" } ] }
+{% endschema %}

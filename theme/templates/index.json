@@ -1,279 +1,225 @@
 {
   "sections": {
     "hero": {
-      "type": "s-hero-grid",
+      "type": "qh-hero",
       "settings": {
-        "book_image": "shopify://shop_images/nac-hero-book.png"
-      }
-    },
-    "channels": {
-      "type": "s-channels",
-      "settings": {
-        "masthead": "The Lineup",
-        "dateline": "Tonight, all night",
-        "heading": "Six channels. One decade.",
-        "intro": "The 48 puzzles are grouped like a night of channel surfing. Pick up the remote.",
-        "remote_label": "Change the channel",
-        "remote_hint": "Arrow keys work too."
+        "kicker": "Quiet Hour Press · Puzzle & gift books",
+        "heading": "Loud books\nfor [quiet]\nhours.",
+        "text": "Puzzle books and gift books, designed page by page and made to be given. For the hour you put the phone down.",
+        "cta_label": "Browse the catalog",
+        "cta_link": "shopify://collections/all",
+        "cta2_label": "About the press",
+        "cta2_link": "shopify://pages/about",
+        "product": "90s-america-crossword-gift-edition",
+        "image": "shopify://shop_images/nac-hero-book.png",
+        "image_alt": "The 90s America Crossword hardcover",
+        "stamp": "Out\nnow"
       },
-      "blocks": {
-        "ch1": {
-          "type": "channel",
-          "settings": {
-            "number": "01",
-            "name": "Television",
-            "short": "TV",
-            "count": "8 puzzles",
-            "intro": "Eight puzzles from the shows we planned our week around: Thursday-night sitcoms, teen dramas that ended on a cliffhanger, Saturday-morning cartoons, and the talk shows, game shows and music videos in between.",
-            "listings": "Sitcoms & Must-See TV|1–2\nDramas & Teen Shows|3–4\nCartoons & Kids' TV|5–6\nMTV, Talk Shows & Game Shows|7–8",
-            "image": "shopify://shop_images/nac-opener-06-07.jpg",
-            "image_alt": "The Television section opener: a CRT showing static and a channel lineup card",
-            "glow": "#3b7bff"
-          }
-        },
-        "ch2": {
-          "type": "channel",
-          "settings": {
-            "number": "02",
-            "name": "Movies",
-            "short": "Movies",
-            "count": "8 puzzles",
-            "intro": "Eight puzzles from the shelves of the neighborhood video store: summer blockbusters, rom-coms, the family movies we rented until the tape wore thin, and the stars whose names sold the tickets.",
-            "listings": "Blockbusters & Action|9–10\nComedies & Rom-Coms|11–12\nDisney & Family Movies|13–14\nHollywood Stars|15–16",
-            "image": "shopify://shop_images/nac-opener-16-17.jpg",
-            "image_alt": "The Movies section opener: video store shelves and a new releases wall",
-            "glow": "#ff3b4e"
-          }
-        },
-        "ch3": {
-          "type": "channel",
-          "settings": {
-            "number": "03",
-            "name": "Music",
-            "short": "Music",
-            "count": "12 puzzles",
-            "intro": "Twelve puzzles from the radio countdown: pop stars, boy bands and girl groups, rock and alternative, hip-hop and R&B, country, and the one-hit wonders that got the whole room dancing.",
-            "listings": "Pop Stars|17–18\nBoy Bands & Girl Groups|19–20\nRock & Alternative|21–22\nHip-Hop & R&B|23–24\nCountry|25–26\nOne-Hit Wonders & Dance Crazes|27–28",
-            "image": "shopify://shop_images/nac-opener-26-27.jpg",
-            "image_alt": "The Music section opener: a shelf stereo display and a CD tower",
-            "glow": "#22d3ee"
-          }
-        },
-        "ch4": {
-          "type": "channel",
-          "settings": {
-            "number": "04",
-            "name": "Games & Toys",
-            "short": "Games",
-            "count": "4 puzzles",
-            "intro": "Four puzzles from the toy aisle and the game room: the consoles we begged for, the games we played until our thumbs hurt, and the toys, fads and collectibles everyone had to have.",
-            "listings": "Video Games & Consoles|29–30\nToys, Fads & Collectibles|31–32",
-            "image": "shopify://shop_images/nac-opener-40-41.jpg",
-            "image_alt": "The Games and Toys section opener: a claw machine and prize capsules",
-            "glow": "#9be31d"
-          }
-        },
-        "ch5": {
-          "type": "channel",
-          "settings": {
-            "number": "05",
-            "name": "Everyday Life",
-            "short": "Life",
-            "count": "10 puzzles",
-            "intro": "Ten puzzles from an ordinary week: dial-up and gadgets, what we wore, what we ate, where we hung out, and what we read and wrote at school.",
-            "listings": "Tech, Gadgets & the Early Internet|33–34\nFashion, Hair & Style|35–36\nSnacks, Sodas & Fast Food|37–38\nMalls, Stores & Hangouts|39–40\nSchool Days, Books & Magazines|41–42",
-            "image": "shopify://shop_images/nac-opener-46-47.jpg",
-            "image_alt": "The Everyday Life section opener: a fridge door covered in magnets and a star chart",
-            "glow": "#ffc61f"
-          }
-        },
-        "ch6": {
-          "type": "channel",
-          "settings": {
-            "number": "06",
-            "name": "Sports, News & Slang",
-            "short": "Sports",
-            "count": "6 puzzles",
-            "intro": "Six puzzles from the sports page, the front page and the schoolyard: the athletes and big games, the headlines that made history, and the catchphrases everyone repeated.",
-            "listings": "Sports Heroes & Big Games|43–44\nHeadlines & History|45–46\nSlang, Catchphrases & Ad Slogans|47–48",
-            "image": "shopify://shop_images/nac-opener-58-59.jpg",
-            "image_alt": "The Sports, News and Slang section opener: a ballpark scoreboard and the lineup",
-            "glow": "#ff7a1f"
-          }
-        }
-      },
-      "block_order": [
-        "ch1",
-        "ch2",
-        "ch3",
-        "ch4",
-        "ch5",
-        "ch6"
-      ]
-    },
-    "binder": {
-      "type": "s-binder",
-      "settings": {},
-      "blocks": {
-        "ins1": {
-          "type": "insert",
-          "settings": {
-            "code": "I1",
-            "title": "Title page",
-            "where": "Front of the book",
-            "page": "1",
-            "note": "A sheet of prismatic stickers under a purple hang tab: the title, the gold seal and a few 90s objects, one already peeled away.",
-            "image": "shopify://shop_images/nac-page-01.jpg"
-          }
-        },
-        "ins2": {
-          "type": "insert",
-          "settings": {
-            "code": "I2",
-            "title": "Autographs",
-            "where": "Front of the book",
-            "page": "3",
-            "note": "A yearbook autograph page with a form for your message, signed in pen, gel pen, marker and pencil.",
-            "image": "shopify://shop_images/nac-page-03.jpg"
-          }
-        },
-        "ins3": {
-          "type": "insert",
-          "settings": {
-            "code": "I3",
-            "title": "Operating Instructions",
-            "where": "Front of the book",
-            "page": "4",
-            "note": "An owner's manual page that explains how the book works, with a numbered diagram and safety notes.",
-            "image": "shopify://shop_images/nac-page-04.jpg"
-          }
-        },
-        "ins4": {
-          "type": "insert",
-          "settings": {
-            "code": "I4",
-            "title": "Track List",
-            "where": "Front of the book",
-            "page": "5",
-            "note": "A hand-labelled C-90 cassette card that lists all 48 puzzles, Side A and Side B.",
-            "image": "shopify://shop_images/nac-page-05.jpg"
-          }
-        },
-        "ins5": {
-          "type": "insert",
-          "settings": {
-            "code": "I5",
-            "title": "Cheat Codes",
-            "where": "Answer key",
-            "page": "66",
-            "note": "The answer key opens like the codes page of a 90s game magazine. Every solved grid is in the back.",
-            "image": "shopify://shop_images/nac-page-66.jpg"
-          }
-        },
-        "ins6": {
-          "type": "insert",
-          "settings": {
-            "code": "I6",
-            "title": "Thanks for Playing",
-            "where": "Last page",
-            "page": "80",
-            "note": "The VCR blue screen at the end of the tape, with a scorecard to fill in.",
-            "image": "shopify://shop_images/nac-page-80.jpg"
-          }
-        }
-      },
-      "block_order": [
-        "ins1",
-        "ins2",
-        "ins3",
-        "ins4",
-        "ins5",
-        "ins6"
-      ]
-    },
-    "gameshow": {
-      "type": "s-gameshow",
-      "settings": {},
       "blocks": {
         "c1": {
-          "type": "clue",
+          "type": "cell",
           "settings": {
-            "plate": "Clue 1",
-            "topic": "Video games",
-            "clue": "Plastic game you blew into when it would not start",
-            "answer": "CARTRIDGE",
-            "hint": "It starts with CART.",
-            "right_msg": "Blow on it and it works every time."
+            "text": "Puzzle books"
           }
         },
         "c2": {
-          "type": "clue",
+          "type": "cell",
           "settings": {
-            "plate": "Clue 2",
-            "topic": "Toys & fads",
-            "clue": "Egg-shaped digital pet that beeped for food in the middle of class",
-            "answer": "TAMAGOTCHI",
-            "hint": "It starts with TAMA.",
-            "right_msg": "Yours is hungry again, by the way."
+            "text": "Gift books"
           }
         },
         "c3": {
-          "type": "clue",
+          "type": "cell",
           "settings": {
-            "plate": "Clue 3",
-            "topic": "Sitcoms",
-            "clue": "What Ross kept yelling while a couch was stuck in a stairwell",
-            "answer": "PIVOT",
-            "hint": "It's also a basketball move.",
-            "right_msg": "You could hear it, couldn't you?"
+            "text": "Designed page by page"
+          }
+        },
+        "c4": {
+          "type": "cell",
+          "settings": {
+            "text": "Made to be given"
           }
         }
       },
       "block_order": [
         "c1",
         "c2",
-        "c3"
+        "c3",
+        "c4"
       ]
     },
-    "facts": {
-      "type": "s-facts",
+    "marquee": {
+      "type": "qh-marquee",
       "settings": {
-        "image": "shopify://shop_images/nac-book-flat.png"
+        "words": "Puzzle books\nGift books\nHardcovers\nNo screens required\nAnswers in the back",
+        "scheme": "blue",
+        "speed": 40,
+        "reverse": false
       }
     },
-    "cheats": {
-      "type": "s-cheats",
+    "catalog": {
+      "type": "qh-catalog",
       "settings": {
-        "image": "shopify://shop_images/nac-open-66-67.png"
-      }
+        "index": "[01]",
+        "heading": "The catalog",
+        "limit": 12,
+        "count_one": "title in print",
+        "count_many": "titles in print",
+        "link_label": "Browse all",
+        "scheme": "paper"
+      },
+      "blocks": {
+        "next": {
+          "type": "upcoming",
+          "settings": {
+            "number": "002",
+            "status": "In the works",
+            "title": "The next book",
+            "text": "A new puzzle book is on the press. Join the mailing list to hear the day it's out.",
+            "link_label": "Get the email",
+            "link": "#signup"
+          }
+        }
+      },
+      "block_order": [
+        "next"
+      ]
     },
-    "yearbook": {
-      "type": "s-yearbook",
+    "spotlight": {
+      "type": "qh-spotlight",
       "settings": {
-        "image": "shopify://shop_images/nac-open-02-03.png",
-        "notes": "2 good 2 be 4gotten!\nH.A.G.S.\nNever change ♥\nStay cool, see you at the reunion\nU R the best\nfriends 4 ever\nDon't forget me!\nRoses r red, crosswords r hard\nKeep in touch!!\nC U next fall"
-      }
+        "product": "90s-america-crossword-gift-edition",
+        "index": "[02]",
+        "kicker": "In the spotlight",
+        "title": "90s America Crossword",
+        "subtitle": "Gift edition hardcover",
+        "text": "<p>Forty-eight crosswords about the 1990s: the sitcoms, the blockbusters, the boy bands, the consoles, the snacks and the slang. Every page is designed as a different piece of the decade, from a cereal box to a video store tape case.</p>",
+        "link_label": "Open the book's page",
+        "image": "shopify://shop_images/nac-open-12-13.png",
+        "image_alt": "The book open at puzzles 5 and 6: a cereal box page and a comic book page",
+        "frame_label": "Puzzles 5 & 6",
+        "stamp": "48\npuzzles",
+        "scheme": "yellow",
+        "flip": false
+      },
+      "blocks": {
+        "s1": {
+          "type": "spec",
+          "settings": {
+            "label": "Format",
+            "value": "Hardcover, 8.25 × 11 in"
+          }
+        },
+        "s2": {
+          "type": "spec",
+          "settings": {
+            "label": "Pages",
+            "value": "80, full color"
+          }
+        },
+        "s3": {
+          "type": "spec",
+          "settings": {
+            "label": "Puzzles",
+            "value": "48 crosswords"
+          }
+        },
+        "s4": {
+          "type": "spec",
+          "settings": {
+            "label": "Clues",
+            "value": "651, with 71 hints"
+          }
+        },
+        "s5": {
+          "type": "spec",
+          "settings": {
+            "label": "Answer key",
+            "value": "In the back"
+          }
+        },
+        "s6": {
+          "type": "spec",
+          "settings": {
+            "label": "Extras",
+            "value": "Autograph page"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s6"
+      ]
     },
-    "infomercial": {
-      "type": "s-infomercial",
+    "rules": {
+      "type": "qh-rules",
       "settings": {
-        "image": "shopify://shop_images/nac-book-fore.png"
-      }
+        "index": "[03]",
+        "heading": "House rules",
+        "aside": "How every Quiet Hour Press book gets made.",
+        "scheme": "paper"
+      },
+      "blocks": {
+        "r1": {
+          "type": "rule",
+          "settings": {
+            "title": "One idea per book",
+            "text": "Each book picks one subject and goes all the way with it. No filler chapters, no padding.",
+            "invert": false
+          }
+        },
+        "r2": {
+          "type": "rule",
+          "settings": {
+            "title": "Every page designed",
+            "text": "Pages are laid out one at a time, so no two spreads look alike.",
+            "invert": true
+          }
+        },
+        "r3": {
+          "type": "rule",
+          "settings": {
+            "title": "Answers in the back",
+            "text": "Every puzzle book has a full answer key. Stuck is fine. Stuck forever is not.",
+            "invert": false
+          }
+        },
+        "r4": {
+          "type": "rule",
+          "settings": {
+            "title": "Made to be given",
+            "text": "Hardcovers built to be wrapped, signed and handed over.",
+            "invert": false
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ]
     },
-    "pager": {
-      "type": "s-pager",
-      "settings": {}
+    "statement": {
+      "type": "qh-statement",
+      "settings": {
+        "kicker": "A note from the press",
+        "text": "Put the phone down.\nPick a [pencil] up.",
+        "small": "Made for the hour after dinner",
+        "scheme": "red"
+      }
     }
   },
   "order": [
     "hero",
-    "channels",
-    "binder",
-    "gameshow",
-    "facts",
-    "cheats",
-    "yearbook",
-    "infomercial",
-    "pager"
+    "marquee",
+    "catalog",
+    "spotlight",
+    "rules",
+    "statement"
   ]
 }

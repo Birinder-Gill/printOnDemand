@@ -1,0 +1,44 @@
+{%- comment -%}
+  Page intro band for store pages: index tag, a huge title (the page title unless overridden), a short line and
+  an optional mono note on the right.
+{%- endcomment -%}
+{%- liquid
+  assign heading = section.settings.heading
+  if heading == blank
+    if page
+      assign heading = page.title
+    elsif collection
+      assign heading = collection.title
+    elsif blog
+      assign heading = blog.title
+    else
+      assign heading = page_title
+    endif
+  endif
+-%}
+<section class="q-intro qs-{{ section.settings.scheme }}">
+  <div class="q-wrap q-intro__in">
+    <div>
+      {%- if section.settings.kicker != blank -%}<p class="q-intro__kicker"><span class="q-tag">{{ section.settings.kicker }}</span></p>{%- endif -%}
+      <h1 class="q-h1">{% render 'qh-hl', text: heading %}</h1>
+      {%- if section.settings.text != blank -%}<div class="q-lede q-intro__text">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+    {%- if section.settings.meta != blank -%}<p class="q-intro__meta q-label">{{ section.settings.meta | newline_to_br }}</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page intro",
+  "class": "sct-intro",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small heading", "default": "Quiet Hour Press" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "info": "Leave empty to use the page title. [Brackets] box a word." },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "textarea", "id": "meta", "label": "Note on the right" },
+    { "type": "select", "id": "scheme", "label": "Color", "default": "paper", "options": [
+      { "value": "paper", "label": "Paper" }, { "value": "white", "label": "White" }, { "value": "yellow", "label": "Yellow" }, { "value": "red", "label": "Red" }, { "value": "blue", "label": "Cobalt" }, { "value": "ink", "label": "Ink" } ] }
+  ],
+  "presets": [{ "name": "Page intro" }]
+}
+{% endschema %}

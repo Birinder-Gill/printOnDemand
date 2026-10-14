@@ -1,0 +1,88 @@
+{%- comment -%}
+  Header: one ruled strip of cells, like a table you can click. Logo tile, the menu as cells, search and the
+  cart (yellow). Sticks to the top. On phones the menu opens as a full-screen cobalt index.
+{%- endcomment -%}
+{%- liquid
+  assign brand = settings.brand_name | default: shop.name
+  assign menu = section.settings.menu
+-%}
+<header class="qhd" data-header>
+  <div class="qhd__bar">
+    <a class="qhd__logo" href="{{ routes.root_url }}"{% if request.page_type == 'index' %} aria-current="page"{% endif %}>
+      {%- render 'qh-logo', word: true -%}
+      <span class="visually-hidden">{{ brand }}</span>
+    </a>
+
+    {%- if menu != blank -%}
+      <nav class="qhd__nav" aria-label="{{ 'general.main_menu' | t }}">
+        <ul class="qhd__links" role="list">
+          {%- for link in menu.links -%}
+            <li><a class="qhd__link" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <span class="qhd__fill" aria-hidden="true">
+      {%- if section.settings.note != blank -%}<span class="q-label">{{ section.settings.note }}</span>{%- endif -%}
+    </span>
+
+    <a class="qhd__cell qhd__search" href="{{ routes.search_url }}">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6.5 6.5" stroke-linecap="square"/></svg>
+      <span class="qhd__cell-word">{{ 'general.search' | t }}</span>
+    </a>
+    <a class="qhd__cell qhd__cart" href="{{ routes.cart_url }}" data-cart-open data-cart-bump aria-label="{{ 'general.cart' | t }}, {{ 'cart.item_count' | t: count: cart.item_count }}">
+      <span class="qhd__cell-word">{{ 'general.cart' | t }}</span>
+      <span class="qhd__count" data-cart-count>{{ cart.item_count }}</span>
+    </a>
+    <button class="qhd__cell qhd__menu" type="button" aria-controls="MenuSheet" aria-expanded="false" data-menu-open>
+      <span class="qhd__burger" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="qhd__cell-word">{{ 'general.menu' | t }}</span>
+    </button>
+  </div>
+</header>
+
+<div class="qmenu qs-blue" id="MenuSheet" role="dialog" aria-modal="true" aria-label="{{ 'general.menu' | t }}" hidden data-menu-sheet>
+  <div class="qmenu__bar">
+    <a class="qhd__logo" href="{{ routes.root_url }}">{%- render 'qh-logo', word: true -%}<span class="visually-hidden">{{ brand }}</span></a>
+    <span class="qhd__fill" aria-hidden="true"></span>
+    <button class="qhd__cell qmenu__close" type="button" data-menu-close>
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      <span class="qhd__cell-word">{{ 'general.close' | t }}</span>
+    </button>
+  </div>
+  {%- if menu != blank -%}
+    <nav class="qmenu__nav" aria-label="{{ 'general.main_menu' | t }}">
+      <ol class="qmenu__links" role="list">
+        {%- for link in menu.links -%}
+          <li style="--i: {{ forloop.index0 }}">
+            <a class="qmenu__link" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>
+              <span class="qmenu__n q-label">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <span class="qmenu__t">{{ link.title }}</span>
+              {%- render 'qh-arrow', class: 'qmenu__arrow' -%}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </nav>
+  {%- endif -%}
+  <form class="qmenu__search" action="{{ routes.search_url }}" method="get" role="search">
+    <label class="visually-hidden" for="MenuSearch">{{ 'search.placeholder' | t }}</label>
+    <div class="q-inline">
+      <input class="q-input" id="MenuSearch" type="search" name="q" placeholder="{{ 'search.placeholder' | t }}">
+      <input type="hidden" name="type" value="product">
+      <button class="q-btn" type="submit">{{ 'search.submit' | t }}</button>
+    </div>
+  </form>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "sct-header",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "text", "id": "note", "label": "Small print in the empty cell", "default": "Puzzle & gift books" }
+  ]
+}
+{% endschema %}

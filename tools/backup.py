@@ -10,13 +10,13 @@ os.chdir(STORE)
 subprocess.run(['git', 'add', '-A'], check=True)
 r = subprocess.run(['git', 'diff', '--cached', '--quiet'])
 if r.returncode:
-    body = f'{msg}\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01N9nUzWnX6CttP1Wf7BU5M8'
+    body = f'{msg}\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01A3PcswNJgAhXRyXjX53WuY'
     subprocess.run(['git', 'commit', '-q', '-m', body], check=True)
 p = subprocess.run(['git', 'push', '-q', 'origin', 'crossword-store'], capture_output=True, text=True)
 print('push:', 'ok' if p.returncode == 0 else p.stderr[-400:])
 sha = subprocess.run(['git', 'rev-parse', 'HEAD'], capture_output=True, text=True).stdout.strip()
 
-out = '/home/claude/90s-store-backup.zip'
+out = '/home/claude/90s-store-backup.zip'  # name kept so resume steps still find it
 n = 0
 with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
     for root, dirs, files in os.walk(STORE):

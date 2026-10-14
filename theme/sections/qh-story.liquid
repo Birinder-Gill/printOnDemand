@@ -1,0 +1,35 @@
+{%- comment -%}
+  About the book: a sticky heading column and the product description (or custom text) as rich text.
+{%- endcomment -%}
+{%- liquid
+  assign body = section.settings.text
+  if body == blank and product
+    assign body = product.description
+  endif
+-%}
+{%- if body != blank -%}
+<section class="qstory qs-{{ section.settings.scheme }} q-sect" aria-labelledby="Story-{{ section.id }}">
+  <div class="q-wrap q-pad qstory__grid">
+    <div class="qstory__head">
+      {%- if section.settings.index != blank -%}<span class="q-head__idx q-label">{{ section.settings.index }}</span>{%- endif -%}
+      <h2 class="q-h2 q-h2--side" id="Story-{{ section.id }}">{% render 'qh-hl', text: section.settings.heading %}</h2>
+    </div>
+    <div class="q-rte qstory__body">{{ body }}</div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "About the book",
+  "class": "sct-story",
+  "settings": [
+    { "type": "text", "id": "index", "label": "Index label", "default": "[01]" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "About the [book]" },
+    { "type": "richtext", "id": "text", "label": "Text", "info": "Leave empty to use the product description." },
+    { "type": "select", "id": "scheme", "label": "Color", "default": "white", "options": [
+      { "value": "white", "label": "White" }, { "value": "paper", "label": "Paper" }, { "value": "yellow", "label": "Yellow" } ] }
+  ],
+  "presets": [{ "name": "About the book" }]
+}
+{% endschema %}

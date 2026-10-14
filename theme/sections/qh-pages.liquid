@@ -1,0 +1,65 @@
+{%- comment -%}
+  Look inside: page images in numbered frames on a sideways track (scroll, swipe, or the arrow keys/buttons).
+{%- endcomment -%}
+<section class="qpages qs-{{ section.settings.scheme }} q-sect" id="look-inside" aria-labelledby="Pages-{{ section.id }}">
+  <div class="q-wrap q-pad-s">
+    <div class="q-head qpages__head">
+      {%- if section.settings.index != blank -%}<span class="q-head__idx q-label">{{ section.settings.index }}</span>{%- endif -%}
+      <h2 class="q-h2" id="Pages-{{ section.id }}">{% render 'qh-hl', text: section.settings.heading %}</h2>
+      <div class="q-head__aside qpages__ctl">
+        <button class="qpages__btn" type="button" data-pages-step="-1" aria-label="{{ 'general.previous' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button>
+        <button class="qpages__btn" type="button" data-pages-step="1" aria-label="{{ 'general.next' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h16M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <ol class="qpages__track" role="list" tabindex="0" aria-label="{{ section.settings.heading | remove: '[' | remove: ']' | escape }}" data-pages-track>
+    {%- for block in section.blocks -%}
+      <li class="qpages__item{% if block.settings.wide %} qpages__item--wide{% endif %}" {{ block.shopify_attributes }}>
+        <figure class="qpages__fig">
+          <div class="qpages__img">
+            {%- if block.settings.image -%}
+              {%- assign w = 900 -%}{%- if block.settings.wide -%}{%- assign w = 1600 -%}{%- endif -%}
+              {{ block.settings.image | image_url: width: w | image_tag: widths: '400,700,900,1200,1600', sizes: '(min-width: 990px) 40vw, 80vw', loading: 'lazy', alt: block.settings.image.alt }}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'qpages__ph' }}
+            {%- endif -%}
+          </div>
+          <figcaption class="qpages__cap"><span class="q-label qpages__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span><span>{{ block.settings.caption }}</span></figcaption>
+        </figure>
+      </li>
+    {%- endfor -%}
+  </ol>
+</section>
+<script>
+(() => {
+  const s = document.getElementById('shopify-section-{{ section.id }}');
+  if (!s) return;
+  const t = s.querySelector('[data-pages-track]');
+  s.querySelectorAll('[data-pages-step]').forEach(b => b.addEventListener('click', () => {
+    const item = t.querySelector('li');
+    const step = item ? item.getBoundingClientRect().width + 24 : t.clientWidth * .8;
+    t.scrollBy({ left: step * +b.dataset.pagesStep, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }));
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Look inside",
+  "class": "sct-pages",
+  "settings": [
+    { "type": "text", "id": "index", "label": "Index label", "default": "[02]" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Look [inside]" },
+    { "type": "select", "id": "scheme", "label": "Color", "default": "blue", "options": [
+      { "value": "blue", "label": "Cobalt" }, { "value": "paper", "label": "Paper" }, { "value": "yellow", "label": "Yellow" }, { "value": "ink", "label": "Ink" }, { "value": "red", "label": "Red" } ] }
+  ],
+  "blocks": [
+    { "type": "page", "name": "Page", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "caption", "label": "Caption", "default": "A page from the book" },
+      { "type": "checkbox", "id": "wide", "label": "Wide (a two-page spread)", "default": false } ] }
+  ],
+  "max_blocks": 24,
+  "presets": [{ "name": "Look inside", "blocks": [{ "type": "page" }, { "type": "page" }, { "type": "page" }] }]
+}
+{% endschema %}

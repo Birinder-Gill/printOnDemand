@@ -1,6 +1,24 @@
 {
   "sections": {
-    "main": { "type": "main-page", "settings": { "label_top": "Composition book", "label_bottom": "100 sheets · wide ruled", "doodle": true } }
+    "intro": {
+      "type": "qh-intro",
+      "settings": {
+        "kicker": "Quiet Hour Press",
+        "heading": "",
+        "text": "",
+        "meta": "",
+        "scheme": "paper"
+      }
+    },
+    "main": {
+      "type": "qh-page",
+      "settings": {
+        "scheme": "white"
+      }
+    }
   },
-  "order": ["main"]
+  "order": [
+    "intro",
+    "main"
+  ]
 }

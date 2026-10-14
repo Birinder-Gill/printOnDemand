@@ -1,32 +1,26 @@
 {%- comment -%}
-  Cart drawer, styled as a thermal receipt printed out of a toy-store register: printed header, item lines with
-  dotted leaders, quantity keys, totals, the big yellow Check out key and a torn edge. Re-rendered with the
-  Section Rendering API (id "cart-drawer") after every cart change.
+  Cart drawer: a ruled paper slab that slides in from the right. Re-rendered with the Section Rendering API
+  (section id "cart-drawer") after every cart change; global.js swaps [data-cart-body].
 {%- endcomment -%}
-{%- liquid
-  assign brand = settings.brand_name | default: shop.name
--%}
-<div class="drawer" id="CartDrawer" role="dialog" aria-modal="true" aria-labelledby="CartDrawerTitle" hidden data-cart-drawer>
-  <div class="drawer__scrim" data-cart-close></div>
-  <div class="drawer__panel">
-    <div class="drawer__register" aria-hidden="true">
-      <span class="drawer__slot"></span>
-    </div>
-    <div class="drawer__head">
-      <h2 class="drawer__title" id="CartDrawerTitle">{{ 'cart.title' | t }}</h2>
-      <button class="drawer__close" type="button" data-cart-close>
-        {%- render 'icon', name: 'x' -%}<span class="visually-hidden">{{ 'general.close' | t }}</span>
+<div class="qcd" id="CartDrawer" role="dialog" aria-modal="true" aria-labelledby="CartDrawerTitle" hidden data-cart-drawer>
+  <div class="qcd__scrim" data-cart-close></div>
+  <div class="qcd__panel">
+    <div class="qcd__head">
+      <h2 class="qcd__title" id="CartDrawerTitle">{{ 'general.cart' | t }} <span class="qcd__n q-num" data-cart-count>{{ cart.item_count }}</span></h2>
+      <button class="qcd__close" type="button" data-cart-close data-cart-focus>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        <span class="visually-hidden">{{ 'general.close' | t }}</span>
       </button>
     </div>
-    <div class="drawer__body" data-cart-body>
-      {%- render 'receipt', brand: brand, compact: true -%}
+    <div class="qcd__body" data-cart-body>
+      {%- render 'qh-cart', compact: true -%}
     </div>
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "Receipt cart drawer",
+  "name": "Cart drawer",
   "class": "sct-cart-drawer",
   "settings": []
 }

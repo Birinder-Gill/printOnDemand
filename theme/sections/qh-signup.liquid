@@ -1,0 +1,42 @@
+{%- comment -%}
+  Newsletter band: one huge line and a single email bar. Shopify's customer form (tagged "newsletter").
+{%- endcomment -%}
+<section class="qsign qs-{{ section.settings.scheme }}" id="signup" aria-labelledby="Sign-{{ section.id }}">
+  <div class="q-wrap qsign__in">
+    <div class="qsign__copy">
+      {%- if section.settings.kicker != blank -%}<p class="q-label qsign__kicker">{{ section.settings.kicker }}</p>{%- endif -%}
+      <h2 class="q-h2 qsign__title" id="Sign-{{ section.id }}">{{ section.settings.heading }}</h2>
+    </div>
+    <div class="qsign__form">
+      {%- form 'customer', id: 'Signup-{{ section.id }}', class: 'qsign__f' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        {%- if form.posted_successfully? -%}
+          <p class="q-msg" role="status">{{ 'newsletter.success' | t }}</p>
+        {%- else -%}
+          <label class="visually-hidden" for="SignEmail-{{ section.id }}">{{ 'newsletter.label' | t }}</label>
+          <div class="q-inline">
+            <input class="q-input" id="SignEmail-{{ section.id }}" type="email" name="contact[email]" autocomplete="email" required placeholder="{{ 'newsletter.placeholder' | t }}"{% if form.errors %} aria-invalid="true" aria-describedby="SignErr-{{ section.id }}"{% endif %}>
+            <button class="q-btn" type="submit">{{ 'newsletter.submit' | t }}{% render 'qh-arrow' %}</button>
+          </div>
+          {%- if form.errors -%}<p class="q-msg q-msg--err qsign__err" id="SignErr-{{ section.id }}" role="alert">{{ 'newsletter.error' | t }}</p>{%- endif -%}
+        {%- endif -%}
+        {%- if section.settings.note != blank -%}<p class="qsign__note q-label">{{ section.settings.note }}</p>{%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "class": "sct-signup",
+  "settings": [
+    { "type": "select", "id": "scheme", "label": "Color", "default": "yellow", "options": [
+      { "value": "yellow", "label": "Yellow" }, { "value": "red", "label": "Red" }, { "value": "blue", "label": "Cobalt" }, { "value": "paper", "label": "Paper" }, { "value": "ink", "label": "Ink" } ] },
+    { "type": "text", "id": "kicker", "label": "Small heading", "default": "The mailing list" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "New books. No noise." },
+    { "type": "text", "id": "note", "label": "Note", "default": "One email when a new title is out. Unsubscribe anytime." }
+  ],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}

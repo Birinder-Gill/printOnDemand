@@ -6,7 +6,8 @@
   with the mosaic artwork behind it.
 {%- endcomment -%}
 {%- liquid
-  assign product = section.settings.product | default: settings.hero_product
+  assign product = section.settings.product | default: product | default: settings.hero_product
+  assign title_tag = section.settings.title_tag | default: 'h1'
   assign variant = product.selected_or_first_available_variant
   assign across = 'CROSSWORD' | split: ''
   assign down = 'AMERICA' | split: ''
@@ -15,7 +16,7 @@
 {{ 's-hero-grid.css' | asset_url | stylesheet_tag }}
 
 <section class="hx" data-hero aria-labelledby="HeroTitle-{{ section.id }}" style="--grid-art: url('{{ 'hero-grid.svg' | asset_url }}')">
-  <h1 class="visually-hidden" id="HeroTitle-{{ section.id }}">{{ section.settings.title | default: brand }}</h1>
+  <{{ title_tag }} class="visually-hidden" id="HeroTitle-{{ section.id }}">{{ section.settings.title | default: brand }}</{{ title_tag }}>
   <div class="hx__grid">
     {%- comment -%} frame squares: plain black cells around the entries, as in a real grid {%- endcomment -%}
     {%- for k in (1..14) -%}<span class="hx__ink hx__ink--{{ k }}" aria-hidden="true"></span>{%- endfor -%}
@@ -83,18 +84,92 @@
   "name": "Hero: the cover, unfolded",
   "class": "sct-hero",
   "settings": [
-    { "type": "product", "id": "product", "label": "Book", "info": "Defaults to the featured book in theme settings." },
-    { "type": "text", "id": "title", "label": "Page heading (read by search engines and screen readers)", "default": "90s America Crossword: The Throwback Puzzle Book, Gift Edition" },
-    { "type": "text", "id": "tagline", "label": "Brushed tagline", "default": "the throwback puzzle book" },
-    { "type": "image_picker", "id": "book_image", "label": "Book image (transparent PNG)" },
-    { "type": "text", "id": "book_alt", "label": "Book image description", "default": "The 90s America Crossword gift edition hardcover, standing" },
-    { "type": "text", "id": "stage_note", "label": "Note on the book stage", "default": "Gift Edition hardcover" },
-    { "type": "text", "id": "clue_label", "label": "Clue label", "default": "1 Across" },
-    { "type": "textarea", "id": "lede", "label": "Clue text", "default": "Forty-eight crosswords about the 1990s, in a hardcover gift edition where every page is designed as a different piece of the decade." },
-    { "type": "text", "id": "link_label", "label": "Second link label", "default": "Look inside" },
-    { "type": "url", "id": "link_url", "label": "Second link" },
-    { "type": "text", "id": "fine_print", "label": "Small print", "default": "80 full-color pages, 8.25 × 11 inches, answer key in the back." }
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Book",
+      "info": "Defaults to the featured book in theme settings."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page heading (read by search engines and screen readers)",
+      "default": "90s America Crossword: The Throwback Puzzle Book, Gift Edition"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Brushed tagline",
+      "default": "the throwback puzzle book"
+    },
+    {
+      "type": "image_picker",
+      "id": "book_image",
+      "label": "Book image (transparent PNG)"
+    },
+    {
+      "type": "text",
+      "id": "book_alt",
+      "label": "Book image description",
+      "default": "The 90s America Crossword gift edition hardcover, standing"
+    },
+    {
+      "type": "text",
+      "id": "stage_note",
+      "label": "Note on the book stage",
+      "default": "Gift Edition hardcover"
+    },
+    {
+      "type": "text",
+      "id": "clue_label",
+      "label": "Clue label",
+      "default": "1 Across"
+    },
+    {
+      "type": "textarea",
+      "id": "lede",
+      "label": "Clue text",
+      "default": "Forty-eight crosswords about the 1990s, in a hardcover gift edition where every page is designed as a different piece of the decade."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Second link label",
+      "default": "Look inside"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Second link"
+    },
+    {
+      "type": "text",
+      "id": "fine_print",
+      "label": "Small print",
+      "default": "80 full-color pages, 8.25 × 11 inches, answer key in the back."
+    },
+    {
+      "type": "select",
+      "id": "title_tag",
+      "label": "Hidden title level",
+      "default": "h1",
+      "options": [
+        {
+          "value": "h1",
+          "label": "Main title (h1)"
+        },
+        {
+          "value": "h2",
+          "label": "Section title (h2)"
+        }
+      ],
+      "info": "Use h2 when this section sits on a product page."
+    }
   ],
-  "presets": [ { "name": "Hero: the cover, unfolded" } ]
+  "presets": [
+    {
+      "name": "Hero: the cover, unfolded"
+    }
+  ]
 }
 {% endschema %}

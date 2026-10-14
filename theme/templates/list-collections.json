@@ -1,6 +1,14 @@
 {
   "sections": {
-    "main": { "type": "main-list-collections", "settings": {} }
+    "main": {
+      "type": "qh-collections",
+      "settings": {
+        "kicker": "Quiet Hour Press",
+        "heading": "Shelves"
+      }
+    }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

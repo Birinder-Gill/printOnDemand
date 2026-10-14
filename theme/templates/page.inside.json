@@ -1,5 +1,15 @@
 {
   "sections": {
+    "world": {
+      "type": "qh-world",
+      "settings": {
+        "product": "90s-america-crossword-gift-edition",
+        "heading": "This page belongs to [No. 001].",
+        "text": "Designed like the book: 1990s America, one piece at a time.",
+        "jump_label": "Back to the book",
+        "jump_target": "/products/90s-america-crossword-gift-edition"
+      }
+    },
     "main": {
       "type": "pg-video",
       "blocks": {
@@ -85,6 +95,7 @@
     }
   },
   "order": [
+    "world",
     "main"
   ]
 }

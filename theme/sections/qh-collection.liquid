@@ -1,0 +1,91 @@
+{%- comment -%}
+  Collection / catalog page: intro band with the collection's name and count, a sort bar, numbered cards,
+  ruled pagination.
+{%- endcomment -%}
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+-%}
+{{ 'qh-catalog.css' | asset_url | stylesheet_tag }}
+<section class="qcoll" aria-labelledby="CollTitle">
+  <div class="q-intro qs-{{ section.settings.scheme }}">
+    <div class="q-wrap q-intro__in">
+      <div>
+        <p class="q-intro__kicker"><span class="q-tag">{{ section.settings.kicker }}</span></p>
+        <h1 class="q-h1" id="CollTitle">{{ collection.title }}</h1>
+        {%- if collection.description != blank -%}<div class="q-lede q-intro__text">{{ collection.description }}</div>{%- endif -%}
+      </div>
+      <p class="q-intro__meta qcat__count q-label"><span class="qcat__n q-num">{{ collection.products_count | prepend: '00' | slice: -2, 2 }}</span> {% if collection.products_count == 1 %}{{ section.settings.count_one }}{% else %}{{ section.settings.count_many }}{% endif %}</p>
+    </div>
+  </div>
+
+  {%- paginate collection.products by section.settings.per_page -%}
+    <div class="q-wrap q-pad-s">
+      {%- if collection.products_count > 1 -%}
+        <form class="qcoll__bar" method="get" action="{{ collection.url }}">
+          <label class="q-label" for="SortBy">{{ 'collections.sort_by' | t }}</label>
+          <select class="q-select qcoll__sort" id="SortBy" name="sort_by" onchange="this.form.submit()">
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
+          <noscript><button class="q-btn q-btn--sm" type="submit">{{ 'collections.apply' | t }}</button></noscript>
+        </form>
+      {%- endif -%}
+
+      {%- if collection.products.size > 0 -%}
+        {%- assign solo = false -%}
+        {%- if collection.products_count == 1 and paginate.current_page == 1 -%}{%- assign solo = true -%}{%- endif -%}
+        <ul class="qcat__grid qcoll__grid{% if solo %} qcat__grid--solo{% endif %}" role="list">
+          {%- for p in collection.products -%}
+            {%- if solo -%}
+              <li class="qcat__item qcat__item--wide">{%- render 'qh-card', product: p, index: forloop.index0, class: 'q-card--wide', sizes: '(min-width: 990px) 34vw, 100vw' -%}</li>
+            {%- else -%}
+              <li class="qcat__item">{%- render 'qh-card', product: p, index: forloop.index0, sizes: '(min-width: 990px) 30vw, (min-width: 600px) 50vw, 100vw' -%}</li>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if solo and section.settings.next_title != blank -%}
+            <li class="qcat__item">
+              <article class="qcat__soon">
+                <div class="q-card__top q-label"><span>{{ section.settings.next_number }}</span><span>{{ section.settings.next_status }}</span></div>
+                <div class="qcat__soon-art q-hatch" aria-hidden="true"><span class="qcat__soon-q">?</span></div>
+                <div class="q-card__body">
+                  <h2 class="q-card__title">{{ section.settings.next_title }}</h2>
+                  <p class="q-card__line">{{ section.settings.next_text }}</p>
+                  <div class="q-card__foot"><a class="q-arrowlink" href="#signup">{{ section.settings.next_link }}{% render 'qh-arrow', class: '' %}</a></div>
+                </div>
+              </article>
+            </li>
+          {%- endif -%}
+        </ul>
+      {%- else -%}
+        <div class="qrel__none">
+          <p class="qrel__big">{{ 'collections.empty' | t }}</p>
+          <a class="q-btn" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}{% render 'qh-arrow' %}</a>
+        </div>
+      {%- endif -%}
+
+      {%- render 'qh-pagination', paginate: paginate -%}
+    </div>
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "class": "sct-collection",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small heading", "default": "The catalog" },
+    { "type": "text", "id": "count_one", "label": "Count label (one)", "default": "title" },
+    { "type": "text", "id": "count_many", "label": "Count label (many)", "default": "titles" },
+    { "type": "header", "content": "While there's only one book" },
+    { "type": "text", "id": "next_number", "label": "Next title number", "default": "No. 002" },
+    { "type": "text", "id": "next_status", "label": "Next title status", "default": "In the works" },
+    { "type": "text", "id": "next_title", "label": "Next title heading", "default": "The next book", "info": "Clear this to hide the tile." },
+    { "type": "textarea", "id": "next_text", "label": "Next title text", "default": "A new puzzle book is on the press. Join the mailing list to hear the day it's out." },
+    { "type": "text", "id": "next_link", "label": "Next title link label", "default": "Get the email" },
+    { "type": "range", "id": "per_page", "label": "Books per page", "min": 6, "max": 48, "step": 3, "default": 24 },
+    { "type": "select", "id": "scheme", "label": "Intro color", "default": "yellow", "options": [
+      { "value": "yellow", "label": "Yellow" }, { "value": "paper", "label": "Paper" }, { "value": "red", "label": "Red" }, { "value": "blue", "label": "Cobalt" }, { "value": "ink", "label": "Ink" } ] }
+  ]
+}
+{% endschema %}

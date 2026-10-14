@@ -1,0 +1,59 @@
+{%- comment -%} Contact: info cells on the left, a ruled form on the right (Shopify contact form). {%- endcomment -%}
+<section class="qcontact q-sect qs-white" aria-labelledby="ContactFormTitle">
+  <div class="q-wrap q-pad qcontact__grid">
+    <div class="qcontact__info">
+      {%- if page.content != blank -%}<div class="q-rte qcontact__rte">{{ page.content }}</div>{%- endif -%}
+      {%- for block in section.blocks -%}
+        <div class="qcontact__cell" {{ block.shopify_attributes }}>
+          <p class="q-label">{{ block.settings.label }}</p>
+          <div class="qcontact__v">{{ block.settings.text }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="qcontact__formwrap">
+      <h2 class="q-h3 qcontact__h" id="ContactFormTitle">{{ section.settings.form_heading }}</h2>
+      {%- form 'contact', id: 'ContactForm', class: 'qcontact__form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="q-msg" role="status" tabindex="-1" autofocus>{{ 'contact.success' | t }}</p>
+        {%- elsif form.errors -%}
+          <p class="q-msg q-msg--err" role="alert">{{ 'contact.error' | t }}</p>
+        {%- endif -%}
+        <div class="qcontact__row">
+          <div class="q-field">
+            <label class="q-label" for="ContactName">{{ 'contact.name' | t }}</label>
+            <input class="q-input" id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          </div>
+          <div class="q-field">
+            <label class="q-label" for="ContactEmail">{{ 'contact.email' | t }} <span aria-hidden="true">*</span></label>
+            <input class="q-input" id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"{% if form.errors contains 'email' %} aria-invalid="true"{% endif %}>
+          </div>
+        </div>
+        <div class="q-field">
+          <label class="q-label" for="ContactOrder">{{ 'contact.order' | t }}</label>
+          <input class="q-input" id="ContactOrder" type="text" name="contact[order]" placeholder="#1001">
+        </div>
+        <div class="q-field">
+          <label class="q-label" for="ContactBody">{{ 'contact.message' | t }} <span aria-hidden="true">*</span></label>
+          <textarea class="q-textarea" id="ContactBody" name="contact[body]" rows="6" required>{{ form.body }}</textarea>
+        </div>
+        <button class="q-btn q-btn--lg" type="submit">{{ 'contact.send' | t }}{% render 'qh-arrow' %}</button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "class": "sct-contact",
+  "settings": [
+    { "type": "text", "id": "form_heading", "label": "Form heading", "default": "Send a message" }
+  ],
+  "blocks": [
+    { "type": "cell", "name": "Info cell", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Replies" },
+      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>We answer every message, usually within two working days.</p>" } ] }
+  ],
+  "max_blocks": 6
+}
+{% endschema %}

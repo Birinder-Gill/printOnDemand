@@ -1,0 +1,69 @@
+{%- comment -%}
+  Cart lines + totals, shared by the cart drawer (compact: true) and the cart page.
+  Hooks for global.js: [data-cart-scope] (busy state), [data-line], [data-line-qty], [data-line-input].
+{%- endcomment -%}
+<div class="qcart{% if compact %} qcart--compact{% endif %}" data-cart-scope>
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" class="qcart__form"{% unless compact %} id="CartPageForm"{% endunless %} novalidate>
+      <ol class="qcart__lines" role="list">
+        {%- for item in cart.items -%}
+          {%- liquid
+            assign less = item.quantity | minus: 1
+            assign more = item.quantity | plus: 1
+            assign cut = item.product.metafields.custom.cutout.value
+            assign thumb = cut | default: item.image
+            assign num = item.product.metafields.custom.catalog_number.value
+          -%}
+          <li class="qcart__line" data-line="{{ forloop.index }}">
+            <a class="qcart__thumb{% if cut %} is-cut{% endif %}" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+              {%- if thumb -%}{{ thumb | image_url: width: 240 | image_tag: alt: '', width: 120, height: 120, loading: 'lazy' }}{%- endif -%}
+            </a>
+            <div class="qcart__desc">
+              {%- if num != blank -%}<p class="q-label qcart__no">No. {{ num }}</p>{%- endif -%}
+              <p class="qcart__name"><a href="{{ item.url }}">{{ item.product.title }}</a></p>
+              {%- unless item.product.has_only_default_variant -%}<p class="qcart__var">{{ item.variant.title }}</p>{%- endunless -%}
+              {%- for p in item.properties -%}{%- unless p.last == blank or p.first contains '_' -%}<p class="qcart__var">{{ p.first }}: {{ p.last }}</p>{%- endunless -%}{%- endfor -%}
+              <div class="qcart__ctl">
+                <div class="q-qty q-qty--sm">
+                  <button type="button" data-line-qty="{{ less }}" aria-label="{{ 'products.decrease_quantity' | t }}"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 8h12" stroke="currentColor" stroke-width="2.6"/></svg></button>
+                  <label class="visually-hidden" for="Qty-{{ forloop.index }}-{{ compact | default: 'page' }}">{{ 'products.quantity' | t }}</label>
+                  <input id="Qty-{{ forloop.index }}-{{ compact | default: 'page' }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric" data-line-input>
+                  <button type="button" data-line-qty="{{ more }}" aria-label="{{ 'products.increase_quantity' | t }}"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="2.6"/></svg></button>
+                </div>
+                <a class="qcart__rm q-label" href="{{ item.url_to_remove }}" data-line-qty="0" aria-label="{{ 'cart.remove_item' | t: title: item.product.title | escape }}">{{ 'cart.remove' | t }}</a>
+              </div>
+            </div>
+            <p class="qcart__amt q-num">
+              {%- if item.original_line_price != item.final_line_price -%}<s>{{ item.original_line_price | money }}</s> {% endif -%}
+              {{ item.final_line_price | money }}
+            </p>
+          </li>
+        {%- endfor -%}
+      </ol>
+
+      <div class="qcart__sum">
+        <dl class="qcart__totals">
+          {%- for d in cart.cart_level_discount_applications -%}
+            <div class="qcart__row"><dt>{{ d.title }}</dt><dd class="q-num">-{{ d.total_allocated_amount | money }}</dd></div>
+          {%- endfor -%}
+          <div class="qcart__row qcart__row--big"><dt>{{ 'cart.subtotal' | t }}</dt><dd class="q-num">{{ cart.total_price | money }}</dd></div>
+        </dl>
+        <p class="qcart__note q-label">{{ 'cart.taxes_shipping' | t }}</p>
+        {%- unless compact -%}
+          <div class="qcart__memo">
+            <label class="q-label" for="CartNote">{{ 'cart.note' | t }}</label>
+            <textarea class="q-textarea" id="CartNote" name="note" rows="3">{{ cart.note }}</textarea>
+          </div>
+        {%- endunless -%}
+        <button type="submit" name="checkout" class="q-btn q-btn--lg q-btn--block qcart__checkout">{{ 'cart.checkout' | t }}{% render 'qh-arrow' %}</button>
+        {%- if compact -%}<a class="qcart__view q-arrowlink" href="{{ routes.cart_url }}">{{ 'cart.view_cart' | t }}{% render 'qh-arrow', class: '' %}</a>{%- endif -%}
+      </div>
+    </form>
+  {%- else -%}
+    <div class="qcart__empty">
+      <p class="qcart__big" aria-hidden="true">{{ 'cart.empty_big' | t }}</p>
+      <p class="qcart__empty-text"><strong>{{ 'cart.empty' | t }}.</strong> {{ 'cart.empty_note' | t }}</p>
+      <a class="q-btn" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}{% render 'qh-arrow' %}</a>
+    </div>
+  {%- endif -%}
+</div>

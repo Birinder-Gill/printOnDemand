@@ -1,0 +1,32 @@
+{%- comment -%} Journal post: ruled header with date and author, a framed image, rich text. {%- endcomment -%}
+<article class="qart" aria-labelledby="ArtTitle">
+  <nav class="q-crumbs" aria-label="{{ 'general.breadcrumbs' | t }}">
+    <ol class="q-wrap">
+      <li><a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a></li>
+      <li><a href="{{ blog.url }}">{{ blog.title }}</a></li>
+      <li><span aria-current="page">{{ article.title | truncate: 48 }}</span></li>
+    </ol>
+  </nav>
+  <header class="q-intro">
+    <div class="q-wrap q-intro__in">
+      <div>
+        <p class="q-intro__kicker"><span class="q-tag"><time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%d %b %Y' }}</time></span></p>
+        <h1 class="q-h1 qart__t" id="ArtTitle">{{ article.title }}</h1>
+      </div>
+      {%- if article.author != blank -%}<p class="q-intro__meta q-label">{{ 'blogs.by' | t: author: article.author }}</p>{%- endif -%}
+    </div>
+  </header>
+  <div class="q-sect qs-white">
+    <div class="q-wrap q-pad qart__body">
+      {%- if article.image -%}
+        <figure class="qart__fig">{{ article.image | image_url: width: 1800 | image_tag: widths: '600,900,1200,1800', sizes: '(min-width: 1200px) 1100px, 100vw', alt: article.image.alt }}</figure>
+      {%- endif -%}
+      <div class="q-rte qart__rte">{{ article.content }}</div>
+      <p class="qart__back"><a class="q-arrowlink" href="{{ blog.url }}">{{ 'blogs.back' | t }}{% render 'qh-arrow', class: '' %}</a></p>
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{ "name": "Journal post", "class": "sct-article", "settings": [] }
+{% endschema %}

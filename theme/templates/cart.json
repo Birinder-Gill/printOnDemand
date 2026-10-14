@@ -1,24 +1,11 @@
 {
   "sections": {
     "main": {
-      "type": "main-cart",
-      "settings": {
-        "lane_label": "Lane",
-        "lane_number": "3",
-        "sub": "Check the receipt, then check out.",
-        "book_image": "shopify://shop_images/nac-book-flat.png",
-        "register_name": "Sales-Mate",
-        "register_model": "Model 90",
-        "back_label": "Back to the book",
-        "show_note": true,
-        "note_label": "Order note",
-        "note_placeholder": "Anything we should know about this order?",
-        "card_title": "At checkout",
-        "card_text": "<p>Shipping and any taxes are shown before you pay.</p><p>You'll get an email receipt, and tracking once it ships.</p>",
-        "card_link_label": "Shipping & returns",
-        "card_link": "shopify://pages/shipping-returns"
-      }
+      "type": "qh-cart-page",
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

@@ -1,5 +1,5 @@
-/* Throwback theme: shared behaviour. Header, phone menu, cart drawer (Section Rendering API), receipt clock,
-   footer tape counter, ticker speed. No dependencies. */
+/* Quiet Hour Press: shared behaviour. Sticky header, phone menu, cart drawer (Section Rendering API),
+   product forms (variant pills, quantity steppers), scroll reveals. No dependencies. */
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -30,7 +30,7 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
-  /* ---------- phone menu: sticker sheet ---------- */
+  /* ---------- phone menu ---------- */
   const sheet = $('[data-menu-sheet]');
   const menuBtn = $('[data-menu-open]');
   let untrapMenu = null;
@@ -51,28 +51,21 @@
     menuBtn && menuBtn.focus();
   }
   menuBtn && menuBtn.addEventListener('click', openMenu);
-  sheet && sheet.addEventListener('click', e => { if (e.target === sheet || e.target.closest('[data-menu-close]')) closeMenu(); });
+  sheet && sheet.addEventListener('click', e => { if (e.target.closest('[data-menu-close]')) closeMenu(); });
+  window.matchMedia('(min-width: 990px)').addEventListener('change', e => { if (e.matches) closeMenu(); });
 
   /* ---------- cart drawer ---------- */
   const drawer = $('[data-cart-drawer]');
   let untrapCart = null, lastFocus = null;
-  function stampReceipts(root = document) {
-    const d = new Date();
-    const pad = n => String(n).padStart(2, '0');
-    let h = d.getHours(); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
-    const txt = `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${String(d.getFullYear()).slice(2)}  ${h}:${pad(d.getMinutes())} ${ap}`;
-    $$('[data-rcpt-date]', root).forEach(el => { el.textContent = txt; });
-  }
-  stampReceipts();
   function openCart() {
     if (!drawer) { window.location.href = T.routes.cart; return; }
     if (sheet && !sheet.hidden) closeMenu();
     lastFocus = document.activeElement;
     drawer.hidden = false;
     document.documentElement.classList.add('no-scroll');
-    requestAnimationFrame(() => drawer.classList.add('is-open'));
+    requestAnimationFrame(() => requestAnimationFrame(() => drawer.classList.add('is-open')));
     untrapCart = trap(drawer, closeCart);
-    setTimeout(() => { const c = $('.drawer__close', drawer); c && c.focus(); }, 60);
+    setTimeout(() => { const c = $('[data-cart-focus]', drawer); c && c.focus(); }, 60);
   }
   function closeCart() {
     if (!drawer || drawer.hidden) return;
@@ -91,24 +84,24 @@
 
   function setCount(n) {
     $$('[data-cart-count]').forEach(el => { el.textContent = n; });
-    const cart = $('.hdr__cart');
-    if (cart) {
-      cart.setAttribute('aria-label', cart.getAttribute('aria-label').replace(/\d+ items?/, `${n} item${n === 1 ? '' : 's'}`));
-      cart.classList.remove('is-bumped'); void cart.offsetWidth; cart.classList.add('is-bumped');
-    }
+    $$('[data-cart-bump]').forEach(el => {
+      const label = el.getAttribute('aria-label');
+      if (label) el.setAttribute('aria-label', label.replace(/\d+ items?/, `${n} item${n === 1 ? '' : 's'}`));
+      el.classList.remove('is-bumped'); void el.offsetWidth; el.classList.add('is-bumped');
+    });
   }
   function renderSections(sections) {
     if (!sections) return;
     if (sections['cart-drawer'] && drawer) {
       const doc = new DOMParser().parseFromString(sections['cart-drawer'], 'text/html');
       const body = $('[data-cart-body]', doc);
-      if (body) { $('[data-cart-body]', drawer).innerHTML = body.innerHTML; stampReceipts(drawer); }
+      if (body) $('[data-cart-body]', drawer).innerHTML = body.innerHTML;
     }
     const main = $('[data-cart-page]');
     if (main && sections[main.dataset.section]) {
       const doc = new DOMParser().parseFromString(sections[main.dataset.section], 'text/html');
       const nb = $('[data-cart-page]', doc);
-      if (nb) { main.innerHTML = nb.innerHTML; stampReceipts(main); }
+      if (nb) main.innerHTML = nb.innerHTML;
     }
   }
   const sectionIds = () => ['cart-drawer'].concat($('[data-cart-page]') ? [$('[data-cart-page]').dataset.section] : []).filter(Boolean);
@@ -117,6 +110,8 @@
     const fd = new FormData(form);
     fd.append('sections', sectionIds().join(','));
     fd.append('sections_url', window.location.pathname);
+    const err = form.querySelector('[data-form-error]');
+    if (err) err.hidden = true;
     if (button) { button.classList.add('is-loading'); button.setAttribute('aria-disabled', 'true'); }
     try {
       const res = await fetch(`${T.routes.cartAdd}.js`, { method: 'POST', headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: fd });
@@ -127,9 +122,8 @@
       setCount(cart.item_count);
       document.dispatchEvent(new CustomEvent('cart:added', { detail: { item: data, cart } }));
       if (T.cartType === 'page') window.location.href = T.routes.cart; else openCart();
-    } catch (err) {
-      const msg = form.querySelector('[data-form-error]');
-      if (msg) { msg.textContent = err.message; msg.hidden = false; } else alert(err.message);
+    } catch (error) {
+      if (err) { err.textContent = error.message; err.hidden = false; } else alert(error.message);
     } finally {
       if (button) { button.classList.remove('is-loading'); button.removeAttribute('aria-disabled'); }
     }
@@ -152,54 +146,60 @@
       if (!res.ok) throw new Error(data.description || T.strings.cartError);
       renderSections(data.sections);
       setCount(data.item_count);
-    } catch (err) { alert(err.message); }
+    } catch (error) { alert(error.message); }
     finally { scope && scope.classList.remove('is-busy'); }
   }
+  const scopeOf = el => el.closest('[data-cart-scope]') || el.closest('[data-receipt]');
   document.addEventListener('click', e => {
     const btn = e.target.closest('[data-line-qty]');
     if (!btn) return;
     const li = btn.closest('[data-line]');
     if (!li) return;
     e.preventDefault();
-    changeLine(+li.dataset.line, Math.max(0, +btn.dataset.lineQty), btn.closest('[data-receipt]'));
+    changeLine(+li.dataset.line, Math.max(0, +btn.dataset.lineQty), scopeOf(btn));
   });
   document.addEventListener('change', e => {
     const input = e.target.closest('[data-line-input]');
     if (!input) return;
     const li = input.closest('[data-line]');
-    changeLine(+li.dataset.line, Math.max(0, parseInt(input.value || '0', 10)), input.closest('[data-receipt]'));
+    changeLine(+li.dataset.line, Math.max(0, parseInt(input.value || '0', 10)), scopeOf(input));
   });
 
-  /* ---------- footer: the tape rewinds when it comes into view ---------- */
-  const counter = $('[data-vcr-counter]');
-  if (counter && 'IntersectionObserver' in window) {
-    const t0 = performance.now();
-    const fmt = s => `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, '0')}:${String(Math.floor(s) % 60).padStart(2, '0')}`;
-    let done = false;
-    const io = new IntersectionObserver(entries => {
-      if (done || !entries.some(en => en.isIntersecting)) return;
-      done = true; io.disconnect();
-      const start = Math.max(7, (performance.now() - t0) / 1000);
-      if (reduced()) { counter.textContent = '0:00:00'; return; }
-      const dur = 1400, t1 = performance.now();
-      const tick = now => {
-        const k = Math.min(1, (now - t1) / dur);
-        counter.textContent = fmt(start * (1 - (1 - Math.pow(1 - k, 3))));
-        if (k < 1) requestAnimationFrame(tick); else counter.textContent = '0:00:00';
-      };
-      requestAnimationFrame(tick);
-    }, { threshold: .35 });
-    io.observe(counter.closest('[data-vcr]') || counter);
+  /* ---------- product forms: quantity steppers and variant pills ---------- */
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-qty-step]');
+    if (!b) return;
+    const input = b.parentElement.querySelector('input');
+    input.value = Math.max(1, (parseInt(input.value, 10) || 1) + +b.dataset.qtyStep);
+  });
+  document.addEventListener('change', e => {
+    const r = e.target.closest('[data-variant-pill]');
+    if (!r) return;
+    const form = r.form;
+    const root = r.closest('[data-buybox]') || form;
+    const price = r.dataset.price, was = r.dataset.compare;
+    $$('[data-variant-price]', root).forEach(el => { el.textContent = price; });
+    $$('[data-variant-compare]', root).forEach(el => { el.textContent = was || ''; el.hidden = !was; });
+    const btn = form.querySelector('[name=add]');
+    if (btn) {
+      const ok = r.dataset.available === 'true';
+      btn.disabled = !ok;
+      const label = btn.querySelector('[data-add-label]');
+      if (label) label.textContent = ok ? T.strings.addToCart : T.strings.soldOut;
+    }
+    if (window.history.replaceState) { const u = new URL(window.location.href); u.searchParams.set('variant', r.value); window.history.replaceState({}, '', u); }
+    document.dispatchEvent(new CustomEvent('variant:change', { detail: { id: r.value, media: r.dataset.media } }));
+  });
+
+  /* ---------- reveal on scroll ---------- */
+  const rises = $$('.q-rise');
+  if (rises.length) {
+    if (reduced() || !('IntersectionObserver' in window)) rises.forEach(el => el.classList.add('is-in'));
+    else {
+      const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+      rises.forEach(el => io.observe(el));
+    }
   }
-
-  /* ---------- ticker: constant crawl speed whatever the message length ---------- */
-  $$('[data-ticker]').forEach(w => {
-    const list = $('.tkr__list', w);
-    if (!list) return;
-    const set = () => w.closest('.tkr').style.setProperty('--tkr-speed', `${Math.max(18, list.scrollWidth / 62)}s`);
-    set();
-    window.addEventListener('resize', set, { passive: true });
-  });
 
   window.themeCart = { open: openCart, close: closeCart, add: addToCart, setCount };
 })();

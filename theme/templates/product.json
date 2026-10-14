@@ -1,334 +1,87 @@
 {
   "sections": {
     "main": {
-      "type": "p-main",
+      "type": "qh-product",
       "settings": {
-        "back_image": "shopify://shop_images/nac-cover-back.jpg"
+        "specs_heading": "Spec sheet",
+        "show_dynamic": true
       }
     },
-    "inside": {
-      "type": "p-lookinside",
-      "settings": {},
-      "blocks": {
-        "sp1": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-02-03.jpg",
-            "caption": "The VCR warning screen and the autograph page"
-          }
-        },
-        "sp2": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-04-05.jpg",
-            "caption": "The operating instructions and the C-90 track list"
-          }
-        },
-        "sp3": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-08-09.jpg",
-            "caption": "Puzzles 1 and 2: a coffeehouse chalkboard and a TV listings digest"
-          }
-        },
-        "sp4": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-12-13.jpg",
-            "caption": "Puzzles 5 and 6: a cereal box and a comic book"
-          }
-        },
-        "sp5": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-14-15.jpg",
-            "caption": "Puzzles 7 and 8: a game show stage and TV color bars"
-          }
-        },
-        "sp6": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-18-19.jpg",
-            "caption": "Puzzles 9 and 10: a popcorn box and a cinema marquee"
-          }
-        },
-        "sp7": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-22-23.jpg",
-            "caption": "Puzzles 13 and 14: a clamshell tape case and a storybook page"
-          }
-        },
-        "sp8": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-24-25.jpg",
-            "caption": "Puzzles 15 and 16: an art deco premiere and a magazine cover"
-          }
-        },
-        "sp9": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-34-35.jpg",
-            "caption": "Puzzles 23 and 24: a car stereo and a satin record sleeve"
-          }
-        },
-        "sp10": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-42-43.jpg",
-            "caption": "Puzzles 29 and 30: a 16-bit title screen and an arcade versus screen"
-          }
-        },
-        "sp11": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-50-51.jpg",
-            "caption": "Puzzles 35 and 36: a school photo envelope and swing tags"
-          }
-        },
-        "sp12": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-62-63.jpg",
-            "caption": "Puzzles 45 and 46: a front page and the evening news"
-          }
-        },
-        "sp13": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-64-65.jpg",
-            "caption": "Puzzles 47 and 48: loud slang and a late-night ad"
-          }
-        },
-        "sp14": {
-          "type": "spread",
-          "settings": {
-            "image": "shopify://shop_images/nac-spread-66-67.jpg",
-            "caption": "The answer key: Cheat Codes and Level Select"
-          }
-        }
-      },
-      "block_order": [
-        "sp1",
-        "sp2",
-        "sp3",
-        "sp4",
-        "sp5",
-        "sp6",
-        "sp7",
-        "sp8",
-        "sp9",
-        "sp10",
-        "sp11",
-        "sp12",
-        "sp13",
-        "sp14"
-      ]
-    },
-    "tracks": {
-      "type": "p-tracklist",
-      "settings": {}
-    },
-    "manual": {
-      "type": "p-manual",
+    "story": {
+      "type": "qh-story",
       "settings": {
-        "image": "shopify://shop_images/nac-cover-front.jpg"
-      },
-      "blocks": {
-        "c1": {
-          "type": "callout",
-          "settings": {
-            "label": "Title, set as a crossword",
-            "x": 14,
-            "y": 61
-          }
-        },
-        "c2": {
-          "type": "callout",
-          "settings": {
-            "label": "Printed 90s sticker art",
-            "x": 40,
-            "y": 29
-          }
-        },
-        "c3": {
-          "type": "callout",
-          "settings": {
-            "label": "Gift Edition seal",
-            "x": 88,
-            "y": 13
-          }
-        },
-        "c4": {
-          "type": "callout",
-          "settings": {
-            "label": "Laminated hardcover case",
-            "x": 7,
-            "y": 93
-          }
-        }
-      },
-      "block_order": [
-        "c1",
-        "c2",
-        "c3",
-        "c4"
-      ]
+        "index": "[01]",
+        "heading": "About the [book]",
+        "scheme": "white"
+      }
+    },
+    "marquee": {
+      "type": "qh-marquee",
+      "settings": {
+        "words": "Puzzle books\nGift books\nHardcovers\nNo screens required",
+        "scheme": "blue",
+        "speed": 40,
+        "reverse": false
+      }
     },
     "faq": {
-      "type": "s-notes",
-      "settings": {},
+      "type": "qh-faq",
+      "settings": {
+        "index": "[02]",
+        "heading": "Questions",
+        "open_first": true,
+        "schema_markup": false,
+        "scheme": "paper",
+        "text": "<p>Something else? <a href=\"/pages/contact\">Write to us</a>.</p>"
+      },
       "blocks": {
         "q1": {
-          "type": "faq",
+          "type": "question",
           "settings": {
-            "question": "How hard are the puzzles?",
-            "answer": "<p>Friendly, not fiendish. Every answer is a single word of 5 to 12 letters, and the tougher ones come with a hint printed upside down at the foot of the page.</p>",
-            "sign": "— K."
+            "question": "How does shipping work?",
+            "answer": "<p>Shipping options and costs are shown at checkout, before you pay. You'll get an email when your order ships.</p>"
           }
         },
         "q2": {
-          "type": "faq",
+          "type": "question",
           "settings": {
-            "question": "Do I need to have grown up in America?",
-            "answer": "<p>It helps. The clues are about American TV, movies, music, toys, food, sports and slang from 1990 to 1999.</p>",
-            "sign": ""
+            "question": "Can I send it as a gift?",
+            "answer": "<p>Yes. Enter the recipient's address at checkout and add a note to the order if you'd like one included.</p>"
           }
         },
         "q3": {
-          "type": "faq",
+          "type": "question",
           "settings": {
-            "question": "Is there an answer key?",
-            "answer": "<p>Yes. Every solved grid is in the back, in a section called Cheat Codes.</p>",
-            "sign": "— J."
-          }
-        },
-        "q4": {
-          "type": "faq",
-          "settings": {
-            "question": "Can I write in it?",
-            "answer": "<p>Please do. There's one puzzle per page, with room around the grid.</p>",
-            "sign": ""
-          }
-        },
-        "q5": {
-          "type": "faq",
-          "settings": {
-            "question": "How big is it?",
-            "answer": "<p>8.25 × 11 inches, hardcover, with 80 full-color pages.</p>",
-            "sign": ""
-          }
-        },
-        "q6": {
-          "type": "faq",
-          "settings": {
-            "question": "Is it a good gift?",
-            "answer": "<p>That's the idea. There's an autograph page up front, so you can sign it before you give it.</p>",
-            "sign": "H.A.G.S.!"
-          }
-        },
-        "q7": {
-          "type": "faq",
-          "settings": {
-            "question": "Do I have to go in order?",
-            "answer": "<p>No. Start anywhere. Every puzzle stands on its own.</p>",
-            "sign": ""
-          }
-        },
-        "q8": {
-          "type": "faq",
-          "settings": {
-            "question": "What makes it different from other crossword books?",
-            "answer": "<p>Every page has its own design: a cereal box, a tape case, a mall directory, a newscast. No two pages look alike.</p>",
-            "sign": ""
-          }
-        },
-        "q9": {
-          "type": "faq",
-          "settings": {
-            "question": "How does shipping work?",
-            "answer": "<p>Shipping options and costs are shown at checkout, before you pay.</p>",
-            "sign": ""
+            "question": "What if something arrives damaged?",
+            "answer": "<p>Write to us from the contact page with your order number and a photo, and we'll sort it out under our <a href=\"/policies/refund-policy\">refund policy</a>.</p>"
           }
         }
       },
       "block_order": [
         "q1",
         "q2",
-        "q3",
-        "q4",
-        "q5",
-        "q6",
-        "q7",
-        "q8",
-        "q9"
+        "q3"
       ]
     },
-    "shipping": {
-      "type": "s-orderform",
-      "settings": {},
-      "blocks": {
-        "b1": {
-          "type": "box",
-          "settings": {
-            "label": "Shipping",
-            "text": "<p>Shipping options and costs are shown at checkout, before you pay.</p>",
-            "link_label": "",
-            "link": "",
-            "wide": false
-          }
-        },
-        "b2": {
-          "type": "box",
-          "settings": {
-            "label": "Order updates",
-            "text": "<p>You'll get an email confirming your order, and another one when it ships.</p>",
-            "link_label": "",
-            "link": "",
-            "wide": false
-          }
-        },
-        "b3": {
-          "type": "box",
-          "settings": {
-            "label": "Returns & refunds",
-            "text": "<p>Returns and refunds follow our refund policy.</p>",
-            "link_label": "Read the refund policy",
-            "link": "shopify://policies/refund-policy",
-            "wide": false
-          }
-        },
-        "b4": {
-          "type": "box",
-          "settings": {
-            "label": "Questions",
-            "text": "<p>Write to us from the contact page with your order number, and we'll get back to you.</p>",
-            "link_label": "Contact us",
-            "link": "shopify://pages/contact",
-            "wide": false
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3",
-        "b4"
-      ]
-    },
-    "pager": {
-      "type": "s-pager",
-      "settings": {}
+    "related": {
+      "type": "qh-related",
+      "settings": {
+        "index": "[++]",
+        "heading": "More from the press",
+        "limit": 3,
+        "link_label": "The whole catalog",
+        "empty_heading": "This is the only one. For now.",
+        "empty_text": "The next title is on the press. Join the mailing list and we'll write the day it's out.",
+        "empty_cta": "Get the email",
+        "scheme": "white"
+      }
     }
   },
   "order": [
     "main",
-    "inside",
-    "tracks",
-    "manual",
+    "story",
+    "marquee",
     "faq",
-    "shipping",
-    "pager"
+    "related"
   ]
 }

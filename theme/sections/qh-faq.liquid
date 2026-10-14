@@ -1,0 +1,46 @@
+{%- comment -%} Questions: numbered accordion rows on ruled lines. Blocks are the questions. {%- endcomment -%}
+<section class="qfaq qs-{{ section.settings.scheme }} q-sect" aria-labelledby="Faq-{{ section.id }}">
+  <div class="q-wrap q-pad qfaq__grid">
+    <div class="qfaq__head">
+      {%- if section.settings.index != blank -%}<span class="q-head__idx q-label">{{ section.settings.index }}</span>{%- endif -%}
+      <h2 class="q-h2 q-h2--side" id="Faq-{{ section.id }}">{% render 'qh-hl', text: section.settings.heading %}</h2>
+      {%- if section.settings.text != blank -%}<div class="qfaq__text">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+    <div class="q-acc">
+      {%- for block in section.blocks -%}
+        <details class="q-acc__item" {{ block.shopify_attributes }}{% if forloop.first and section.settings.open_first %} open{% endif %}>
+          <summary class="q-acc__q"><span class="q-acc__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span><span>{{ block.settings.question }}</span><span class="q-acc__icon" aria-hidden="true"></span></summary>
+          <div class="q-acc__a q-rte">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- if section.settings.schema_markup and section.blocks.size > 0 -%}
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{%- for block in section.blocks -%}{"@type":"Question","name":{{ block.settings.question | json }},"acceptedAnswer":{"@type":"Answer","text":{{ block.settings.answer | strip_html | json }}}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]}
+    </script>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Questions",
+  "class": "sct-faq",
+  "settings": [
+    { "type": "text", "id": "index", "label": "Index label", "default": "[03]" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Questions" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "checkbox", "id": "open_first", "label": "Open the first answer", "default": true },
+    { "type": "checkbox", "id": "schema_markup", "label": "Add FAQ structured data", "default": false, "info": "Turn on for one FAQ section per page at most." },
+    { "type": "select", "id": "scheme", "label": "Color", "default": "paper", "options": [
+      { "value": "paper", "label": "Paper" }, { "value": "white", "label": "White" }, { "value": "yellow", "label": "Yellow" }, { "value": "ink", "label": "Ink" } ] }
+  ],
+  "blocks": [
+    { "type": "question", "name": "Question", "settings": [
+      { "type": "text", "id": "question", "label": "Question", "default": "How does shipping work?" },
+      { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Shipping options and costs are shown at checkout, before you pay.</p>" } ] }
+  ],
+  "max_blocks": 30,
+  "presets": [{ "name": "Questions", "blocks": [{ "type": "question" }] }]
+}
+{% endschema %}

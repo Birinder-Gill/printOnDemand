@@ -1,0 +1,101 @@
+{%- comment -%}
+  Book spotlight: one title up close. A giant outlined catalog number, the name, a ruled spec sheet (blocks),
+  price with Add to cart, and a link to the book's own page. The image sits in a framed window with a stamp.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product | default: settings.hero_product
+  assign v = p.selected_or_first_available_variant
+  assign num = p.metafields.custom.catalog_number.value | default: section.settings.number
+  assign parts = p.title | split: ' — '
+  assign pname = section.settings.title | default: parts.first
+  assign psub = section.settings.subtitle
+  if psub == blank and parts.size > 1
+    assign psub = parts.last
+  endif
+-%}
+{{ 'qh-spotlight.css' | asset_url | stylesheet_tag }}
+<section class="qspot qs-{{ section.settings.scheme }} q-sect{% if section.settings.flip %} qspot--flip{% endif %}" aria-labelledby="Spot-{{ section.id }}">
+  <div class="qspot__grid">
+    <div class="qspot__copy">
+      <div class="qspot__top">
+        {%- if section.settings.index != blank -%}<span class="q-head__idx q-label">{{ section.settings.index }}</span>{%- endif -%}
+        {%- if section.settings.kicker != blank -%}<p class="q-label">{{ section.settings.kicker }}</p>{%- endif -%}
+      </div>
+      {%- if num != blank -%}<p class="qspot__num" aria-hidden="true">{{ num }}</p>{%- endif -%}
+      <h2 class="q-h2 qspot__title" id="Spot-{{ section.id }}">{% if num != blank %}<span class="visually-hidden">No. {{ num }}: </span>{% endif %}{{ pname }}</h2>
+      {%- if psub != blank -%}<p class="qspot__sub">{{ psub }}</p>{%- endif -%}
+      {%- if section.settings.text != blank -%}<div class="qspot__text">{{ section.settings.text }}</div>{%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <dl class="qspot__specs">
+          {%- for block in section.blocks -%}
+            <div class="qspot__spec" {{ block.shopify_attributes }}><dt class="q-label">{{ block.settings.label }}</dt><dd>{{ block.settings.value }}</dd></div>
+          {%- endfor -%}
+        </dl>
+      {%- endif -%}
+
+      {%- if p != blank -%}
+        <div class="qspot__buy">
+          {%- form 'product', p, id: 'SpotBuy-{{ section.id }}', class: 'qspot__form' -%}
+            <input type="hidden" name="id" value="{{ v.id }}">
+            <button class="q-btn q-btn--lg" type="submit" name="add"{% unless v.available %} disabled{% endunless %}>
+              <span data-add-label>{% if v.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</span>
+              <span class="q-btn__price">{{ v.price | money_without_trailing_zeros }}</span>
+            </button>
+            <p class="buy__err q-msg q-msg--err" data-form-error hidden role="alert"></p>
+          {%- endform -%}
+          <a class="q-arrowlink" href="{{ p.url }}">{{ section.settings.link_label }}{% render 'qh-arrow', class: '' %}</a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="qspot__media">
+      <div class="qspot__stick">
+      <div class="qspot__frame">
+        <div class="qspot__bar q-label" aria-hidden="true"><span>{{ section.settings.frame_label }}</span><span class="qspot__dots"><i></i><i></i><i></i></span></div>
+        <div class="qspot__win">
+          {%- liquid
+            assign simg = section.settings.image | default: p.featured_media
+            assign salt = section.settings.image_alt | default: simg.alt | escape
+          -%}
+          {%- if simg -%}
+            {{ simg | image_url: width: 1600 | image_tag: widths: '600,900,1200,1600', sizes: '(min-width: 990px) 48vw, 100vw', alt: salt, loading: 'lazy', class: 'qspot__img' }}
+          {%- endif -%}
+        </div>
+      </div>
+      {%- if section.settings.stamp != blank -%}<p class="q-stamp qspot__stamp">{% render 'qh-hl', text: section.settings.stamp %}</p>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Book spotlight",
+  "class": "sct-spotlight",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Book" },
+    { "type": "text", "id": "index", "label": "Index label", "default": "[02]" },
+    { "type": "text", "id": "kicker", "label": "Small heading", "default": "In the spotlight" },
+    { "type": "text", "id": "number", "label": "Catalog number", "info": "Used when the product has no custom.catalog_number metafield." },
+    { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the product title." },
+    { "type": "text", "id": "subtitle", "label": "Subtitle" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>A short pitch for the book.</p>" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Open the book's page" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image description" },
+    { "type": "text", "id": "frame_label", "label": "Frame label", "default": "Inside the book" },
+    { "type": "textarea", "id": "stamp", "label": "Stamp" },
+    { "type": "select", "id": "scheme", "label": "Color", "default": "yellow", "options": [
+      { "value": "yellow", "label": "Yellow" }, { "value": "red", "label": "Red" }, { "value": "blue", "label": "Cobalt" }, { "value": "paper", "label": "Paper" }, { "value": "ink", "label": "Ink" } ] },
+    { "type": "checkbox", "id": "flip", "label": "Image on the left", "default": false }
+  ],
+  "blocks": [
+    { "type": "spec", "name": "Spec row", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Format" },
+      { "type": "text", "id": "value", "label": "Value", "default": "Hardcover" } ] }
+  ],
+  "max_blocks": 10,
+  "presets": [{ "name": "Book spotlight", "blocks": [{ "type": "spec" }] }]
+}
+{% endschema %}

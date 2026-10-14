@@ -1,0 +1,42 @@
+{%- comment -%} 404: the clock mark at full size, the page that took the hour off, and ways back. {%- endcomment -%}
+<section class="q404 qs-yellow" aria-labelledby="NfTitle">
+  <div class="q-wrap q404__in">
+    <div class="q404__copy">
+      <p class="q-label q404__k">{{ section.settings.kicker }}</p>
+      <h1 class="q404__t" id="NfTitle"><span class="q404__big" aria-hidden="true">404</span><span class="q404__line">{% render 'qh-hl', text: section.settings.heading %}</span></h1>
+      <p class="q-lede">{{ section.settings.text }}</p>
+      <div class="q404__ctas">
+        <a class="q-btn q-btn--ink" href="{{ routes.root_url }}">{{ 'general.home' | t }}{% render 'qh-arrow' %}</a>
+        <a class="q-btn" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}{% render 'qh-arrow' %}</a>
+      </div>
+      <form class="q404__search" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="NfSearch">{{ 'search.placeholder' | t }}</label>
+        <div class="q-inline">
+          <input class="q-input" id="NfSearch" type="search" name="q" placeholder="{{ 'search.placeholder' | t }}">
+          <button class="q-btn q-btn--ink" type="submit">{{ 'search.submit' | t }}</button>
+        </div>
+      </form>
+    </div>
+    <div class="q404__clock" aria-hidden="true">
+      <svg viewBox="0 0 200 200" focusable="false">
+        <circle cx="100" cy="100" r="96" fill="#fffdf7" stroke="#0d0d0d" stroke-width="5"/>
+        <path d="M100 100V4A96 96 0 0 1 148 16.86Z" fill="#ff2a1f" stroke="#0d0d0d" stroke-width="5"/>
+        <g class="q404__hand"><path d="M100 100V22" stroke="#0d0d0d" stroke-width="7" stroke-linecap="square"/></g>
+        <g class="q404__hand q404__hand--m"><path d="M100 100l52 30" stroke="#1f3bff" stroke-width="7" stroke-linecap="square"/></g>
+        <circle cx="100" cy="100" r="9" fill="#0d0d0d"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404",
+  "class": "sct-404",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small heading", "default": "Error 404 · Page not found" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "This page took\nthe [hour] off." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "The link may be old, or the page moved. The books are all still here." }
+  ]
+}
+{% endschema %}

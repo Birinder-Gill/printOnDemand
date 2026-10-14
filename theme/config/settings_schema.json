@@ -1,40 +1,99 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Throwback",
-    "theme_version": "1.0.0",
-    "theme_author": "90s America Crossword",
+    "theme_name": "Quiet Hour Press",
+    "theme_version": "2.0.0",
+    "theme_author": "Quiet Hour Press",
     "theme_documentation_url": "https://github.com/Birinder-Gill/printOnDemand/tree/crossword-store",
     "theme_support_url": "https://github.com/Birinder-Gill/printOnDemand/tree/crossword-store"
   },
   {
     "name": "Brand",
     "settings": [
-      { "type": "text", "id": "brand_name", "label": "Brand name", "default": "90s America Crossword", "info": "Shown in the header, footer and page titles. The store name in Settings is used for emails and checkout." },
-      { "type": "image_picker", "id": "favicon", "label": "Favicon", "info": "Leave empty to use the holographic 90s sticker." },
-      { "type": "product", "id": "hero_product", "label": "Featured book", "info": "The product the Add to cart buttons across the site point to." }
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Brand name",
+        "default": "Quiet Hour Press",
+        "info": "Shown in the header, footer and page titles. The store name in Settings is used for emails and checkout."
+      },
+      {
+        "type": "text",
+        "id": "brand_tagline",
+        "label": "Tagline",
+        "default": "Loud books for quiet hours",
+        "info": "Used in the home page title."
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Leave empty to use the Quiet Hour Press clock mark."
+      },
+      {
+        "type": "product",
+        "id": "hero_product",
+        "label": "Featured book",
+        "info": "Used by the 90s crossword sections and as a fallback for empty states."
+      }
     ]
   },
   {
     "name": "Cart",
     "settings": [
-      { "type": "select", "id": "cart_type", "label": "When someone adds to cart", "default": "drawer", "options": [ { "value": "drawer", "label": "Open the receipt drawer" }, { "value": "page", "label": "Go to the cart page" } ] },
-      { "type": "text", "id": "cart_note_label", "label": "Receipt footer line", "default": "Thank you. Be kind, rewind." }
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "When someone adds to cart",
+        "default": "drawer",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Open the cart drawer"
+          },
+          {
+            "value": "page",
+            "label": "Go to the cart page"
+          }
+        ]
+      }
     ]
   },
   {
     "name": "Motion",
     "settings": [
-      { "type": "checkbox", "id": "motion_enabled", "label": "Play the page-load moments", "default": true, "info": "The crossword tiles typing in, the channel static and the ticker. Visitors who ask their device for reduced motion never see them." }
+      {
+        "type": "checkbox",
+        "id": "motion_enabled",
+        "label": "Play motion (marquees, reveals, page-load moments)",
+        "default": true,
+        "info": "Visitors who ask their device for reduced motion never see it."
+      }
     ]
   },
   {
     "name": "Social",
     "settings": [
-      { "type": "text", "id": "social_instagram", "label": "Instagram URL" },
-      { "type": "text", "id": "social_tiktok", "label": "TikTok URL" },
-      { "type": "text", "id": "social_pinterest", "label": "Pinterest URL" },
-      { "type": "text", "id": "social_facebook", "label": "Facebook URL" }
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest",
+        "label": "Pinterest URL"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      }
     ]
   }
 ]

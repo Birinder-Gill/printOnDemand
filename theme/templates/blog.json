@@ -1,1 +1,13 @@
-{ "sections": { "main": { "type": "main-blog", "settings": {} } }, "order": ["main"] }
+{
+  "sections": {
+    "main": {
+      "type": "qh-blog",
+      "settings": {
+        "kicker": "The journal"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
