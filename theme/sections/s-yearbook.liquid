@@ -1,0 +1,51 @@
+{%- comment -%}
+  "Sign it like a yearbook": the gift page. Black yearbook endsheet paper written over in gel pens; the book's real
+  autograph page, open; the copy and the buy button.
+{%- endcomment -%}
+{%- assign notes = section.settings.notes | newline_to_br | split: '<br />' -%}
+{{ 's-yearbook.css' | asset_url | stylesheet_tag }}
+
+<section class="yb on-dark" id="gift" aria-labelledby="YbTitle-{{ section.id }}">
+  <div class="yb__notes" aria-hidden="true">
+    {%- for n in notes -%}
+      {%- assign t = n | strip -%}
+      {%- if t != blank -%}<span class="yb__note yb__note--{{ forloop.index }}">{{ t }}</span>{%- endif -%}
+    {%- endfor -%}
+  </div>
+  <div class="yb__wrap">
+    <div class="yb__art">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1500 | image_tag: loading: 'lazy', class: 'yb__img', widths: '600, 900, 1200, 1500', sizes: '(min-width: 990px) 52vw, 94vw', alt: section.settings.image_alt }}
+      {%- endif -%}
+    </div>
+    <div class="yb__copy">
+      <p class="yb__kicker">{{ section.settings.kicker }}</p>
+      <h2 class="yb__title" id="YbTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <div class="yb__lede">{{ section.settings.text }}</div>
+      <ul class="yb__form" role="list" aria-label="{{ section.settings.form_label | escape }}">
+        {%- assign fields = section.settings.fields | split: ',' -%}
+        {%- for f in fields -%}<li><span>{{ f | strip }}</span><i aria-hidden="true"></i></li>{%- endfor -%}
+      </ul>
+      {%- render 'buy-button', product: section.settings.product, size: 'lg', id: 'YbBuy' -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Yearbook (gift)",
+  "class": "sct-yearbook",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Book" },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Made to be given" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Sign it like a yearbook." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Every copy opens with an autograph page, so the book arrives with a note from you. Write something better than “Stay cool.”</p>" },
+    { "type": "text", "id": "form_label", "label": "Form description", "default": "What the autograph page asks for" },
+    { "type": "text", "id": "fields", "label": "Form fields (comma separated)", "default": "For, From, On, A few words" },
+    { "type": "image_picker", "id": "image", "label": "Image (transparent PNG)" },
+    { "type": "text", "id": "image_alt", "label": "Image description", "default": "The book open at its autograph page, signed in gel pen" },
+    { "type": "textarea", "id": "notes", "label": "Gel pen notes on the background (one per line)", "default": "2 good 2 be 4gotten!\nH.A.G.S.\nNever change ♥\nStay cool, see you in 2030\nU R the best\nfriends 4 ever\nDon't forget me!\nRoses r red, crosswords r hard\nKeep in touch!!\nC U next fall" }
+  ],
+  "presets": [ { "name": "Yearbook (gift)" } ]
+}
+{% endschema %}

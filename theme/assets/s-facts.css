@@ -1,0 +1,59 @@
+/* Puzzle facts: a cereal box, front and side panel, with a nutrition-facts style label. */
+.sct-facts{background:#ffc400}
+.fx{position:relative;overflow:hidden;padding:clamp(72px,8vw,120px) 0}
+.fx__box{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr);width:min(100% - 2*var(--gutter),1280px);margin-inline:auto;
+  border-radius:14px;overflow:hidden;box-shadow:0 30px 60px rgba(110,60,0,.35),0 0 0 4px var(--ink)}
+.fx__front{position:relative;isolation:isolate;padding:clamp(40px,5vw,72px) clamp(28px,4.5vw,64px) clamp(36px,4vw,56px);color:#fff;
+  background:repeating-conic-gradient(from 0deg at 30% 62%,#ffd21f 0deg 9deg,#ffb800 9deg 18deg)}
+.fx__front::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(40% 46% at 30% 62%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%)}
+.fx__front::after{content:"";position:absolute;inset:0;z-index:-1;background:var(--grain) 0 0/200px 200px;opacity:.1;mix-blend-mode:multiply}
+.fx__kicker{margin:0 0 16px}
+.fx__kicker span{display:inline-block;padding:9px 16px 8px;background:var(--magenta);border:3px solid var(--ink);border-radius:999px;transform:rotate(-3deg);
+  font:800 14px/1 var(--f-body);font-stretch:112%;letter-spacing:.12em;text-transform:uppercase;box-shadow:3px 4px 0 var(--ink)}
+.fx__title{max-width:12ch;font:400 clamp(46px,6vw,88px)/.92 'Lilita One',var(--f-tile);letter-spacing:.005em;color:#fff;
+  -webkit-text-stroke:clamp(6px,.7vw,9px) var(--ink);paint-order:stroke fill;
+  text-shadow:0 clamp(5px,.6vw,8px) 0 #e8231f,0 clamp(9px,1vw,13px) 0 var(--ink)}
+.fx__lede{max-width:40ch;margin-top:20px;padding:14px 18px;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:14px;transform:rotate(-1deg);
+  font:600 clamp(16px,1.35vw,18px)/1.45 var(--f-body);box-shadow:4px 5px 0 var(--ink)}
+.fx__bowl{position:relative;margin-top:26px}
+.fx__book{width:min(100%,640px);height:auto;margin-left:-4%;filter:drop-shadow(0 20px 22px rgba(120,60,0,.35))}
+.fx__prize{position:absolute;right:2%;top:2%;display:grid;place-items:center;align-content:center;width:clamp(150px,15vw,200px);aspect-ratio:1;margin:0;padding:22px;text-align:center;color:var(--ink);
+  background:var(--sun);transform:rotate(10deg);
+  clip-path:polygon(50% 0,58% 13%,72% 5%,74% 20%,90% 17%,84% 31%,99% 37%,87% 48%,99% 60%,84% 66%,90% 81%,74% 79%,72% 95%,58% 87%,50% 100%,42% 87%,28% 95%,26% 79%,10% 81%,16% 66%,1% 60%,13% 48%,1% 37%,16% 31%,10% 17%,26% 20%,28% 5%,42% 13%);
+  filter:drop-shadow(0 0 0 var(--ink))}
+.fx__prize::before{content:"";position:absolute;inset:7px;z-index:-1;background:#e8231f;clip-path:inherit}
+.fx__prize span{font:800 clamp(11px,1vw,13px)/1.1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.fx__prize strong{display:block;margin-top:4px;font:400 clamp(20px,2vw,27px)/.95 'Lilita One',var(--f-tile);color:var(--sun)}
+
+/* the side panel */
+.fx__side{position:relative;padding:clamp(32px,4vw,56px) clamp(22px,3vw,44px);background:linear-gradient(90deg,#d8a400,#ffcf2e 5%,#ffd84f 50%,#ffcf2e);
+  border-left:4px solid var(--ink)}
+.fx__side::before{content:"";position:absolute;left:0;top:0;bottom:0;width:18px;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent)}
+.nf{max-width:420px;margin:0 auto;padding:10px 12px 12px;background:#fff;color:#000;border:2px solid #000;font-family:'Libre Franklin',var(--f-body)}
+.nf__title{margin:0;font:900 clamp(34px,3.4vw,46px)/1 'Libre Franklin',sans-serif;letter-spacing:-.02em}
+.nf__serv{margin:4px 0 0;padding-bottom:2px;font:400 15px/1.25 'Libre Franklin',sans-serif;border-bottom:1px solid #000}
+.nf__serv--b{font-weight:700;border:0}
+.nf__rule{background:#000;margin:3px 0}
+.nf__rule--xl{height:12px}.nf__rule--l{height:7px}.nf__rule--m{height:3px}
+.nf__amt{margin:2px 0;font:900 13px/1.2 'Libre Franklin',sans-serif}
+.nf__row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:baseline;padding:4px 0;border-top:1px solid #000;font:400 15px/1.25 'Libre Franklin',sans-serif}
+.nf__rule+.nf__row,.nf__amt+.nf__row{border-top:0}
+.nf__row.is-bold span:first-child{font-weight:900}
+.nf__v{font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
+.nf__row.is-bold .nf__v{font-weight:700}
+.nf__dv{min-width:3.2em;text-align:right;font-weight:900}
+.nf__foot{margin:6px 0 0;font:400 12px/1.35 'Libre Franklin',sans-serif}
+.fx__ingr{max-width:420px;margin:18px auto 0;font:400 12.5px/1.45 'Libre Franklin',sans-serif;color:#1a1300;text-transform:uppercase;letter-spacing:.01em}
+.fx__boxtop{position:relative;max-width:420px;margin:22px auto 0;padding:16px 18px 16px 74px;border:3px dashed var(--ink);border-radius:10px;background:rgba(255,255,255,.35)}
+.fx__boxtop::before{content:"\2702";position:absolute;left:-14px;top:-15px;font-size:22px;color:var(--ink);background:#ffd84f;padding:0 4px}
+.fx__boxtop::after{content:"";position:absolute;left:16px;top:50%;width:42px;height:42px;margin-top:-21px;background:var(--magenta);border:3px solid var(--ink);border-radius:50%;box-shadow:inset 0 0 0 5px #fff}
+.fx__boxtop-h{margin:0;font:400 22px/1 'Lilita One',var(--f-tile);text-transform:uppercase;letter-spacing:.04em}
+.fx__boxtop-t{margin:6px 0 0;font:600 13.5px/1.4 var(--f-body)}
+.fx__barcode{display:flex;flex-direction:column;align-items:center;gap:6px;width:170px;margin:22px auto 0;padding:10px 12px 8px;background:#fff;border:2px solid #000}
+.fx__barcode span{display:block;width:100%;height:52px;background:repeating-linear-gradient(90deg,#000 0 2px,#fff 2px 3px,#000 3px 6px,#fff 6px 8px,#000 8px 9px,#fff 9px 12px,#000 12px 13px,#fff 13px 15px)}
+.fx__barcode em{font:700 11px/1 'Libre Franklin',sans-serif;font-style:normal;letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:899px){
+  .fx__box{grid-template-columns:1fr}
+  .fx__side{border-left:0;border-top:4px solid var(--ink)}
+  .fx__prize{width:130px;padding:16px}
+}

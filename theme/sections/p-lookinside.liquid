@@ -1,0 +1,60 @@
+{%- comment -%}
+  Look inside: the quiet moment. The book lies open on a desk in the warm pool of a reading lamp, and the pages
+  really turn (click a page, use the arrows, swipe, or the arrow keys). A tape counter keeps your place.
+{%- endcomment -%}
+{%- assign spreads = section.blocks | where: 'type', 'spread' -%}
+{{ 'p-lookinside.css' | asset_url | stylesheet_tag }}
+
+<section class="li on-dark" id="look-inside" data-flip aria-labelledby="LiTitle-{{ section.id }}" aria-roledescription="carousel">
+  <div class="li__lamp" aria-hidden="true"><span class="li__shade"></span><span class="li__cone"></span></div>
+  <div class="li__wrap">
+    <header class="li__head">
+      <p class="li__kicker">{{ section.settings.kicker }}</p>
+      <h2 class="li__title" id="LiTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <p class="li__lede">{{ section.settings.lede }}</p>
+    </header>
+
+    <div class="li__desk">
+      <div class="li__book" data-book>
+        {%- for b in spreads -%}
+          <template data-spread="{{ forloop.index0 }}" data-caption="{{ b.settings.caption | escape }}" data-src="{{ b.settings.image | image_url: width: 1600 }}" data-src-s="{{ b.settings.image | image_url: width: 900 }}"></template>
+        {%- endfor -%}
+        {%- assign f = spreads.first -%}
+        <button class="li__page li__page--l" type="button" data-turn="-1" aria-label="{{ 'general.previous' | t }}" style="--img: url('{{ f.settings.image | image_url: width: 1600 }}')"></button>
+        <button class="li__page li__page--r" type="button" data-turn="1" aria-label="{{ 'general.next' | t }}" style="--img: url('{{ f.settings.image | image_url: width: 1600 }}')"></button>
+        <div class="li__leaf" aria-hidden="true"><span class="li__leaf-f"></span><span class="li__leaf-b"></span></div>
+        <span class="li__gutter" aria-hidden="true"></span>
+      </div>
+      <noscript>{{ f.settings.image | image_url: width: 1600 | image_tag: alt: f.settings.caption }}</noscript>
+    </div>
+
+    <div class="li__bar">
+      <button class="li__btn" type="button" data-turn="-1" aria-label="{{ 'general.previous' | t }}">{%- render 'icon', name: 'rewind' -%}</button>
+      <div class="li__counter" aria-hidden="true"><span data-counter>001</span></div>
+      <button class="li__btn" type="button" data-turn="1" aria-label="{{ 'general.next' | t }}">{%- render 'icon', name: 'fast-forward' -%}</button>
+      <p class="li__cap" aria-live="polite" data-caption-out>{{ f.settings.caption }}</p>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'p-lookinside.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Look inside (flipbook)",
+  "class": "sct-lookinside",
+  "max_blocks": 30,
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Look inside" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Turn the pages." },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "A few spreads from the book. Click a page to turn it." }
+  ],
+  "blocks": [
+    { "type": "spread", "name": "Spread", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Spread image (two pages side by side)" },
+      { "type": "text", "id": "caption", "label": "Caption" }
+    ] }
+  ],
+  "presets": [ { "name": "Look inside (flipbook)" } ]
+}
+{% endschema %}

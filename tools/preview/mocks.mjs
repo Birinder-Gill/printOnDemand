@@ -19,7 +19,7 @@ const product = {
   id: 7700001, title: '90s America Crossword — Gift Edition Hardcover', handle: HANDLE, url: `/products/${HANDLE}`,
   vendor: '90s America Crossword', type: 'Hardcover book', price: PRICE, price_min: PRICE, price_max: PRICE, price_varies: false,
   compare_at_price: null, compare_at_price_max: null, available: true, tags: ['crossword', '90s', 'gift', 'hardcover'],
-  description: '<p>Forty-eight crosswords about the 1990s: the sitcoms, the blockbusters, the boy bands, the consoles, the snacks and the slang.</p>',
+  description: fs.readFileSync('/home/claude/store/data/product-description.html', 'utf8'),
   content: '', featured_media: productMedia[0] || null, featured_image: productMedia[0] || null, media: productMedia, images: productMedia,
   variants: [variant], selected_variant: null, selected_or_first_available_variant: variant, first_available_variant: variant,
   has_only_default_variant: true, options: ['Title'], options_with_values: [{ name: 'Title', position: 1, values: ['Default Title'], selected_value: 'Default Title' }],

@@ -1,0 +1,88 @@
+{%- comment -%}
+  "Come on down!": three real clues from the book on a game show stage. A marquee of bulbs around the title, an
+  LED scoreboard, and three contestant podiums, each with a clue, answer squares to type into, a lifeline (the hint)
+  and a reveal. The bulbs chase only when an answer is right.
+{%- endcomment -%}
+{{ 's-gameshow.css' | asset_url | stylesheet_tag }}
+
+<section class="gs on-dark" data-gameshow aria-labelledby="GsTitle-{{ section.id }}">
+  <div class="gs__beams" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="gs__wrap">
+    <div class="gs__marquee" data-bulbs>
+      <span class="gs__bulbs gs__bulbs--top" aria-hidden="true">{%- for i in (1..22) -%}<i></i>{%- endfor -%}</span>
+      <span class="gs__bulbs gs__bulbs--bottom" aria-hidden="true">{%- for i in (1..22) -%}<i></i>{%- endfor -%}</span>
+      <span class="gs__bulbs gs__bulbs--left" aria-hidden="true">{%- for i in (1..5) -%}<i></i>{%- endfor -%}</span>
+      <span class="gs__bulbs gs__bulbs--right" aria-hidden="true">{%- for i in (1..5) -%}<i></i>{%- endfor -%}</span>
+      <p class="gs__kicker">{{ section.settings.kicker }}</p>
+      <h2 class="gs__title" id="GsTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <p class="gs__lede">{{ section.settings.lede }}</p>
+    </div>
+
+    <div class="gs__board" role="status" aria-live="polite">
+      <span class="gs__score-label">{{ section.settings.score_label }}</span>
+      <span class="gs__score"><span data-score>0</span><span class="gs__slash">/</span>{{ section.blocks.size }}</span>
+      <span class="gs__msg" data-msg aria-hidden="true">{{ section.settings.start_msg | upcase | replace: ' ', '!' }}</span><span class="visually-hidden" data-msg-sr>{{ section.settings.start_msg }}</span>
+    </div>
+
+    <div class="gs__podiums">
+      {%- for block in section.blocks -%}
+        {%- assign ans = block.settings.answer | upcase | strip | remove: ' ' -%}
+        {%- assign letters = ans | split: '' -%}
+        <form class="pod pod--{{ forloop.index | modulo: 3 }}" data-podium data-key="{{ ans | base64_encode }}" data-ok="{{ block.settings.right_msg | escape }}" novalidate {{ block.shopify_attributes }}>
+          <div class="pod__plate" aria-hidden="true"><span>{{ block.settings.plate | upcase | replace: ' ', '!' }}</span></div>
+          <div class="pod__face">
+            <p class="pod__topic">{{ block.settings.topic }}</p>
+            <p class="pod__clue" id="Clue-{{ block.id }}">{{ block.settings.clue }} <span class="pod__len">({{ letters.size }})</span></p>
+            <fieldset class="pod__squares" aria-describedby="Clue-{{ block.id }}">
+              <legend class="visually-hidden">Answer, {{ letters.size }} letters</legend>
+              {%- for l in letters -%}
+                <input class="pod__sq" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="1" aria-label="Letter {{ forloop.index }} of {{ letters.size }}" style="--i: {{ forloop.index0 }}">
+              {%- endfor -%}
+            </fieldset>
+            <p class="pod__hint" data-hint hidden><span>{{ section.settings.lifeline_label }}:</span> {{ block.settings.hint }}</p>
+            <p class="pod__result" data-result aria-live="polite"></p>
+            <div class="pod__btns">
+              <button class="btn btn--sm pod__lock" type="submit">{{ section.settings.check_label }}</button>
+              <button class="pod__link" type="button" data-lifeline>{{ section.settings.lifeline_label }}</button>
+              <button class="pod__link" type="button" data-reveal>{{ section.settings.reveal_label }}</button>
+            </div>
+          </div>
+          <div class="pod__base" aria-hidden="true"></div>
+        </form>
+      {%- endfor -%}
+    </div>
+    <p class="gs__foot">{{ section.settings.footnote }}</p>
+  </div>
+</section>
+
+<script src="{{ 's-gameshow.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Game show: try a clue",
+  "class": "sct-gameshow",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Small line", "default": "Tonight's contestant: you" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Come on down!" },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "Three real clues from the book. Type your answers into the squares." },
+    { "type": "text", "id": "score_label", "label": "Scoreboard label", "default": "Score" },
+    { "type": "text", "id": "start_msg", "label": "Scoreboard start message", "default": "Good luck" },
+    { "type": "text", "id": "check_label", "label": "Check button", "default": "Lock it in" },
+    { "type": "text", "id": "lifeline_label", "label": "Hint button", "default": "Lifeline" },
+    { "type": "text", "id": "reveal_label", "label": "Reveal button", "default": "Show answer" },
+    { "type": "textarea", "id": "footnote", "label": "Footnote", "default": "The book has 648 more where these came from, and the hard ones come with a hint printed upside down." }
+  ],
+  "blocks": [
+    { "type": "clue", "name": "Clue", "settings": [
+      { "type": "text", "id": "plate", "label": "Name plate", "default": "Clue 1" },
+      { "type": "text", "id": "topic", "label": "Topic", "default": "Video games" },
+      { "type": "textarea", "id": "clue", "label": "Clue", "default": "Plastic game you blew into when it would not start" },
+      { "type": "text", "id": "answer", "label": "Answer", "default": "CARTRIDGE" },
+      { "type": "text", "id": "hint", "label": "Hint", "default": "Starts with CART" },
+      { "type": "text", "id": "right_msg", "label": "Message when right", "default": "Blow on it and it works every time." }
+    ] }
+  ],
+  "presets": [ { "name": "Game show: try a clue" } ]
+}
+{% endschema %}

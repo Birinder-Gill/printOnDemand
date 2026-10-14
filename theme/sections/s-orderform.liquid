@@ -1,0 +1,56 @@
+{%- comment -%}
+  Shipping and returns as a mail-order catalog order form: ruled boxes with tiny printed labels, the answers typed
+  in, a "for office use only" corner with a stamp. Each block is one box on the form.
+{%- endcomment -%}
+{{ 's-orderform.css' | asset_url | stylesheet_tag }}
+
+<section class="of" aria-labelledby="OfTitle-{{ section.id }}">
+  <div class="of__wrap">
+    <div class="of__form">
+      <header class="of__head">
+        <h2 class="of__title" id="OfTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+        <p class="of__sub">{{ section.settings.subheading }}</p>
+        <p class="of__no" aria-hidden="true">{{ section.settings.form_no }}</p>
+      </header>
+      <div class="of__grid">
+        {%- for block in section.blocks -%}
+          <div class="of__box{% if block.settings.wide %} of__box--wide{% endif %}" {{ block.shopify_attributes }}>
+            <h3 class="of__label"><span class="of__n" aria-hidden="true">{{ forloop.index }}</span>{{ block.settings.label }}</h3>
+            <div class="of__typed rte">{{ block.settings.text }}</div>
+            {%- if block.settings.link_label != blank and block.settings.link != blank -%}
+              <a class="of__link" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+        <div class="of__office" aria-hidden="true">
+          <p class="of__label">For office use only</p>
+          <span class="of__stamp">{{ section.settings.stamp }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Order form (shipping)",
+  "class": "sct-orderform",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Order form" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Shipping, returns and the fine print" },
+    { "type": "text", "id": "form_no", "label": "Form number", "default": "Form 90-C" },
+    { "type": "text", "id": "stamp", "label": "Stamp", "default": "Thank you" }
+  ],
+  "blocks": [
+    { "type": "box", "name": "Box", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Shipping" },
+      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Shipping options and costs are shown at checkout, before you pay.</p>" },
+      { "type": "text", "id": "link_label", "label": "Link label" },
+      { "type": "url", "id": "link", "label": "Link" },
+      { "type": "checkbox", "id": "wide", "label": "Full width", "default": false }
+    ] }
+  ],
+  "presets": [ { "name": "Order form (shipping)" } ]
+}
+{% endschema %}

@@ -1,0 +1,63 @@
+{%- comment -%}
+  "But wait, there's more!": the closing pitch as a late-night infomercial end card. Light rays, sparkles, the book
+  on a turntable, everything you get with starburst checks, the price on a red TV-tube badge, and the buy bar.
+{%- endcomment -%}
+{%- liquid
+  assign product = section.settings.product | default: settings.hero_product
+  assign items = section.settings.items | newline_to_br | split: '<br />'
+-%}
+{{ 's-infomercial.css' | asset_url | stylesheet_tag }}
+
+<section class="im on-dark" aria-labelledby="ImTitle-{{ section.id }}">
+  <div class="im__rays" aria-hidden="true"></div>
+  <div class="im__wrap">
+    <div class="im__stage">
+      <span class="im__spark im__spark--1" aria-hidden="true"></span><span class="im__spark im__spark--2" aria-hidden="true"></span><span class="im__spark im__spark--3" aria-hidden="true"></span>
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1100 | image_tag: loading: 'lazy', class: 'im__book', widths: '500, 800, 1100', sizes: '(min-width: 990px) 34vw, 70vw', alt: section.settings.image_alt }}
+      {%- endif -%}
+      <div class="im__turntable" aria-hidden="true"></div>
+      {%- if product != blank -%}
+        <p class="im__tube"><span class="im__tube-s">{{ section.settings.price_label }}</span><span class="im__tube-p">{{ product.price | money_without_trailing_zeros }}</span></p>
+      {%- endif -%}
+    </div>
+    <div class="im__copy">
+      <p class="im__seen"><span>{{ section.settings.kicker }}</span></p>
+      <h2 class="im__title" id="ImTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <p class="im__lede">{{ section.settings.lede }}</p>
+      <ul class="im__list" role="list">
+        {%- for it in items -%}
+          {%- assign t = it | strip -%}
+          {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+  <div class="im__bar">
+    <div class="im__bar-in">
+      <p class="im__bar-t">{{ section.settings.bar_text }}</p>
+      {%- render 'buy-button', product: product, size: 'lg', id: 'ImBuy' -%}
+      <p class="im__fine">{{ section.settings.fine_print }}</p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Infomercial (final pitch)",
+  "class": "sct-infomercial",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Book" },
+    { "type": "image_picker", "id": "image", "label": "Book image (transparent PNG)" },
+    { "type": "text", "id": "image_alt", "label": "Image description", "default": "The gift edition hardcover" },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "As seen on your coffee table" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "But wait, there's more!" },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "Here's everything that comes in the box. Well, between the covers." },
+    { "type": "textarea", "id": "items", "label": "What you get (one per line)", "default": "48 crosswords about the 1990s\n651 clues and 71 upside-down hints\n48 page designs, no two alike\nA full answer key in the back\nAn autograph page for your message\nA hardcover with 80 full-color pages" },
+    { "type": "text", "id": "price_label", "label": "Price badge label", "default": "All this for" },
+    { "type": "text", "id": "bar_text", "label": "Buy bar text", "default": "Get yours" },
+    { "type": "text", "id": "fine_print", "label": "Fine print", "default": "Operators are not standing by. It's a website." }
+  ],
+  "presets": [ { "name": "Infomercial (final pitch)" } ]
+}
+{% endschema %}

@@ -1,0 +1,91 @@
+{%- comment -%}
+  Operating instructions: the specs as a 90s owner's manual page. FIG. 1 with numbered callouts on the cover,
+  a brushed-metal model plate with the specifications, numbered operating steps and important safeguards.
+  Callouts: blocks with x/y in percent of the figure.
+{%- endcomment -%}
+{%- liquid
+  assign specs = section.settings.specs | newline_to_br | split: '<br />'
+  assign steps = section.settings.steps | newline_to_br | split: '<br />'
+  assign callouts = section.blocks | where: 'type', 'callout'
+-%}
+{{ 'p-manual.css' | asset_url | stylesheet_tag }}
+
+<section class="om" aria-labelledby="OmTitle-{{ section.id }}">
+  <div class="om__sheet">
+    <header class="om__top">
+      <h2 class="om__title" id="OmTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <p class="om__model">{{ section.settings.model }}</p>
+    </header>
+
+    <div class="om__grid">
+      <figure class="om__fig">
+        <div class="om__figbox">
+          {%- if section.settings.image != blank -%}
+            {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'om__img', widths: '500, 800, 1000', sizes: '(min-width: 990px) 36vw, 88vw', alt: section.settings.image_alt }}
+          {%- endif -%}
+          {%- for c in callouts -%}
+            <span class="om__pin" style="left: {{ c.settings.x }}%; top: {{ c.settings.y }}%" aria-hidden="true" {{ c.shopify_attributes }}>{{ forloop.index }}</span>
+          {%- endfor -%}
+        </div>
+        <figcaption class="om__cap">{{ section.settings.fig_caption }}</figcaption>
+        <ol class="om__parts" role="list">
+          {%- for c in callouts -%}<li><span class="om__pn" aria-hidden="true">{{ forloop.index }}</span>{{ c.settings.label }}</li>{%- endfor -%}
+        </ol>
+      </figure>
+
+      <div class="om__right">
+        <div class="om__plate">
+          <span class="om__screw om__screw--1" aria-hidden="true"></span><span class="om__screw om__screw--2" aria-hidden="true"></span>
+          <span class="om__screw om__screw--3" aria-hidden="true"></span><span class="om__screw om__screw--4" aria-hidden="true"></span>
+          <h3 class="om__ph">{{ section.settings.plate_heading }}</h3>
+          <dl class="om__specs">
+            {%- for s in specs -%}
+              {%- assign p = s | strip | split: '|' -%}
+              {%- if p.size > 1 -%}<div><dt>{{ p[0] }}</dt><dd>{{ p[1] }}</dd></div>{%- endif -%}
+            {%- endfor -%}
+          </dl>
+        </div>
+
+        <h3 class="om__h">{{ section.settings.steps_heading }}</h3>
+        <ol class="om__steps" role="list">
+          {%- for s in steps -%}{%- assign t = s | strip -%}{%- if t != blank -%}<li><span class="om__sn" aria-hidden="true">{{ forloop.index }}</span><span>{{ t }}</span></li>{%- endif -%}{%- endfor -%}
+        </ol>
+
+        <div class="om__safe">
+          <h3 class="om__safe-h"><span aria-hidden="true">&#9888;</span> {{ section.settings.safe_heading }}</h3>
+          <p>{{ section.settings.safe_text }}</p>
+        </div>
+      </div>
+    </div>
+    <p class="om__foot"><span>{{ section.settings.page_label }}</span><span>{{ section.settings.footer }}</span></p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Operating instructions (specs)",
+  "class": "sct-manual",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Operating instructions" },
+    { "type": "text", "id": "model", "label": "Model line", "default": "Model XW-4890 · Gift Edition" },
+    { "type": "image_picker", "id": "image", "label": "Figure image" },
+    { "type": "text", "id": "image_alt", "label": "Figure description", "default": "The front cover of the gift edition" },
+    { "type": "text", "id": "fig_caption", "label": "Figure caption", "default": "FIG. 1  Front view" },
+    { "type": "text", "id": "plate_heading", "label": "Model plate heading", "default": "Specifications" },
+    { "type": "textarea", "id": "specs", "label": "Specifications (Label|Value per line)", "default": "Format|Hardcover, laminated case\nTrim size|8.25 × 11 in\nPages|80, full color\nPuzzles|48, one per page\nClues|651 in 24 categories\nHints|71, printed upside down\nAnswer key|In the back\nPower|None required. Pencil recommended." },
+    { "type": "text", "id": "steps_heading", "label": "Steps heading", "default": "Operation" },
+    { "type": "textarea", "id": "steps", "label": "Steps (one per line)", "default": "Open the book to any puzzle. They don't have to be done in order.\nRead a clue and count the squares. The number in parentheses is the answer's length.\nFill it in. Pen if you're confident, pencil if you're honest.\nStuck? Turn the book around. The hint is printed upside down at the foot of the page.\nStill stuck? The Cheat Codes in the back have every solved grid.\nSign the autograph page and give it to someone who was there." },
+    { "type": "text", "id": "safe_heading", "label": "Safeguards heading", "default": "Important safeguards" },
+    { "type": "textarea", "id": "safe_text", "label": "Safeguards text", "default": "Do not attempt to explain these clues to anyone born after 2000. Keep away from people who say the 90s were only twenty years ago." },
+    { "type": "text", "id": "page_label", "label": "Page label", "default": "E-4" },
+    { "type": "text", "id": "footer", "label": "Footer", "default": "Retain these instructions for future reference." }
+  ],
+  "blocks": [
+    { "type": "callout", "name": "Callout", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Part" },
+      { "type": "range", "id": "x", "label": "Left (%)", "min": 0, "max": 100, "step": 1, "default": 50 },
+      { "type": "range", "id": "y", "label": "Top (%)", "min": 0, "max": 100, "step": 1, "default": 50 }
+    ] }
+  ]
+}
+{% endschema %}

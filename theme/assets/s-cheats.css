@@ -1,0 +1,48 @@
+/* Cheat codes: a 90s game magazine codes page, as in the book's answer key. */
+.sct-cheats{background:#0e0e18}
+.cc{position:relative;overflow:hidden;padding:clamp(80px,9vw,136px) 0;color:#f4f2ff;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M14 10v8M10 14h8' stroke='%23ffffff' stroke-opacity='.07' stroke-width='2'/%3E%3C/svg%3E") 0 0/28px 28px,
+    radial-gradient(60% 50% at 75% 45%,rgba(255,212,0,.12),transparent 70%),#0e0e18}
+.cc__wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(36px,5vw,80px);align-items:center;width:min(100% - 2*var(--gutter),1320px);margin-inline:auto}
+.cc__tag{margin:0 0 18px}
+.cc__tag span{display:inline-block;padding:8px 12px 7px;background:#ffd400;color:#0e0e18;font:400 12px/1 'Press Start 2P',monospace;letter-spacing:.04em;text-transform:uppercase;
+  clip-path:polygon(0 0,100% 0,calc(100% - 8px) 100%,0 100%);padding-right:20px}
+.cc__title{display:flex;flex-wrap:wrap;gap:10px 22px;margin:0;font:400 clamp(30px,4.2vw,58px)/1 'Bungee',var(--f-tile);color:#0e0e18}
+.cc__word{display:flex;gap:6px}
+.cc__key{display:grid;place-items:center;width:1.25em;height:1.25em;background:linear-gradient(180deg,#ffe34d,#ffd400 55%,#e0b400);border-radius:8px;
+  box-shadow:0 .14em 0 #8a6d00,0 .2em .3em rgba(0,0,0,.5),inset 0 2px 0 rgba(255,255,255,.6);transform:rotate(calc((var(--i) - 3) * .8deg))}
+.cc__lede{max-width:44ch;margin-top:28px;font:500 clamp(16px,1.35vw,19px)/1.55 var(--f-body);color:#d8d5ee}
+.cc__pad{margin-top:34px;padding:22px 22px 18px;border-radius:16px;background:linear-gradient(180deg,#1b1b2b,#141422);box-shadow:inset 0 0 0 2px #2c2c44,0 18px 30px rgba(0,0,0,.4)}
+.cc__pad-label{margin:0 0 14px;font:400 12px/1 'Press Start 2P',monospace;color:#ffd400;text-transform:uppercase}
+.cc__seq{display:flex;flex-wrap:wrap;gap:6px}
+.cc__btn{display:grid;place-items:center;width:42px;height:44px;border:0;border-radius:10px;color:#f4f2ff;
+  background:linear-gradient(180deg,#3a3a56,#26263a);box-shadow:0 4px 0 #0a0a12,inset 0 1px 0 rgba(255,255,255,.18);font:400 14px/1 'Press Start 2P',monospace;transition:transform .08s,box-shadow .08s,background .15s}
+.cc__btn--b,.cc__btn--a{width:44px;border-radius:50%;background:linear-gradient(180deg,#ff4f6b,#c8102e)}
+.cc__btn--b{margin-left:8px}
+.cc__btn:active{transform:translateY(3px);box-shadow:0 1px 0 #0a0a12}
+.cc__btn.is-lit{background:linear-gradient(180deg,#ffe34d,#ffd400);color:#0e0e18;box-shadow:0 4px 0 #8a6d00,0 0 14px rgba(255,212,0,.6)}
+.cc__status{margin:14px 0 0;min-height:1.4em;font:600 14px/1.4 var(--f-body);color:#a9a6c4}
+.cc__status.is-bad{color:#ff8fa3}
+.cc__art{position:relative}
+.cc__img{width:100%;height:auto;transform:rotate(2deg);filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))}
+.cc__worlds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 0;padding:0}
+.cc__worlds li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px 12px 10px 16px;border-radius:6px;background:#181826;box-shadow:inset 4px 0 0 var(--w)}
+.cc__wn{font:700 14px/1.2 var(--f-body)}
+.cc__wr{font:400 10px/1 'Press Start 2P',monospace;color:var(--w);white-space:nowrap}
+/* the celebration */
+.cc__win{position:absolute;inset:0;z-index:5;display:grid;place-content:center;text-align:center;pointer-events:none;background:radial-gradient(50% 50% at 50% 50%,rgba(14,14,24,.85),rgba(14,14,24,.2))}
+.cc__win[hidden]{display:none}
+.cc__win-t{margin:0;font:400 clamp(26px,4vw,52px)/1.2 'Press Start 2P',monospace;color:#ffd400;text-shadow:4px 4px 0 #c8102e;animation:cc-blink .5s steps(2) 6}
+.cc__win-s{margin:18px 0 0;font:700 clamp(17px,1.6vw,22px)/1.4 var(--f-body)}
+@keyframes cc-blink{50%{opacity:.2}}
+.cc__confetti{position:absolute;left:calc(6% + var(--k) * 5.8%);top:-120px;width:clamp(44px,5vw,72px);animation:cc-fall 2.6s cubic-bezier(.3,.6,.4,1) forwards;animation-delay:calc(var(--k) * 70ms)}
+@keyframes cc-fall{to{transform:translateY(calc(100vh + 200px)) rotate(calc(var(--k) * 47deg - 300deg))}}
+@media (max-width:989px){
+  .cc__wrap{grid-template-columns:1fr}
+  .cc__worlds{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:480px){
+  .cc__btn{width:40px;height:40px;font-size:12px}
+  .cc__title{gap:8px 14px}
+}

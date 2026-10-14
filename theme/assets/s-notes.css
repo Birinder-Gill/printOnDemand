@@ -1,0 +1,36 @@
+/* FAQ: folded notes on a school desk. */
+.sct-notes{background:#c98d4f}
+.nt{position:relative;padding:clamp(80px,9vw,130px) 0;
+  background:repeating-linear-gradient(90deg,rgba(90,45,10,.08) 0 2px,transparent 2px 7px,rgba(255,230,190,.06) 7px 9px,transparent 9px 23px),
+    linear-gradient(180deg,#d39a5c 0%,#c4874a 50%,#b87b3f 100%)}
+.nt::after{content:"";position:absolute;inset:0;background:var(--grain) 0 0/220px 220px;opacity:.14;mix-blend-mode:multiply;pointer-events:none}
+.nt__wrap{position:relative;z-index:1;width:min(100% - 2*var(--gutter),1180px);margin-inline:auto}
+.nt__head{max-width:640px;margin:0 auto clamp(40px,5vw,64px);text-align:center;color:#2b1607}
+.nt__kicker{margin:0 0 8px;font:400 24px/1 'Caveat',cursive;color:#7a2a12}
+.nt__title{font:400 clamp(40px,5vw,72px)/1 'Permanent Marker',cursive;color:#fff;transform:rotate(-2deg);text-shadow:3px 4px 0 #5a2a0a}
+.nt__lede{margin-top:16px;font:600 17px/1.45 var(--f-body)}
+.nt__desk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.4vw,32px);align-items:start}
+.note{--r:-2deg;position:relative;transform:rotate(var(--r));transition:transform .25s var(--ease-spring)}
+.note--1{--r:2.2deg}.note--2{--r:-1.4deg}.note--3{--r:1deg}
+.note[open]{transform:rotate(0);z-index:2}
+.note__fold{position:relative;display:flex;flex-direction:column;gap:8px;min-height:150px;padding:20px 22px 18px;list-style:none;cursor:pointer;color:#1d3fbf;
+  background:linear-gradient(135deg,#fffdf6 0%,#fffdf6 49.6%,#ece6d4 50%,#f7f3e6 50.4%,#fffdf6 100%),#fffdf6;
+  box-shadow:0 2px 0 rgba(0,0,0,.08),0 12px 18px rgba(60,30,5,.35);border-radius:2px}
+.note__fold::-webkit-details-marker{display:none}
+.note__fold::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent 49.5%,rgba(120,100,60,.18) 50%,transparent 50.5%),linear-gradient(180deg,transparent 49.5%,rgba(120,100,60,.14) 50%,transparent 50.5%)}
+.note__fold::after{content:"";position:absolute;right:0;top:0;width:34px;height:34px;background:linear-gradient(225deg,#c4874a 50%,#e9e2cc 50%);box-shadow:-2px 2px 3px rgba(0,0,0,.18)}
+.note__to{font:400 18px/1 'Caveat',cursive;color:#c8102e}
+.note__q{position:relative;font:400 clamp(22px,1.9vw,27px)/1.2 'Gochi Hand',cursive;color:#1d3fbf;text-wrap:balance}
+.note__hint{margin-top:auto;align-self:flex-end;font:800 11px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:rgba(29,63,191,.6)}
+.note[open] .note__hint{visibility:hidden}
+.note__fold:focus-visible{outline:3px solid var(--magenta);outline-offset:4px}
+.note__sheet{position:relative;margin-top:-4px;padding:18px 22px 22px 46px;color:#1b2a6b;
+  background:linear-gradient(90deg,transparent 30px,rgba(220,40,60,.5) 30px 32px,transparent 32px),repeating-linear-gradient(180deg,#fffdf6 0 29px,#b9cdf0 29px 30px);
+  box-shadow:0 14px 20px rgba(60,30,5,.35);animation:nt-unfold .35s var(--ease-out);transform-origin:top center}
+@keyframes nt-unfold{from{transform:scaleY(.2) rotateX(60deg);opacity:0}}
+.note__a{font:400 19px/30px 'Kalam',cursive}
+.note__a p{margin:0}
+.note__a p+p{margin-top:0}
+.note__sign{margin:8px 0 0;text-align:right;font:400 22px/1 'Caveat',cursive;color:#c8102e}
+@media (max-width:989px){.nt__desk{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.nt__desk{grid-template-columns:1fr}.note__fold{min-height:0}}

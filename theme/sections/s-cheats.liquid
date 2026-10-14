@@ -1,0 +1,76 @@
+{%- comment -%}
+  "Cheat codes": the answer key, styled like the codes section of a 90s game magazine (as the book's own key is).
+  A code pad you can actually enter (on screen or with the keyboard) sets off a little celebration.
+{%- endcomment -%}
+{%- assign worlds = section.settings.worlds | newline_to_br | split: '<br />' -%}
+{{ 's-cheats.css' | asset_url | stylesheet_tag }}
+
+<section class="cc on-dark" data-cheats aria-labelledby="CcTitle-{{ section.id }}">
+  <div class="cc__wrap">
+    <div class="cc__copy">
+      <p class="cc__tag"><span>{{ section.settings.tag }}</span></p>
+      <h2 class="cc__title" id="CcTitle-{{ section.id }}">
+        {%- assign words = section.settings.heading | split: ' ' -%}
+        {%- for w in words -%}<span class="cc__word">{%- assign chars = w | split: '' -%}{%- for c in chars -%}<span class="cc__key" style="--i: {{ forloop.index0 }}">{{ c }}</span>{%- endfor -%}</span>{% unless forloop.last %} {% endunless %}{%- endfor -%}
+      </h2>
+      <p class="cc__lede">{{ section.settings.lede }}</p>
+
+      <div class="cc__pad" data-pad>
+        <p class="cc__pad-label" id="PadLabel-{{ section.id }}">{{ section.settings.pad_label }}</p>
+        <div class="cc__seq" role="group" aria-labelledby="PadLabel-{{ section.id }}">
+          {%- assign seq = 'up,up,down,down,left,right,left,right,b,a' | split: ',' -%}
+          {%- for s in seq -%}
+            <button type="button" class="cc__btn cc__btn--{{ s }}" data-code="{{ s }}" aria-label="{{ s | capitalize }}">
+              {%- case s -%}
+                {%- when 'up' -%}&#9650;{%- when 'down' -%}&#9660;{%- when 'left' -%}&#9664;{%- when 'right' -%}&#9654;{%- else -%}{{ s | upcase }}
+              {%- endcase -%}
+            </button>
+          {%- endfor -%}
+        </div>
+        <p class="cc__status" data-status role="status" aria-live="polite">{{ section.settings.pad_hint }}</p>
+      </div>
+    </div>
+
+    <div class="cc__art">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'cc__img', widths: '600, 900, 1200, 1400', sizes: '(min-width: 990px) 50vw, 94vw', alt: section.settings.image_alt }}
+      {%- endif -%}
+      <ol class="cc__worlds" role="list">
+        {%- for w in worlds -%}
+          {%- assign p = w | strip | split: '|' -%}
+          {%- if p.size > 1 -%}
+            <li style="--w: {{ p[2] | default: '#ffd400' }}"><span class="cc__wn">{{ p[0] }}</span><span class="cc__wr">{{ p[1] }}</span></li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ol>
+    </div>
+  </div>
+  <div class="cc__win" data-win hidden aria-hidden="true">
+    <p class="cc__win-t">{{ section.settings.win_title }}</p>
+    <p class="cc__win-s">{{ section.settings.win_text }}</p>
+    {%- assign st = 'cassette,gamepad,pizza,boombox,floppy,pet,sneaker,tv,pager,smiley,skate,cd,handheld,popcorn,camera,alien' | split: ',' -%}
+    {%- for n in st -%}<img class="cc__confetti" style="--k: {{ forloop.index0 }}" src="{{ 'st-' | append: n | append: '.svg' | asset_url }}" alt="" width="80" height="80" loading="lazy">{%- endfor -%}
+  </div>
+</section>
+
+<script src="{{ 's-cheats.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Cheat codes (answer key)",
+  "class": "sct-cheats",
+  "settings": [
+    { "type": "text", "id": "tag", "label": "Tag", "default": "The answer key" },
+    { "type": "text", "id": "heading", "label": "Heading (one tile per letter)", "default": "Cheat codes" },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "Stuck on a clue? The tough ones have a hint printed upside down on the same page. Really stuck? Every solved grid is in the back, laid out like the codes section of a 90s game magazine." },
+    { "type": "text", "id": "pad_label", "label": "Code pad label", "default": "Enter the code" },
+    { "type": "text", "id": "pad_hint", "label": "Code pad hint", "default": "Tap the buttons, or use your keyboard." },
+    { "type": "text", "id": "win_title", "label": "Code entered: title", "default": "Cheat activated!" },
+    { "type": "text", "id": "win_text", "label": "Code entered: text", "default": "All 651 answers unlocked. In the book, that is. Nice try." },
+    { "type": "image_picker", "id": "image", "label": "Answer key image (transparent PNG)" },
+    { "type": "text", "id": "image_alt", "label": "Image description", "default": "The book open at the answer key: Cheat Codes and Level Select" },
+    { "type": "textarea", "id": "worlds", "label": "Worlds", "info": "One per line: name|puzzles|colour", "default": "Television|1–8|#ff4f8b\nMovies|9–16|#ffb000\nMusic|17–28|#3ad1e0\nGames & Toys|29–32|#9be31d\nEveryday Life|33–42|#b48cff\nSports, News & Slang|43–48|#ff7a1f" }
+  ],
+  "presets": [ { "name": "Cheat codes (answer key)" } ]
+}
+{% endschema %}

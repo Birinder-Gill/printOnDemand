@@ -1,0 +1,84 @@
+{%- comment -%}
+  "Puzzle Facts": the book's specs on the side panel of a cereal box. A sunburst box side with chunky cereal type,
+  a free-prize-inside burst, the book poured out like the cereal, and a nutrition-facts style label.
+  Label rows: one per line, "Label|Value", "Label|Value|% DV"; "--" for a thick rule, "-" for a medium rule.
+{%- endcomment -%}
+{%- assign rows = section.settings.rows | newline_to_br | split: '<br />' -%}
+{{ 's-facts.css' | asset_url | stylesheet_tag }}
+
+<section class="fx" aria-labelledby="FxTitle-{{ section.id }}">
+  <div class="fx__box">
+    <div class="fx__front">
+      <p class="fx__kicker"><span>{{ section.settings.kicker }}</span></p>
+      <h2 class="fx__title" id="FxTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <p class="fx__lede">{{ section.settings.lede }}</p>
+      <div class="fx__bowl">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'fx__book', widths: '500, 800, 1200', sizes: '(min-width: 990px) 44vw, 90vw', alt: section.settings.image_alt }}
+        {%- endif -%}
+        <p class="fx__prize" aria-hidden="true"><span>{{ section.settings.prize_small }}</span><strong>{{ section.settings.prize }}</strong></p>
+      </div>
+    </div>
+
+    <div class="fx__side">
+      <div class="nf" role="table" aria-label="{{ section.settings.label_title | escape }}">
+        <p class="nf__title" role="caption">{{ section.settings.label_title }}</p>
+        <p class="nf__serv">{{ section.settings.serving_size }}</p>
+        <p class="nf__serv nf__serv--b">{{ section.settings.servings }}</p>
+        <div class="nf__rule nf__rule--xl" aria-hidden="true"></div>
+        <p class="nf__amt">{{ section.settings.amount_label }}</p>
+        {%- for r in rows -%}
+          {%- assign line = r | strip -%}
+          {%- if line == '--' -%}
+            <div class="nf__rule nf__rule--l" aria-hidden="true"></div>
+          {%- elsif line == '-' -%}
+            <div class="nf__rule nf__rule--m" aria-hidden="true"></div>
+          {%- elsif line != blank -%}
+            {%- assign p = line | split: '|' -%}
+            <div class="nf__row{% if p[0] contains '*' %} is-bold{% endif %}" role="row">
+              <span role="rowheader">{{ p[0] | remove: '*' }}</span>
+              <span role="cell" class="nf__v">{{ p[1] }}</span>
+              {%- if p[2] -%}<span role="cell" class="nf__dv">{{ p[2] }}</span>{%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+        <div class="nf__rule nf__rule--l" aria-hidden="true"></div>
+        <p class="nf__foot">{{ section.settings.footnote }}</p>
+      </div>
+      <p class="fx__ingr"><strong>{{ section.settings.ingredients_label }}</strong> {{ section.settings.ingredients }}</p>
+      <div class="fx__boxtop">
+        <p class="fx__boxtop-h">{{ section.settings.boxtop_title }}</p>
+        <p class="fx__boxtop-t">{{ section.settings.boxtop_text }}</p>
+      </div>
+      <div class="fx__barcode" aria-hidden="true"><span></span><em>{{ section.settings.best_before }}</em></div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Puzzle facts (cereal box)",
+  "class": "sct-facts",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "New! Gift Edition" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Part of a complete nostalgia breakfast" },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "A hardcover, 8.25 × 11 inches, with one puzzle per full-color page, so there's room to write. Pour a bowl and get started." },
+    { "type": "image_picker", "id": "image", "label": "Book image (transparent PNG)" },
+    { "type": "text", "id": "image_alt", "label": "Book image description", "default": "The gift edition hardcover lying flat" },
+    { "type": "text", "id": "prize_small", "label": "Prize burst, small line", "default": "Free prize inside" },
+    { "type": "text", "id": "prize", "label": "Prize burst, big line", "default": "The answer key!" },
+    { "type": "text", "id": "label_title", "label": "Label title", "default": "Puzzle Facts" },
+    { "type": "text", "id": "serving_size", "label": "Serving size line", "default": "Serving size 1 puzzle (1 page)" },
+    { "type": "text", "id": "servings", "label": "Servings line", "default": "Servings per book 48" },
+    { "type": "text", "id": "amount_label", "label": "Amount line", "default": "Amount per serving" },
+    { "type": "textarea", "id": "rows", "label": "Label rows", "default": "*Clues|12 to 17\n-\nHints, printed upside down|0 to 6|\nAnswers printed on the page|0|0%\n--\n*Clues in the book|651\nHints in the book|71\nCategories|24\nSections|6\n--\n*Format|Hardcover\nTrim size|8.25 × 11 in\nPages|80, full color\nAnswer key|In the back\nAutograph page|Up front" },
+    { "type": "textarea", "id": "footnote", "label": "Label footnote", "default": "* Percent Daily Values are based on a 1990s diet. Your nostalgia may vary." },
+    { "type": "text", "id": "ingredients_label", "label": "Ingredients label", "default": "Ingredients:" },
+    { "type": "textarea", "id": "ingredients", "label": "Ingredients", "default": "Sitcoms, teen dramas, cartoons, blockbusters, rom-coms, pop stars, boy bands, girl groups, grunge, hip-hop, country, one-hit wonders, consoles, toys, dial-up, mall food, school supplies, sports heroes, headlines, slang. Contains no actual cereal." },
+    { "type": "text", "id": "boxtop_title", "label": "Box top coupon title", "default": "Box top" },
+    { "type": "textarea", "id": "boxtop_text", "label": "Box top coupon text", "default": "Proof of nostalgia. Clip and keep. Worth absolutely nothing, which is the point." },
+    { "type": "text", "id": "best_before", "label": "Under the barcode", "default": "Best before: never" }
+  ],
+  "presets": [ { "name": "Puzzle facts (cereal box)" } ]
+}
+{% endschema %}

@@ -47,8 +47,8 @@ body{
 /* ---------- utilities ---------- */
 .wrap{width:min(100% - 2*var(--gutter),var(--maxw));margin-inline:auto}
 .visually-hidden{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
-.skip-link{position:fixed;left:16px;top:-80px;z-index:1000;background:var(--sun);color:var(--ink);border:3px solid var(--ink);border-radius:10px;padding:10px 16px;font-weight:800;text-decoration:none;box-shadow:0 4px 0 var(--ink);transition:top .2s}
-.skip-link:focus{top:16px}
+.skip-link{position:fixed;left:16px;top:16px;transform:translateY(-300%);z-index:1000;background:var(--sun);color:var(--ink);border:3px solid var(--ink);border-radius:10px;padding:10px 16px;font-weight:800;text-decoration:none;box-shadow:0 4px 0 var(--ink);transition:transform .2s}
+.skip-link:focus{transform:none}
 :focus{outline:0}
 :focus-visible{outline:3px solid var(--magenta);outline-offset:3px;border-radius:4px}
 .on-dark :focus-visible{outline-color:var(--sun)}
@@ -105,3 +105,5 @@ body{
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 }
 .no-motion *,.no-motion *::before,.no-motion *::after{animation-duration:.001ms!important;animation-iteration-count:1!important}
+.buy{margin:0}
+.buy__err{margin:8px 0 0;color:#c8102e;font-weight:700}

@@ -25,7 +25,21 @@ const { execFileSync } = require('child_process');
   if (opt('eval')) { await p.evaluate(opt('eval')); await p.waitForTimeout(700); }
   await p.waitForTimeout(+(opt('wait') || 1500));
   if (opt('y')) { await p.evaluate(y => window.scrollTo(0, y), +opt('y')); await p.waitForTimeout(800); await p.evaluate(async () => { await Promise.all([...document.images].filter(i => i.offsetParent && i.getBoundingClientRect().top < innerHeight * 2).map(i => i.complete ? i.decode().catch(()=>{}) : new Promise(r => { i.onload = i.onerror = r; setTimeout(r, 4000); }))); }); await p.waitForTimeout(400); }
-  if (full) {
+  if (a.includes('--sections')) {
+    await p.addStyleTag({ content: '.sct-header,.sct-ticker{position:static!important}.skip-link{display:none!important}' });
+    const n = await p.evaluate(() => document.querySelectorAll('main > .shopify-section, body > .shopify-section').length);
+    const els = await p.$$('main > .shopify-section, footer, body > .shopify-section.sct-footer');
+    let k = 0;
+    for (const el of els) {
+      k++;
+      await el.scrollIntoViewIfNeeded(); await p.waitForTimeout(700);
+      await p.evaluate(async () => { await Promise.all([...document.images].filter(i => i.offsetParent).map(i => i.complete ? i.decode().catch(()=>{}) : new Promise(r => { i.onload = i.onerror = r; setTimeout(r, 4000); }))); });
+      const box = await el.boundingBox();
+      if (!box || box.height < 5) continue;
+      await el.screenshot({ path: `${out}_s${k}.png` });
+      console.log(`${out}_s${k}.png`, Math.round(box.height));
+    }
+  } else if (full) {
     // trigger lazy content by scrolling through
     const h = await p.evaluate(() => document.documentElement.scrollHeight);
     for (let y = 0; y < h; y += 700) { await p.evaluate(y => window.scrollTo(0, y), y); await p.waitForTimeout(120); }

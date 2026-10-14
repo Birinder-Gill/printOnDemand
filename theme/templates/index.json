@@ -190,11 +190,90 @@
         "ins5",
         "ins6"
       ]
+    },
+    "gameshow": {
+      "type": "s-gameshow",
+      "settings": {},
+      "blocks": {
+        "c1": {
+          "type": "clue",
+          "settings": {
+            "plate": "Clue 1",
+            "topic": "Video games",
+            "clue": "Plastic game you blew into when it would not start",
+            "answer": "CARTRIDGE",
+            "hint": "It starts with CART.",
+            "right_msg": "Blow on it and it works every time."
+          }
+        },
+        "c2": {
+          "type": "clue",
+          "settings": {
+            "plate": "Clue 2",
+            "topic": "Toys & fads",
+            "clue": "Egg-shaped digital pet that beeped for food in the middle of class",
+            "answer": "TAMAGOTCHI",
+            "hint": "It starts with TAMA.",
+            "right_msg": "Yours is hungry again, by the way."
+          }
+        },
+        "c3": {
+          "type": "clue",
+          "settings": {
+            "plate": "Clue 3",
+            "topic": "Sitcoms",
+            "clue": "What Ross kept yelling while a couch was stuck in a stairwell",
+            "answer": "PIVOT",
+            "hint": "It's also a basketball move.",
+            "right_msg": "You could hear it, couldn't you?"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ]
+    },
+    "facts": {
+      "type": "s-facts",
+      "settings": {
+        "image": "shopify://shop_images/nac-book-flat.png"
+      }
+    },
+    "cheats": {
+      "type": "s-cheats",
+      "settings": {
+        "image": "shopify://shop_images/nac-open-66-67.png"
+      }
+    },
+    "yearbook": {
+      "type": "s-yearbook",
+      "settings": {
+        "image": "shopify://shop_images/nac-open-02-03.png",
+        "notes": "2 good 2 be 4gotten!\nH.A.G.S.\nNever change ♥\nStay cool, see you at the reunion\nU R the best\nfriends 4 ever\nDon't forget me!\nRoses r red, crosswords r hard\nKeep in touch!!\nC U next fall"
+      }
+    },
+    "infomercial": {
+      "type": "s-infomercial",
+      "settings": {
+        "image": "shopify://shop_images/nac-book-fore.png"
+      }
+    },
+    "pager": {
+      "type": "s-pager",
+      "settings": {}
     }
   },
   "order": [
     "hero",
     "channels",
-    "binder"
+    "binder",
+    "gameshow",
+    "facts",
+    "cheats",
+    "yearbook",
+    "infomercial",
+    "pager"
   ]
 }

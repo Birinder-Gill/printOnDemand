@@ -45,6 +45,8 @@ for fam, (slug, ws) in STATIC.items():
     for w in ws:
         FONTS.append((fam, f'f-{slug}-{w}.woff2', f'{FS}/{slug}/files/{slug}-latin-{w}-normal.woff2', str(w), 'normal', None))
 FONTS += [
+    ('Playfair Display', 'f-playfair-display-400.woff2', f'{FS}/playfair-display/files/playfair-display-latin-400-normal.woff2', '400', 'normal', None),
+    ('Playfair Display', 'f-playfair-display-400i.woff2', f'{FS}/playfair-display/files/playfair-display-latin-400-italic.woff2', '400', 'italic', None),
     ('DSEG7', 'f-dseg7-bold.woff2', f'{DSEG}/DSEG7-Classic/DSEG7Classic-Bold.woff2', '700', 'normal', None),
     ('DSEG7', 'f-dseg7-regular.woff2', f'{DSEG}/DSEG7-Classic/DSEG7Classic-Regular.woff2', '400', 'normal', None),
     ('DSEG14', 'f-dseg14-bold.woff2', f'{DSEG}/DSEG14-Classic/DSEG14Classic-Bold.woff2', '700', 'normal', None),

@@ -1,0 +1,35 @@
+/* Yearbook: black endsheet paper written over in gel pens. */
+.sct-yearbook{background:#0c0a12}
+.yb{position:relative;overflow:hidden;padding:clamp(84px,9vw,140px) 0;color:#f6f3ff;
+  background:radial-gradient(70% 60% at 30% 40%,#1d1830,#0c0a12 70%),#0c0a12}
+.yb::before{content:"";position:absolute;inset:0;background:var(--grain) 0 0/220px 220px;opacity:.16;mix-blend-mode:screen;pointer-events:none}
+.yb__notes{position:absolute;inset:0;pointer-events:none}
+.yb__note{position:absolute;white-space:nowrap;font-size:clamp(20px,2.1vw,32px);line-height:1;opacity:.9;
+  background:linear-gradient(100deg,var(--g1),var(--g2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 6px var(--g3))}
+.yb__note--1{--g1:#ff9bf0;--g2:#ff5fc8;--g3:rgba(255,95,200,.35);left:3%;top:6%;font-family:'Caveat',cursive;transform:rotate(-8deg)}
+.yb__note--2{--g1:#8ff7ff;--g2:#3fd2ff;--g3:rgba(63,210,255,.35);right:6%;top:5%;font-family:'Permanent Marker',cursive;transform:rotate(6deg)}
+.yb__note--3{--g1:#d7ff7a;--g2:#9bff3f;--g3:rgba(155,255,63,.3);left:44%;top:3%;font-family:'Gochi Hand',cursive;transform:rotate(-3deg)}
+.yb__note--4{--g1:#ffe98a;--g2:#ffc93f;--g3:rgba(255,201,63,.3);left:4%;bottom:6%;font-family:'Kalam',cursive;transform:rotate(4deg)}
+.yb__note--5{--g1:#d7c2ff;--g2:#a57bff;--g3:rgba(165,123,255,.35);right:4%;bottom:8%;font-family:'Caveat',cursive;transform:rotate(-6deg)}
+.yb__note--6{--g1:#f2f2f7;--g2:#a9adc2;--g3:rgba(255,255,255,.25);left:40%;bottom:4%;font-family:'Reenie Beanie',cursive;font-size:clamp(26px,2.6vw,40px);transform:rotate(-2deg)}
+.yb__note--7{--g1:#ff9bf0;--g2:#c47bff;--g3:rgba(196,123,255,.3);left:24%;top:9%;font-family:'Kalam',cursive;transform:rotate(9deg)}
+.yb__note--8{--g1:#8ff7ff;--g2:#7affc1;--g3:rgba(122,255,193,.3);left:22%;bottom:14%;font-family:'Gochi Hand',cursive;transform:rotate(-12deg);opacity:.45}
+.yb__note--9{--g1:#ffe98a;--g2:#ff9b5c;--g3:rgba(255,155,92,.3);left:2%;top:36%;font-family:'Permanent Marker',cursive;transform:rotate(-5deg);opacity:.5}
+.yb__note--10{--g1:#d7ff7a;--g2:#56f2a8;--g3:rgba(86,242,168,.3);right:28%;bottom:6%;font-family:'Caveat',cursive;transform:rotate(3deg);opacity:.5}
+.yb__wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(32px,5vw,80px);align-items:center;width:min(100% - 2*var(--gutter),1320px);margin-inline:auto}
+.yb__img{width:100%;height:auto;transform:rotate(-3deg);filter:drop-shadow(0 30px 40px rgba(0,0,0,.7))}
+.yb__kicker{margin:0 0 12px;font:800 13px/1 var(--f-body);font-stretch:118%;letter-spacing:.22em;text-transform:uppercase;color:#ff9bf0}
+.yb__title{font:400 clamp(46px,5.4vw,82px)/1.02 'Leckerli One',cursive;letter-spacing:-.01em;
+  background:linear-gradient(100deg,#ff9bf0 0%,#ffd6f6 30%,#9fe6ff 60%,#d7c2ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 14px rgba(255,155,240,.35));text-wrap:balance;padding-bottom:.08em}
+.yb__lede{margin-top:20px;max-width:40ch;font:500 clamp(17px,1.4vw,20px)/1.55 var(--f-body);color:#e4defa}
+.yb__form{display:grid;grid-template-columns:auto 1fr;gap:12px 14px;max-width:420px;margin:28px 0 30px;padding:0}
+.yb__form li{display:contents}
+.yb__form span{font:400 26px/1 'Caveat',cursive;color:#ffe98a}
+.yb__form i{align-self:end;height:2px;margin-bottom:6px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 8px,transparent 8px 13px)}
+.yb .btn{--btn-edge:#000}
+@media (max-width:899px){
+  .yb__wrap{grid-template-columns:1fr}
+  .yb__note{font-size:20px}
+  .yb__note--7,.yb__note--8,.yb__note--9,.yb__note--10{display:none}
+}

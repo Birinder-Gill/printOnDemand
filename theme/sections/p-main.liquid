@@ -1,0 +1,142 @@
+{%- comment -%}
+  Product main: the book sold like a 90s toy, blister-carded on a pegboard. The photos sit inside the clear plastic
+  bubble; the printed card carries the title, an age badge, the price-gun sticker, features, a counter for quantity
+  and the big yellow button. A slim buy bar follows on phones once the button scrolls away.
+{%- endcomment -%}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign title_parts = product.title | split: ' — '
+  assign main_title = title_parts[0]
+  assign sub_title = title_parts[1] | default: section.settings.subtitle
+  assign features = section.settings.features | newline_to_br | split: '<br />'
+-%}
+{{ 'p-main.css' | asset_url | stylesheet_tag }}
+
+<section class="pm" aria-labelledby="ProductTitle">
+  <div class="pm__board">
+    <div class="pm__card">
+      <div class="pm__tab" aria-hidden="true"><span class="pm__hole"></span></div>
+      <div class="pm__grid">
+
+        <div class="pm__media" data-gallery>
+          <div class="pm__bubble">
+            <span class="pm__glare" aria-hidden="true"></span>
+            <ul class="pm__slides" role="list">
+              {%- for m in product.media -%}
+                <li class="pm__slide{% if forloop.first %} is-on{% endif %}" data-slide="{{ forloop.index0 }}"{% unless forloop.first %} hidden{% endunless %}>
+                  <button class="pm__zoom" type="button" data-zoom="{{ forloop.index0 }}" aria-label="{{ 'products.zoom' | t }}: {{ m.alt | escape }}">
+                    {%- if forloop.first -%}
+                      {{ m | image_url: width: 1400 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '500, 700, 900, 1100, 1400', sizes: '(min-width: 990px) 46vw, 92vw', alt: m.alt }}
+                    {%- else -%}
+                      {{ m | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '500, 700, 900, 1100, 1400', sizes: '(min-width: 990px) 46vw, 92vw', alt: m.alt }}
+                    {%- endif -%}
+                  </button>
+                </li>
+              {%- endfor -%}
+            </ul>
+            {%- if product.media.size > 1 -%}
+              <button class="pm__arrow pm__arrow--prev" type="button" data-step="-1" aria-label="{{ 'general.previous' | t }}">{%- render 'icon', name: 'caret-left' -%}</button>
+              <button class="pm__arrow pm__arrow--next" type="button" data-step="1" aria-label="{{ 'general.next' | t }}">{%- render 'icon', name: 'caret-right' -%}</button>
+              <p class="pm__count" aria-live="polite"><span data-count>1</span> / {{ product.media.size }}</p>
+            {%- endif -%}
+          </div>
+          {%- if product.media.size > 1 -%}
+            <ul class="pm__thumbs" role="list">
+              {%- for m in product.media -%}
+                <li><button class="pm__thumb" type="button" data-go="{{ forloop.index0 }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="{{ 'products.view_gallery_image' | t: index: forloop.index }}">
+                  {{ m | image_url: width: 180 | image_tag: loading: 'lazy', alt: '', width: 90, height: 90 }}
+                </button></li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+        <div class="pm__info">
+          <p class="pm__burst" aria-hidden="true"><span>{{ section.settings.burst }}</span></p>
+          <p class="pm__age"><strong>{{ section.settings.age_big }}</strong><span>{{ section.settings.age_small }}</span></p>
+          <h1 class="pm__title" id="ProductTitle">{{ main_title }}{% if sub_title %}<span class="visually-hidden">: {{ sub_title }}</span>{% endif %}</h1>
+          {%- if sub_title -%}<p class="pm__sub" aria-hidden="true">{{ sub_title }}</p>{%- endif -%}
+
+          <div class="pm__price">
+            <p class="pm__tag"><span class="visually-hidden">{{ 'products.price' | t }}</span><span class="pm__tag-v" data-price>{{ variant.price | money_without_trailing_zeros }}</span></p>
+            <p class="pm__taxes">{%- if cart.taxes_included -%}Taxes included. {% endif -%}Shipping is calculated at checkout.</p>
+          </div>
+
+          <ul class="pm__feats" role="list">
+            {%- for f in features -%}{%- assign t = f | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+          </ul>
+
+          {%- form 'product', product, id: 'ProductForm', class: 'pm__form' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}">
+            {%- unless product.has_only_default_variant -%}
+              <label class="pm__label" for="VariantSelect">{{ product.options.first }}</label>
+              <select class="pm__select" id="VariantSelect" data-variant-select>
+                {%- for v in product.variants -%}<option value="{{ v.id }}" data-price="{{ v.price | money_without_trailing_zeros }}"{% if v == variant %} selected{% endif %}{% unless v.available %} disabled{% endunless %}>{{ v.title }}</option>{%- endfor -%}
+              </select>
+            {%- endunless -%}
+            <div class="pm__row">
+              <div class="pm__qty" data-qty>
+                <span class="pm__qty-l" id="QtyLabel">{{ 'products.quantity' | t }}</span>
+                <button class="pm__qbtn" type="button" data-q="-1" aria-label="{{ 'products.decrease_quantity' | t }}">{%- render 'icon', name: 'minus' -%}</button>
+                <input class="pm__qnum" type="number" name="quantity" value="1" min="1" max="99" inputmode="numeric" aria-labelledby="QtyLabel">
+                <button class="pm__qbtn" type="button" data-q="1" aria-label="{{ 'products.increase_quantity' | t }}">{%- render 'icon', name: 'plus' -%}</button>
+              </div>
+              <button class="btn btn--lg pm__add" type="submit" name="add" data-main-add{% unless variant.available %} disabled{% endunless %}>
+                {%- if variant.available -%}{{ 'products.add_to_cart' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+                <span class="btn__price" data-price>{{ variant.price | money_without_trailing_zeros }}</span>
+              </button>
+            </div>
+            <div class="pm__dynamic">{{ form | payment_button }}</div>
+            <p class="buy__err" data-form-error hidden role="alert"></p>
+          {%- endform -%}
+
+          <p class="pm__warn"><span class="pm__tri" aria-hidden="true">!</span>{{ section.settings.warning }}</p>
+        </div>
+      </div>
+
+      {%- if product.description != blank -%}
+        <div class="pm__back">
+          <h2 class="pm__back-h">{{ section.settings.back_heading }}</h2>
+          <div class="pm__backgrid">
+            <div class="pm__desc rte">{{ product.description }}</div>
+            {%- if section.settings.back_image != blank -%}
+              {{ section.settings.back_image | image_url: width: 900 | image_tag: loading: 'lazy', class: 'pm__backimg', widths: '400, 600, 900', sizes: '(min-width: 990px) 30vw, 90vw', alt: section.settings.back_image_alt }}
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="pm__sticky" data-sticky hidden>
+    {%- if product.featured_media -%}{{ product.featured_media | image_url: width: 120 | image_tag: alt: '', width: 48, height: 48, class: 'pm__sticky-img', loading: 'lazy' }}{%- endif -%}
+    <p class="pm__sticky-t">{{ main_title }}<span>{{ variant.price | money_without_trailing_zeros }}</span></p>
+    <button class="btn btn--sm" type="submit" form="ProductForm"{% unless variant.available %} disabled{% endunless %}>{{ 'products.add_to_cart' | t }}</button>
+  </div>
+
+  <dialog class="pm__lightbox" data-lightbox aria-label="{{ product.title | escape }}">
+    <button class="pm__lb-x" type="button" data-lb-close>{%- render 'icon', name: 'x' -%}<span class="visually-hidden">{{ 'general.close' | t }}</span></button>
+    <img data-lb-img alt="" width="2048" height="2048">
+  </dialog>
+</section>
+
+<script type="application/ld+json">{{ product | structured_data }}</script>
+<script src="{{ 'p-main.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Product: blister card",
+  "class": "sct-pmain",
+  "settings": [
+    { "type": "text", "id": "subtitle", "label": "Subtitle when the title has none", "default": "Gift Edition Hardcover" },
+    { "type": "text", "id": "burst", "label": "Burst", "default": "Gift edition!" },
+    { "type": "text", "id": "age_big", "label": "Age badge, big", "default": "30+" },
+    { "type": "text", "id": "age_small", "label": "Age badge, small", "default": "Ages" },
+    { "type": "textarea", "id": "features", "label": "Features (one per line)", "default": "48 crosswords about the 1990s, one per page\n651 clues, with hints printed upside down\nEvery page a different design\nHardcover, 8.25 × 11 in, 80 full-color pages\nAnswer key in the back, autograph page up front" },
+    { "type": "text", "id": "warning", "label": "Warning label", "default": "Caution: contains small references. Players born after 2000 may need supervision." },
+    { "type": "text", "id": "back_heading", "label": "Description heading", "default": "On the back of the card" },
+    { "type": "image_picker", "id": "back_image", "label": "Back cover image" },
+    { "type": "text", "id": "back_image_alt", "label": "Back cover description", "default": "The back cover: You were there. Prove it." }
+  ]
+}
+{% endschema %}

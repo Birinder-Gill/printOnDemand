@@ -1,0 +1,57 @@
+{%- comment -%}
+  Email signup as a pager clipped to a denim pocket: the email field is the pager's LCD, the send key is the button.
+{%- endcomment -%}
+{{ 's-pager.css' | asset_url | stylesheet_tag }}
+
+<section class="pg" aria-labelledby="PgTitle-{{ section.id }}">
+  <div class="pg__denim">
+    <div class="pg__wrap">
+      <div class="pg__patch">
+        <h2 class="pg__title" id="PgTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+        <p class="pg__lede">{{ section.settings.lede }}</p>
+      </div>
+      <div class="pg__pocket">
+        <div class="pager">
+          <span class="pager__clip" aria-hidden="true"></span>
+          {%- form 'customer', id: 'PagerForm', class: 'pager__form' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter,pager">
+            <div class="pager__lcd">
+              <p class="pager__status" aria-hidden="true"><span>&#9993; 1</span><span>1/1</span></p>
+              {%- if form.posted_successfully? -%}
+                <p class="pager__msg" role="status">{{ section.settings.success }}</p>
+              {%- else -%}
+                <label class="pager__label" for="PagerEmail">{{ section.settings.field_label }}</label>
+                <input class="pager__input" id="PagerEmail" type="email" name="contact[email]" autocomplete="email" required spellcheck="false" placeholder="you@example.com"{% if form.errors %} aria-invalid="true" aria-describedby="PagerErr"{% endif %}>
+                {%- if form.errors -%}<p class="pager__err" id="PagerErr">{{ 'newsletter.error' | t }}</p>{%- endif -%}
+              {%- endif -%}
+            </div>
+            <div class="pager__keys">
+              <span class="pager__key" aria-hidden="true"></span>
+              <span class="pager__key" aria-hidden="true"></span>
+              <button class="pager__send" type="submit">{{ section.settings.button }}</button>
+            </div>
+            <p class="pager__brand" aria-hidden="true">{{ section.settings.model }}</p>
+          {%- endform -%}
+        </div>
+      </div>
+      <p class="pg__small">{{ section.settings.small }}</p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pager (email signup)",
+  "class": "sct-pager",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Page me when the next book drops." },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "One email when a new book comes out. That's the whole list." },
+    { "type": "text", "id": "field_label", "label": "Field label", "default": "Your email" },
+    { "type": "text", "id": "button", "label": "Button", "default": "Send" },
+    { "type": "text", "id": "success", "label": "Success message", "default": "Got it. We'll page you." },
+    { "type": "text", "id": "model", "label": "Pager model text", "default": "Alpha-numeric 2000" },
+    { "type": "text", "id": "small", "label": "Small print", "default": "No spam. Unsubscribe from any email in one click." }
+  ],
+  "presets": [ { "name": "Pager (email signup)" } ]
+}
+{% endschema %}

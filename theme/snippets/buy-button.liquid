@@ -1,0 +1,18 @@
+{%- comment -%}
+  The big yellow Add to cart button with the price, for any section.
+  {% render 'buy-button', product: product, size: 'lg', extra: 'class', id: 'unique-id' %}
+{%- endcomment -%}
+{%- liquid
+  assign p = product | default: settings.hero_product
+  assign v = p.selected_or_first_available_variant
+-%}
+{%- if p != blank -%}
+  {%- form 'product', p, id: id, class: 'buy' -%}
+    <input type="hidden" name="id" value="{{ v.id }}">
+    <button class="btn{% if size %} btn--{{ size }}{% endif %}{% if extra %} {{ extra }}{% endif %}" type="submit" name="add"{% unless v.available %} disabled{% endunless %}>
+      {%- if v.available -%}{%- if label != blank -%}{{ label }}{%- else -%}{{ 'products.add_to_cart' | t }}{%- endif -%}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+      <span class="btn__price">{{ v.price | money_without_trailing_zeros }}</span>
+    </button>
+    <p class="buy__err" data-form-error hidden role="alert"></p>
+  {%- endform -%}
+{%- endif -%}

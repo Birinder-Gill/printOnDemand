@@ -1,0 +1,67 @@
+{%- comment -%}
+  Track list: all 48 puzzles written out by hand on the J-card of a C-90 mixtape, Side A (odd numbers) and
+  Side B (even numbers), as on the book's own track list page. Titles come from the "puzzle" metaobjects.
+{%- endcomment -%}
+{{ 'p-tracklist.css' | asset_url | stylesheet_tag }}
+
+<section class="tl" aria-labelledby="TlTitle-{{ section.id }}">
+  <div class="tl__wrap">
+    <div class="tl__card">
+      <div class="tl__spine" aria-hidden="true"><span>{{ section.settings.spine }}</span></div>
+      <div class="tl__front">
+        <div class="tl__print" aria-hidden="true"><span class="tl__c90">C-90</span><span class="tl__stripes"><i></i><i></i><i></i><i></i></span><span class="tl__hi">High bias</span></div>
+        <h2 class="tl__title" id="TlTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+        <p class="tl__lede">{{ section.settings.lede }}</p>
+        <img class="tl__tape" src="{{ 'st-cassette.svg' | asset_url }}" alt="" width="320" height="220" loading="lazy">
+        <p class="tl__date" aria-hidden="true"><span>Date</span><em>{{ section.settings.date }}</em></p>
+        <p class="tl__nr" aria-hidden="true"><span class="tl__box is-checked"></span>NR <span class="tl__box"></span>Dolby B</p>
+      </div>
+      {%- for side in (1..2) -%}
+        {%- if side == 1 -%}{%- assign start = 1 -%}{%- assign label = section.settings.side_a -%}{%- else -%}{%- assign start = 2 -%}{%- assign label = section.settings.side_b -%}{%- endif -%}
+        <div class="tl__side">
+          <h3 class="tl__sidehead"><span class="tl__sidebadge">{%- if side == 1 -%}A{%- else -%}B{%- endif -%}</span>{{ label }}</h3>
+          <ol class="tl__list" role="list">
+            {%- assign last_section = '' -%}
+            {%- for n in (start..48) -%}
+              {%- assign odd = n | modulo: 2 -%}
+              {%- if side == 1 and odd == 0 -%}{%- continue -%}{%- endif -%}
+              {%- if side == 2 and odd == 1 -%}{%- continue -%}{%- endif -%}
+              {%- liquid
+                if n < 10
+                  assign h = 'puzzle-0' | append: n
+                else
+                  assign h = 'puzzle-' | append: n
+                endif
+                assign p = shop.metaobjects.puzzle[h]
+              -%}
+              {%- if p == blank -%}{%- continue -%}{%- endif -%}
+              {%- assign sec = p.section.value -%}
+              {%- if sec != last_section -%}
+                <li class="tl__sec" aria-hidden="true">{{ sec }}</li>
+                {%- assign last_section = sec -%}
+              {%- endif -%}
+              <li class="tl__track"><span class="tl__n">{{ n }}.</span><span class="tl__t">{{ p.title.value }}</span></li>
+            {%- endfor -%}
+          </ol>
+        </div>
+      {%- endfor -%}
+    </div>
+    <p class="tl__bonus">{{ section.settings.bonus }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Track list (mixtape)",
+  "class": "sct-tracklist",
+  "settings": [
+    { "type": "text", "id": "spine", "label": "Spine label", "default": "90s America Crossword" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The track list" },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "All 48 puzzles, in order. Odd numbers sit on the left pages, even numbers on the right, so each spread is one topic." },
+    { "type": "text", "id": "date", "label": "Date on the card", "default": "Summer '96" },
+    { "type": "text", "id": "side_a", "label": "Side A label", "default": "Side A" },
+    { "type": "text", "id": "side_b", "label": "Side B label", "default": "Side B" },
+    { "type": "text", "id": "bonus", "label": "Bonus track line", "default": "Bonus track: the answer key, at the end of the tape." }
+  ]
+}
+{% endschema %}

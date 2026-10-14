@@ -1,0 +1,53 @@
+{%- comment -%}
+  FAQ as notes passed in class: each question is a folded note on a school desk. Open one and it unfolds into a
+  lined sheet with the answer. Built on details/summary, so it works without JavaScript and with a keyboard.
+{%- endcomment -%}
+{{ 's-notes.css' | asset_url | stylesheet_tag }}
+
+<section class="nt" aria-labelledby="NtTitle-{{ section.id }}">
+  <div class="nt__wrap">
+    <header class="nt__head">
+      <p class="nt__kicker">{{ section.settings.kicker }}</p>
+      <h2 class="nt__title" id="NtTitle-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.lede != blank -%}<p class="nt__lede">{{ section.settings.lede }}</p>{%- endif -%}
+    </header>
+    <div class="nt__desk">
+      {%- for block in section.blocks -%}
+        <details class="note note--{{ forloop.index | modulo: 4 }}" {{ block.shopify_attributes }}>
+          <summary class="note__fold">
+            <span class="note__to">{{ section.settings.to_label }}</span>
+            <span class="note__q">{{ block.settings.question }}</span>
+            <span class="note__hint" aria-hidden="true">{{ section.settings.open_label }}</span>
+          </summary>
+          <div class="note__sheet">
+            <div class="note__a rte">{{ block.settings.answer }}</div>
+            {%- if block.settings.sign != blank -%}<p class="note__sign">{{ block.settings.sign }}</p>{%- endif -%}
+          </div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Notes passed in class (FAQ)",
+  "class": "sct-notes",
+  "max_blocks": 16,
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Pass it on" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Questions, passed in class" },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "Open a note to read the answer." },
+    { "type": "text", "id": "to_label", "label": "Outside of each note", "default": "Read this:" },
+    { "type": "text", "id": "open_label", "label": "Open hint", "default": "Unfold" }
+  ],
+  "blocks": [
+    { "type": "faq", "name": "Question", "settings": [
+      { "type": "text", "id": "question", "label": "Question", "default": "How hard are the puzzles?" },
+      { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Friendly, not fiendish.</p>" },
+      { "type": "text", "id": "sign", "label": "Signed", "default": "" }
+    ] }
+  ],
+  "presets": [ { "name": "Notes passed in class (FAQ)" } ]
+}
+{% endschema %}
