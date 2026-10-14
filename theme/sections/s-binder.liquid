@@ -7,7 +7,7 @@
 {%- liquid
   assign inserts = section.blocks | where: 'type', 'insert'
   assign total = inserts.size | plus: 48
-  assign pages = total | plus: 8 | divided_by: 9
+  assign pages = total | plus: 8 | divided_by: 9 | floor
 -%}
 {{ 's-binder.css' | asset_url | stylesheet_tag }}
 
@@ -42,6 +42,9 @@
                 <li><button type="button" class="bd__cl-item is-insert" data-open="{{ forloop.index0 | plus: 48 }}"><span class="bd__box" aria-hidden="true"></span><span class="bd__cl-n">{{ b.settings.code }}</span><span class="bd__cl-t">{{ b.settings.title }}</span></button></li>
               {%- endfor -%}
             </ol>
+            <p class="bd__cl-foot">{{ section.settings.checklist_note }}</p>
+            <img class="bd__cl-st bd__cl-st--1" src="{{ 'st-cd.svg' | asset_url }}" alt="" width="80" height="80" loading="lazy">
+            <img class="bd__cl-st bd__cl-st--2" src="{{ 'st-pet.svg' | asset_url }}" alt="" width="70" height="80" loading="lazy">
           </div>
         </div>
       </div>
@@ -174,6 +177,7 @@
     { "type": "text", "id": "heading", "label": "Heading", "default": "No two pages alike." },
     { "type": "textarea", "id": "lede", "label": "Intro", "default": "Forty-eight puzzles, forty-eight page designs, each one a different piece of the decade. Pick any card for a closer look." },
     { "type": "text", "id": "checklist_label", "label": "Checklist heading", "default": "Checklist" },
+    { "type": "text", "id": "checklist_note", "label": "Checklist note", "default": "Tick a box for every puzzle you finish. The six extras are free." },
     { "type": "text", "id": "insert_label", "label": "Insert topic label", "default": "Extra page" },
     { "type": "text", "id": "flip_label", "label": "Flip button", "default": "Flip the card" },
     { "type": "text", "id": "back_footer", "label": "Card back footer", "default": "90s America Crossword, Gift Edition" }

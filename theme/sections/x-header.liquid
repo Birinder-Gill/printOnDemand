@@ -32,7 +32,7 @@
       <span class="hdr__hole" aria-hidden="true"></span>
 
       {%- if menu != blank -%}
-        {%- assign half = menu.links.size | plus: 1 | divided_by: 2 -%}
+        {%- assign half = menu.links.size | plus: 1 | divided_by: 2 | floor -%}
         {%- assign half_next = half | plus: 1 -%}
         <nav class="hdr__nav" aria-label="Main">
           <ul class="hdr__links" role="list">

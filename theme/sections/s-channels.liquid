@@ -88,7 +88,7 @@
                 {%- assign parts = line | strip | split: '|' -%}
                 {%- if parts.size > 0 -%}
                   {%- assign mins = forloop.index0 | times: 30 | plus: 480 -%}
-                  {%- assign hh = mins | divided_by: 60 -%}
+                  {%- assign hh = mins | divided_by: 60 | floor -%}
                   {%- assign mm = mins | modulo: 60 -%}
                   <li class="guide__row">
                     <span class="guide__time">{{ hh }}:{% if mm < 10 %}0{% endif %}{{ mm }}</span>

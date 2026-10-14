@@ -18,16 +18,18 @@ const { execFileSync } = require('child_process');
   p.on('requestfailed', r => errs.push('FAILED ' + r.url()));
   p.on('response', r => { if (r.status() >= 400 && !r.url().endsWith('favicon.ico')) errs.push(r.status() + ' ' + r.url()); });
   await p.goto(`http://127.0.0.1:8777/${page}.html`, { waitUntil: 'networkidle', timeout: 120000 });
+  await p.addStyleTag({ content: 'html{scroll-behavior:auto!important}' });
   await p.evaluate(async () => { await document.fonts.ready; });
   if (opt('click')) for (const s of opt('click').split('|')) { await p.click(s).catch(e => errs.push('click ' + s + ' ' + e.message.split('\n')[0])); await p.waitForTimeout(400); }
   if (opt('hover')) await p.hover(opt('hover')).catch(() => {});
-  if (opt('eval')) await p.evaluate(opt('eval'));
+  if (opt('eval')) { await p.evaluate(opt('eval')); await p.waitForTimeout(700); }
   await p.waitForTimeout(+(opt('wait') || 1500));
-  if (opt('y')) await p.evaluate(y => window.scrollTo(0, y), +opt('y'));
+  if (opt('y')) { await p.evaluate(y => window.scrollTo(0, y), +opt('y')); await p.waitForTimeout(800); await p.evaluate(async () => { await Promise.all([...document.images].filter(i => i.offsetParent && i.getBoundingClientRect().top < innerHeight * 2).map(i => i.complete ? i.decode().catch(()=>{}) : new Promise(r => { i.onload = i.onerror = r; setTimeout(r, 4000); }))); }); await p.waitForTimeout(400); }
   if (full) {
     // trigger lazy content by scrolling through
     const h = await p.evaluate(() => document.documentElement.scrollHeight);
     for (let y = 0; y < h; y += 700) { await p.evaluate(y => window.scrollTo(0, y), y); await p.waitForTimeout(120); }
+    await p.evaluate(async () => { await Promise.all([...document.images].filter(i => i.offsetParent).map(i => i.complete ? i.decode().catch(()=>{}) : new Promise(r => { i.onload = i.onerror = r; setTimeout(r, 4000); }))); });
     await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(600);
     await p.screenshot({ path: out + '.png', fullPage: true });
     const slice = +(opt('slice') || 1800);

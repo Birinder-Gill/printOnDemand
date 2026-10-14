@@ -52,7 +52,16 @@ const pages = {
 const collection = { id: 55, title: 'The Gift Shop', handle: 'all', url: '/collections/all', description: '<p>Everything in the shop.</p>', products: [product], products_count: 1, all_products_count: 1,
   image: null, featured_image: productMedia[0] || null, sort_by: 'manual', default_sort_by: 'manual', sort_options: [], filters: [], current_type: null, current_vendor: null };
 
-const shop = { name: 'My Store 10', url: 'https://i7d9cn-v1.myshopify.com', secure_url: 'https://i7d9cn-v1.myshopify.com', domain: 'i7d9cn-v1.myshopify.com', email: 'shop@example.com',
+const puzzles = JSON.parse(fs.readFileSync('/home/claude/store/tools/puzzles.json', 'utf8'));
+const puzzleObjs = {};
+for (const p of puzzles) {
+  const o = {};
+  for (const [k, v] of Object.entries(p)) o[k] = { value: v, toString() { return String(v); } };
+  o.image = { value: imageObj('shopify://shop_images/' + p.image, '') };
+  o.system = { handle: p.handle };
+  puzzleObjs[p.handle] = o;
+}
+const shop = { metaobjects: { puzzle: puzzleObjs }, name: 'My Store 10', url: 'https://i7d9cn-v1.myshopify.com', secure_url: 'https://i7d9cn-v1.myshopify.com', domain: 'i7d9cn-v1.myshopify.com', email: 'shop@example.com',
   currency: 'INR', money_format: 'Rs. {{amount}}', money_with_currency_format: 'Rs. {{amount}} INR', description: '', permanent_domain: 'i7d9cn-v1.myshopify.com',
   refund_policy: { title: 'Refund policy', url: '/policies/refund-policy' }, privacy_policy: { title: 'Privacy policy', url: '/policies/privacy-policy' },
   terms_of_service: { title: 'Terms of service', url: '/policies/terms-of-service' }, shipping_policy: { title: 'Shipping policy', url: '/policies/shipping-policy' },
