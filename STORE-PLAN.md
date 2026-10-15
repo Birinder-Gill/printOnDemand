@@ -116,7 +116,26 @@ Other templates
 - Search: library card catalog. 404: no signal. Password: homemade "under construction" web page with a guestbook.
 - Blog/article: photocopied zine. Gift card: arcade game card. Generic page: composition notebook.
 
-## Status
+## Status (Quiet Hour Press rebuild, 14-15 Oct 2026)
+- [x] Brutalist design system, chrome, home, product templates, all store templates (see "Brutalist system" above).
+- [x] Theme "Quiet Hour Press" = gid://shopify/OnlineStoreTheme/189145809049 (renamed from "90s America Crossword:
+      Throwback"), UNPUBLISHED. All new/changed files upserted from commit 7904f89; every JSON template verified
+      against the repo after upload (no dropped sections). themeFilesDelete is blocked by the connector: the 51 retired
+      files are still on the theme but unused; the 4 retired sections that had presets were overwritten with empty
+      stubs so they don't show in "Add section". The user can delete the rest in the code editor (optional).
+- [x] Store data: product metafield definitions custom.catalog_number / tagline / cutout / highlights / specs (pinned);
+      crossword filled in (No. 001, cutout = nac-hero-book.png), vendor "Quiet Hour Press", templateSuffix
+      "90s-crossword". Smart collection "The Catalog" (handle all, price > 0, newest first) published to Online Store.
+      Pages: about (press, template about), liner-notes (new, template liner, old liner notes copy), contact and
+      shipping-returns copy rewritten for the press. Main menu: Catalog, 90s Crossword, About, FAQ, Contact.
+- [ ] Multi-agent code review of the theme (5 dimensions + adversarial verify), then fixes, re-upload, checkpoint.
+- [ ] Real-store check is the user's (workspace can't open the storefront): Online Store > Themes > Quiet Hour Press >
+      Preview. Then Publish.
+- [ ] User to-dos (tell them, don't do): rename the store from "My Store 10" to Quiet Hour Press (Settings > General);
+      currency (INR now); policies (refund, shipping, privacy, terms); payments and shipping rates; password message;
+      list the other books (title, price, images, catalog number) so each gets its own product page/template.
+
+## Status (original 90s build, kept for history)
 - [x] Render book images (covers, pages, 3D renders, spreads)
 - [x] Theme skeleton, design tokens, fonts, preview harness
 - [x] Global chrome
