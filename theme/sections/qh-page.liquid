@@ -8,7 +8,13 @@
           <div class="qpage__card" {{ block.shopify_attributes }}>
             <p class="q-label qpage__card-h">{{ block.settings.heading }}</p>
             <div class="qpage__card-b">{{ block.settings.text }}</div>
-            {%- if block.settings.link_label != blank -%}<a class="q-arrowlink" href="{{ block.settings.link | default: '#signup' }}">{{ block.settings.link_label }}{% render 'qh-arrow', class: '' %}</a>{%- endif -%}
+            {%- liquid
+              assign card_href = block.settings.link
+              if card_href == blank and block.settings.to_signup
+                assign card_href = '#signup'
+              endif
+            -%}
+            {%- if block.settings.link_label != blank and card_href != blank -%}<a class="q-arrowlink" href="{{ card_href }}">{{ block.settings.link_label }}{% render 'qh-arrow', class: '' %}</a>{%- endif -%}
           </div>
         {%- endfor -%}
       </aside>
@@ -29,7 +35,8 @@
       { "type": "text", "id": "heading", "label": "Heading", "default": "Good to know" },
       { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Add a short fact here.</p>" },
       { "type": "text", "id": "link_label", "label": "Link label" },
-      { "type": "url", "id": "link", "label": "Link", "info": "Leave empty to point at the newsletter." } ] }
+      { "type": "url", "id": "link", "label": "Link", "info": "Leave empty to hide the link." },
+      { "type": "checkbox", "id": "to_signup", "label": "Point an empty link at the newsletter", "default": false } ] }
   ],
   "max_blocks": 6,
   "presets": [{ "name": "Page content" }]

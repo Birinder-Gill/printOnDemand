@@ -5,7 +5,7 @@
       "settings": {
         "kicker": "Contact",
         "heading": "Write to [us].",
-        "text": "<p>Questions about an order, a book, or a stack of books for a gift? Send a message and a real person writes back.</p>",
+        "text": "<p>Questions about an order, a book, or a stack of books for a gift? Send a message and we'll write back.</p>",
         "meta": "",
         "scheme": "red"
       }
@@ -20,7 +20,7 @@
           "type": "cell",
           "settings": {
             "label": "Replies",
-            "text": "<p>We answer every message, usually within two working days.</p>"
+            "text": "<p>We read every message and write back as soon as we can.</p>"
           }
         },
         "c2": {

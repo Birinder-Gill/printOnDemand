@@ -20,7 +20,7 @@
     -%}
     <title>{{ title_text }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.page' | t: number: current_page }}{% endif %}{% unless title_text contains brand %} &ndash; {{ brand }}{% endunless %}</title>
     {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
-    {% render 'meta-tags', brand: brand %}
+    {% render 'meta-tags', brand: brand, title: title_text %}
     <link rel="preload" href="{{ 'f-archivo-var.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
     {% render 'font-faces' %}
     {{ 'base.css' | asset_url | stylesheet_tag }}
@@ -41,7 +41,7 @@
       window.theme = {
         routes: { cart: {{ routes.cart_url | json }}, cartAdd: {{ routes.cart_add_url | json }}, cartChange: {{ routes.cart_change_url | json }}, root: {{ routes.root_url | json }} },
         cartType: {{ settings.cart_type | json }},
-        strings: { soldOut: {{ 'products.sold_out' | t | json }}, adding: {{ 'products.adding' | t | json }}, added: {{ 'products.added' | t | json }}, addToCart: {{ 'products.add_to_cart' | t | json }}, cartError: {{ 'cart.update_error' | t | json }} }
+        strings: { soldOut: {{ 'products.sold_out' | t | json }}, available: {{ 'products.available' | t | json }}, price: {{ 'products.price' | t | json }}, salePrice: {{ 'products.sale_price' | t | json }}, cartUpdated: {{ 'cart.updated' | t | json }}, pause: {{ 'general.pause' | t | json }}, play: {{ 'general.play' | t | json }}, adding: {{ 'products.adding' | t | json }}, added: {{ 'products.added' | t | json }}, addToCart: {{ 'products.add_to_cart' | t | json }}, cartError: {{ 'cart.update_error' | t | json }} }
       };
     </script>
     <script src="{{ 'global.js' | asset_url }}" defer></script>

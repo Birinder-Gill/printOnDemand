@@ -1,7 +1,7 @@
 {%- comment -%} Announcement strip: a mono crawl on ink. Messages are blocks; each can link somewhere. {%- endcomment -%}
 {%- if section.blocks.size > 0 -%}
-<div class="qann" role="region" aria-label="{{ section.settings.label | escape }}">
-  <div class="q-marquee" style="--q-marq: {{ section.settings.speed | times: section.blocks.size }}s">
+<div class="qann" role="region" aria-label="{{ section.settings.label | escape }}" data-marquee>
+  <div class="q-marquee qann__crawl" style="--q-marq: {{ section.settings.speed | times: section.blocks.size }}s">
     {%- for k in (1..2) -%}
       <ul class="q-marquee__track qann__list" role="list"{% if k == 2 %} aria-hidden="true"{% endif %}>
         {%- for block in section.blocks -%}
@@ -17,6 +17,7 @@
       </ul>
     {%- endfor -%}
   </div>
+  {%- render 'qh-mtoggle', class: 'qann__toggle' -%}
 </div>
 {%- endif -%}
 

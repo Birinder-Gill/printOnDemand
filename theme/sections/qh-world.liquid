@@ -25,6 +25,12 @@
     <div class="qworld__copy">
       <p class="qworld__t">{% render 'qh-hl', text: section.settings.heading %}</p>
       {%- if section.settings.text != blank -%}<p class="qworld__s q-label">{{ section.settings.text }}</p>{%- endif -%}
+      {%- if section.settings.link1_label != blank and section.settings.link1 != blank or section.settings.link2_label != blank and section.settings.link2 != blank -%}
+        <ul class="qworld__links" role="list">
+          {%- if section.settings.link1_label != blank and section.settings.link1 != blank -%}<li><a href="{{ section.settings.link1 }}">{{ section.settings.link1_label }}</a></li>{%- endif -%}
+          {%- if section.settings.link2_label != blank and section.settings.link2 != blank -%}<li><a href="{{ section.settings.link2 }}">{{ section.settings.link2_label }}</a></li>{%- endif -%}
+        </ul>
+      {%- endif -%}
     </div>
     {%- if section.settings.jump_label != blank -%}
       <a class="qworld__jump" href="{{ section.settings.jump_target }}">
@@ -49,6 +55,10 @@
     { "type": "text", "id": "number", "label": "Catalog number", "info": "Used when the product has no custom.catalog_number metafield." },
     { "type": "textarea", "id": "heading", "label": "Line", "default": "This book comes with its [own world]." },
     { "type": "text", "id": "text", "label": "Small print", "default": "Scroll down. The rest of this page is designed like the book." },
+    { "type": "text", "id": "link1_label", "label": "Link 1 label" },
+    { "type": "url", "id": "link1", "label": "Link 1" },
+    { "type": "text", "id": "link2_label", "label": "Link 2 label" },
+    { "type": "url", "id": "link2", "label": "Link 2" },
     { "type": "text", "id": "jump_label", "label": "Jump link label", "default": "Skip to buying" },
     { "type": "text", "id": "jump_target", "label": "Jump link target", "default": "#ProductTitle", "info": "An anchor on this page (like #ProductTitle) or a path (like /collections/all)." }
   ],

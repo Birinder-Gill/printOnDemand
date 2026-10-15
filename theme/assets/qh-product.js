@@ -44,8 +44,11 @@
   const bar = document.querySelector('[data-qbar]');
   const add = document.querySelector('.qpm__add');
   if (bar && add && 'IntersectionObserver' in window) {
+    let past = false, foot = false;
+    const update = () => { const on = past && !foot; bar.classList.toggle('is-on', on); bar.inert = !on; document.documentElement.classList.toggle('has-buybar', on); };
     bar.hidden = false;
-    const io = new IntersectionObserver(([en]) => bar.classList.toggle('is-on', !en.isIntersecting && en.boundingClientRect.top < 0), { threshold: 0 });
-    io.observe(add);
+    new IntersectionObserver(([en]) => { past = !en.isIntersecting && en.boundingClientRect.top < 0; update(); }, { threshold: 0 }).observe(add);
+    const footer = document.querySelector('.qft');
+    if (footer) new IntersectionObserver(([en]) => { foot = en.isIntersecting; update(); }, { threshold: 0 }).observe(footer);
   }
 })();

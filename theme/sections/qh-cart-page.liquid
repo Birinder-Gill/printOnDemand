@@ -3,12 +3,13 @@
   <div class="q-intro">
     <div class="q-wrap q-intro__in">
       <div>
-        <p class="q-intro__kicker"><span class="q-tag">{{ 'cart.item_count' | t: count: cart.item_count }}</span></p>
+        <p class="q-intro__kicker"><span class="q-tag" data-cart-count-label>{{ 'cart.item_count' | t: count: cart.item_count }}</span></p>
         <h1 class="q-h1" id="CartTitle">{{ 'cart.title' | t }}</h1>
       </div>
       <a class="q-arrowlink q-intro__meta" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}{% render 'qh-arrow', class: '' %}</a>
     </div>
   </div>
+  <p class="visually-hidden" role="status" aria-live="polite" data-cart-status></p>
   <div class="qcp__body" data-cart-page data-section="{{ section.id }}">
     {%- render 'qh-cart' -%}
   </div>

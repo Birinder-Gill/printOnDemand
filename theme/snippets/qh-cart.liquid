@@ -48,7 +48,7 @@
           {%- endfor -%}
           <div class="qcart__row qcart__row--big"><dt>{{ 'cart.subtotal' | t }}</dt><dd class="q-num">{{ cart.total_price | money }}</dd></div>
         </dl>
-        <p class="qcart__note q-label">{{ 'cart.taxes_shipping' | t }}</p>
+        <p class="qcart__note q-label">{%- if cart.taxes_included -%}{{ 'products.taxes_note' | t }}{%- else -%}{{ 'cart.taxes_shipping' | t }}{%- endif -%}</p>
         {%- unless compact -%}
           <div class="qcart__memo">
             <label class="q-label" for="CartNote">{{ 'cart.note' | t }}</label>

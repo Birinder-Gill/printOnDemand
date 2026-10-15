@@ -51,7 +51,7 @@
         <div class="gcard__main">
           <p class="q-label">{{ 'gift_card.balance' | t }}</p>
           <p class="gcard__amt">{{ gift_card.balance | money_without_trailing_zeros }}</p>
-          {%- if gift_card.balance != gift_card.initial_value -%}<p class="q-label">{{ 'gift_card.initial' | t: value: gift_card.initial_value | money_without_trailing_zeros }}</p>{%- endif -%}
+          {%- if gift_card.balance != gift_card.initial_value -%}{%- assign gc_initial = gift_card.initial_value | money_without_trailing_zeros | strip_html -%}<p class="q-label">{{ 'gift_card.initial' | t: value: gc_initial }}</p>{%- endif -%}
         </div>
         <div class="gcard__side" aria-hidden="true">
           <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="#ffd400" stroke="#0d0d0d" stroke-width="4"/><path d="M32 32V5A27 27 0 0 1 45.5 8.6Z" fill="#fffdf7" stroke="#0d0d0d" stroke-width="4"/><circle cx="32" cy="32" r="4.5" fill="#0d0d0d"/></svg>

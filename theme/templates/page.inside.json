@@ -7,7 +7,9 @@
         "heading": "This page belongs to [No. 001].",
         "text": "Designed like the book: 1990s America, one piece at a time.",
         "jump_label": "Back to the book",
-        "jump_target": "/products/90s-america-crossword-gift-edition"
+        "jump_target": "/products/90s-america-crossword-gift-edition",
+        "link1_label": "Liner notes",
+        "link1": "shopify://pages/liner-notes"
       }
     },
     "main": {

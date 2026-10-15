@@ -12,6 +12,7 @@
         <span class="visually-hidden">{{ 'general.close' | t }}</span>
       </button>
     </div>
+    <p class="visually-hidden" role="status" aria-live="polite" data-cart-status></p>
     <div class="qcd__body" data-cart-body>
       {%- render 'qh-cart', compact: true -%}
     </div>

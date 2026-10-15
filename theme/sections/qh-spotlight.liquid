@@ -36,7 +36,8 @@
 
       {%- if p != blank -%}
         <div class="qspot__buy">
-          {%- form 'product', p, id: 'SpotBuy-{{ section.id }}', class: 'qspot__form' -%}
+          {%- assign spot_form_id = 'SpotBuy-' | append: section.id -%}
+          {%- form 'product', p, id: spot_form_id, class: 'qspot__form' -%}
             <input type="hidden" name="id" value="{{ v.id }}">
             <button class="q-btn q-btn--lg" type="submit" name="add"{% unless v.available %} disabled{% endunless %}>
               <span data-add-label>{% if v.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</span>

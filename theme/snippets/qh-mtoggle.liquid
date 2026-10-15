@@ -1,0 +1,6 @@
+{%- comment -%} Pause/play button for a marquee (WCAG 2.2.2). Must sit inside the [data-marquee] element. {%- endcomment -%}
+<button class="q-mtoggle {{ class }}" type="button" aria-pressed="false" data-marquee-toggle>
+  <svg class="q-mtoggle__pause" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false"><path d="M3 2h3.5v12H3zM9.5 2H13v12H9.5z" fill="currentColor"/></svg>
+  <svg class="q-mtoggle__play" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false"><path d="M4 2l10 6-10 6z" fill="currentColor"/></svg>
+  <span class="visually-hidden">{{ 'general.pause_motion' | t }}</span>
+</button>

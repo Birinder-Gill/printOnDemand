@@ -8,7 +8,7 @@
   assign product = section.settings.product | default: settings.hero_product
   assign heading = section.settings.heading | default: page.title
 -%}
-<section class="ln" aria-labelledby="LnTitle-{{ section.id }}">
+<section class="ln on-dark" aria-labelledby="LnTitle-{{ section.id }}">
   <div class="ln__stage">
     <div class="ln__stage-in">
       <div class="ln__art" aria-hidden="true">

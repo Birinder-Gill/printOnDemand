@@ -30,7 +30,8 @@
           "settings": {
             "heading": "Next up",
             "text": "<p>The next title is on the press. The mailing list hears first.</p>",
-            "link_label": "Get the email"
+            "link_label": "Get the email",
+            "to_signup": true
           }
         }
       },

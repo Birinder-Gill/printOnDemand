@@ -8,7 +8,8 @@
       <h2 class="q-h2 qsign__title" id="Sign-{{ section.id }}">{{ section.settings.heading }}</h2>
     </div>
     <div class="qsign__form">
-      {%- form 'customer', id: 'Signup-{{ section.id }}', class: 'qsign__f' -%}
+      {%- assign signup_id = 'Signup-' | append: section.id -%}
+      {%- form 'customer', id: signup_id, class: 'qsign__f' -%}
         <input type="hidden" name="contact[tags]" value="newsletter">
         {%- if form.posted_successfully? -%}
           <p class="q-msg" role="status">{{ 'newsletter.success' | t }}</p>

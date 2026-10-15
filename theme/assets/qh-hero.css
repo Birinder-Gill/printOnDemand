@@ -6,6 +6,7 @@
 .qhero__title{margin:0;font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(3.2rem,7.7vw,8.6rem);line-height:.86;letter-spacing:-.035em;color:var(--q-ink)}
 .qhero__title .q-hl{display:inline-block;background:var(--q-blue);color:#fff;padding:.02em .1em .04em;margin:0 -.02em;transform:rotate(-1.5deg);box-shadow:.06em .06em 0 var(--q-ink);line-height:.9;position:relative;z-index:1}
 .qhero__foot{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px 40px}
+@media (max-width:1279px){.qhero__foot{grid-template-columns:minmax(0,1fr)}}
 .qhero__lede{max-width:38ch}
 .qhero__ctas{display:flex;flex-direction:column;align-items:flex-start;gap:18px}
 
@@ -33,13 +34,13 @@
 .qhero__cell{display:flex;align-items:baseline;gap:12px;padding:22px var(--q-gutter) 22px 22px;border-right:var(--q-bw) solid var(--q-ink)}
 .qhero__cell:first-child{padding-left:var(--q-gutter)}
 .qhero__cell:last-child{border-right:0}
-.qhero__cell-n{color:var(--q-red)}
+.qhero__cell-n{color:var(--q-red-d)}
 .qhero__cell-t{font-weight:800;font-stretch:112%;text-transform:uppercase;font-size:clamp(.95rem,1.15vw,1.1rem);letter-spacing:.01em;line-height:1.15}
 
 @media (max-width:989px){
   .qhero__grid{grid-template-columns:1fr;min-height:0}
   .qhero__copy{border-right:0;border-bottom:var(--q-bw) solid var(--q-ink)}
-  .qhero__foot{grid-template-columns:1fr}
+  .qhero__foot{grid-template-columns:minmax(0,1fr)}
   .qhero__stage{min-height:0;aspect-ratio:1/1.02;padding-bottom:96px}
   .qhero__strip{grid-template-columns:1fr 1fr}
   .qhero__cell{padding:18px var(--q-gutter)}

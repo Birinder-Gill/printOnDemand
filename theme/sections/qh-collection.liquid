@@ -23,12 +23,12 @@
       {%- if collection.products_count > 1 -%}
         <form class="qcoll__bar" method="get" action="{{ collection.url }}">
           <label class="q-label" for="SortBy">{{ 'collections.sort_by' | t }}</label>
-          <select class="q-select qcoll__sort" id="SortBy" name="sort_by" onchange="this.form.submit()">
+          <select class="q-select qcoll__sort" id="SortBy" name="sort_by">
             {%- for option in collection.sort_options -%}
               <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
             {%- endfor -%}
           </select>
-          <noscript><button class="q-btn q-btn--sm" type="submit">{{ 'collections.apply' | t }}</button></noscript>
+          <button class="q-btn q-btn--sm qcoll__apply" type="submit">{{ 'collections.apply' | t }}</button>
         </form>
       {%- endif -%}
 
@@ -38,12 +38,12 @@
         <ul class="qcat__grid qcoll__grid{% if solo %} qcat__grid--solo{% endif %}" role="list">
           {%- for p in collection.products -%}
             {%- if solo -%}
-              <li class="qcat__item qcat__item--wide">{%- render 'qh-card', product: p, index: forloop.index0, class: 'q-card--wide', sizes: '(min-width: 990px) 34vw, 100vw' -%}</li>
+              <li class="qcat__item qcat__item--wide">{%- render 'qh-card', product: p, index: forloop.index0, class: 'q-card--wide', heading: 'h2', sizes: '(min-width: 990px) 34vw, 100vw' -%}</li>
             {%- else -%}
-              <li class="qcat__item">{%- render 'qh-card', product: p, index: forloop.index0, sizes: '(min-width: 990px) 30vw, (min-width: 600px) 50vw, 100vw' -%}</li>
+              <li class="qcat__item">{%- render 'qh-card', product: p, index: forloop.index0, heading: 'h2', sizes: '(min-width: 990px) 30vw, (min-width: 600px) 50vw, 100vw' -%}</li>
             {%- endif -%}
           {%- endfor -%}
-          {%- if solo and section.settings.next_title != blank -%}
+          {%- if solo and collections.all.products_count == 1 and section.settings.next_title != blank -%}
             <li class="qcat__item">
               <article class="qcat__soon">
                 <div class="q-card__top q-label"><span>{{ section.settings.next_number }}</span><span>{{ section.settings.next_status }}</span></div>

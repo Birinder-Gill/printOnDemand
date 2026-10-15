@@ -46,14 +46,14 @@
           "type": "question",
           "settings": {
             "question": "Can I send it as a gift?",
-            "answer": "<p>Yes. Enter the recipient's address at checkout and add a note to the order if you'd like one included.</p>"
+            "answer": "<p>Yes. Add a note in the Order note box in your cart, then enter the recipient's address at checkout.</p>"
           }
         },
         "q3": {
           "type": "question",
           "settings": {
             "question": "What if something arrives damaged?",
-            "answer": "<p>Write to us from the contact page with your order number and a photo, and we'll sort it out under our <a href=\"/policies/refund-policy\">refund policy</a>.</p>"
+            "answer": "<p>Write to us from the contact page with your order number and a photo, and we'll sort it out.</p>"
           }
         }
       },

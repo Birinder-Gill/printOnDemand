@@ -22,10 +22,13 @@
     endif
   endif
   assign img = cut | default: p.featured_media
+  assign htag = heading | default: 'h3'
+  assign no_num = 'products.no_number' | t
+  assign price_str = p.price | money_without_trailing_zeros
 -%}
 <article class="q-card q-card--{{ tone }} {{ class }}">
   <div class="q-card__top q-label">
-    <span>{% if num != blank %}No. {{ num }}{% else %}{{ p.type | default: 'Book' }}{% endif %}</span>
+    <span>{% if num != blank %}No. {{ num }}{% else %}{{ p.type | default: no_num }}{% endif %}</span>
     {%- if num != blank and p.type != blank -%}<span>{{ p.type }}</span>{%- endif -%}
   </div>
   <div class="q-card__media{% if cut == blank %} q-card__media--photo{% endif %}">
@@ -35,7 +38,7 @@
     {%- unless p.available -%}<span class="q-tag q-tag--fill q-card__sold">{{ 'products.sold_out' | t }}</span>{%- endunless -%}
   </div>
   <div class="q-card__body">
-    <h3 class="q-card__title"><a href="{{ p.url }}">{{ name }}</a></h3>
+    <{{ htag }} class="q-card__title"><a href="{{ p.url }}">{{ name }}</a></{{ htag }}>
     {%- if line != blank -%}<p class="q-card__line">{{ line }}</p>{%- endif -%}
     {%- if class contains 'q-card--wide' -%}
       {%- assign excerpt = p.description | strip_html | truncatewords: 46 -%}
@@ -45,7 +48,7 @@
       {%- endif -%}
     {%- endif -%}
     <div class="q-card__foot">
-      <span class="q-card__price">{% if p.price_varies %}From {% endif %}{{ p.price | money_without_trailing_zeros }}</span>
+      <span class="q-card__price">{% if p.price_varies %}{{ 'products.from_price' | t: price: price_str }}{% else %}{{ price_str }}{% endif %}</span>
       <span class="q-card__go" aria-hidden="true">{{ 'products.view' | t }} {% render 'qh-arrow', class: '' %}</span>
     </div>
   </div>

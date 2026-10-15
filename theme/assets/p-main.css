@@ -101,7 +101,7 @@
 .pm__lb-x svg{width:20px;height:20px}
 .pm :focus-visible{outline-color:var(--sun)}
 @media (max-width:989px){
-  .pm__grid{grid-template-columns:1fr}
+  .pm__grid{grid-template-columns:minmax(0,1fr)}
   .pm__burst{width:104px;height:104px;top:-18px;right:-4px}
   .pm__burst span{font-size:15px}
   .pm__backgrid{grid-template-columns:1fr}
@@ -112,7 +112,10 @@
   .pm__thumb{width:62px;height:62px}
   .pm__add{min-width:0}
   .pm__row{flex-wrap:nowrap}
+  .pm__add{padding:0 1.1em}
   .pm__qnum{width:42px}
   .pm__tab{width:170px;margin-left:-85px}
 }
 @media (min-width:990px){.pm__sticky{display:none!important}}
+
+@media (max-width:420px){.pm__row{flex-wrap:wrap}.pm__add{flex-basis:100%}}

@@ -10,11 +10,14 @@
   </div>
   <div class="q-wrap q-pad-s">
     <ul class="qcolls__grid" role="list">
+      {%- assign n = 0 -%}
       {%- for c in collections -%}
-        {%- assign tone = forloop.index0 | modulo: 3 -%}
+        {%- if c.handle == 'frontpage' -%}{%- continue -%}{%- endif -%}
+        {%- assign tone = n | modulo: 3 -%}
+        {%- assign n = n | plus: 1 -%}
         <li>
           <a class="qcolls__tile qcolls__tile--{{ tone }}" href="{{ c.url }}">
-            <span class="q-label qcolls__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="q-label qcolls__n">{{ n | prepend: '0' | slice: -2, 2 }}</span>
             <span class="qcolls__img" aria-hidden="true">
               {%- assign cimg = c.featured_image | default: c.products.first.featured_media -%}
               {%- if cimg -%}{{ cimg | image_url: width: 700 | image_tag: loading: 'lazy', alt: '', widths: '350,700', sizes: '(min-width: 990px) 30vw, 90vw' }}{%- endif -%}

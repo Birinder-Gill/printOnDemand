@@ -6,7 +6,11 @@
         "heading": "This book comes with its [own world].",
         "text": "Scroll down. The rest of this page is designed like the book: 1990s America, one piece at a time.",
         "jump_label": "Skip to buying",
-        "jump_target": "#ProductTitle"
+        "jump_target": "#ProductTitle",
+        "link1_label": "Every puzzle, shelved",
+        "link1": "shopify://pages/inside-the-book",
+        "link2_label": "Liner notes",
+        "link2": "shopify://pages/liner-notes"
       }
     },
     "hero": {
@@ -14,7 +18,7 @@
       "settings": {
         "book_image": "shopify://shop_images/nac-hero-book.png",
         "title": "90s America Crossword: the cover, unfolded",
-        "title_tag": "h2"
+        "title_tag": "p"
       }
     },
     "main": {

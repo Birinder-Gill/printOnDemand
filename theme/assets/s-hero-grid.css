@@ -2,7 +2,7 @@
 .sct-hero{container-type:inline-size;background:var(--ink)}
 .hx{
   --cols:16;--rows:9;
-  --cell:min(calc(100cqw / 16),calc((100svh - 130px) / 8.6));
+  --cell:min(calc(100cqw / 16),calc((100svh - var(--hx-top,130px)) / 8.6));
   --g:calc(var(--cell) * .0484);
   --off:calc((100cqw - var(--cols) * var(--cell)) / 2);
   position:relative;overflow:hidden;isolation:isolate;

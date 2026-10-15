@@ -32,7 +32,7 @@
           "type": "question",
           "settings": {
             "question": "Where's my order?",
-            "answer": "<p>Your shipping confirmation email has a tracking link. Can't find it? <a href=\"/pages/contact\">Leave us a message</a> with your order number.</p>"
+            "answer": "<p>We email you when your order ships, with tracking details when the carrier provides them. Can't find it? <a href=\"/pages/contact\">Leave us a message</a> with your order number.</p>"
           }
         },
         "q3": {
@@ -53,7 +53,7 @@
           "type": "question",
           "settings": {
             "question": "Can I send a book as a gift?",
-            "answer": "<p>Enter the recipient's address at checkout. Want to sign it yourself first? Ship it to you, then use the autograph page up front.</p>"
+            "answer": "<p>Yes. Add a note in the Order note box in your cart, then enter the recipient's address at checkout.</p>"
           }
         }
       },

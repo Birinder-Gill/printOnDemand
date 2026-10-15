@@ -128,7 +128,15 @@ Other templates
       "90s-crossword". Smart collection "The Catalog" (handle all, price > 0, newest first) published to Online Store.
       Pages: about (press, template about), liner-notes (new, template liner, old liner notes copy), contact and
       shipping-returns copy rewritten for the press. Main menu: Catalog, 90s Crossword, About, FAQ, Contact.
-- [ ] Multi-agent code review of the theme (5 dimensions + adversarial verify), then fixes, re-upload, checkpoint.
+- [x] Multi-agent code review (15 Oct): 5 dimensions (Liquid on real Shopify, JS, a11y, responsive CSS, content
+      honesty), each verified by an adversarial agent: 65 confirmed, 8 rejected, all 65 fixed. Highlights: icon-only
+      header buttons got names; cart drawer keeps focus + live status after quantity changes; double-submit guard;
+      variant pills update the buy bar; marquee pause buttons; focus rings per color scheme; reveal never hides content
+      when JS fails or in the theme editor; menu/header survive editor re-renders; 320px overflow fixed everywhere
+      (verified by script: no horizontal overflow on 19 templates x 9 widths); burger below 1100px; cart tax line
+      follows the store's tax-included setting; softer copy (no reply-time or damage-rate claims); crossword placard
+      links to Inside the book and Liner notes. Note: the store has only a privacy policy, so refund-policy links 404
+      until the owner adds one.
 - [ ] Real-store check is the user's (workspace can't open the storefront): Online Store > Themes > Quiet Hour Press >
       Preview. Then Publish.
 - [ ] User to-dos (tell them, don't do): rename the store from "My Store 10" to Quiet Hour Press (Settings > General);

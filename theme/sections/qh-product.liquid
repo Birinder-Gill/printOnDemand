@@ -32,7 +32,7 @@
   <div class="qpm__grid">
     <div class="qpm__media" data-qgallery>
       <div class="qpm__stage">
-        <ul class="qpm__slides" role="list" data-qslides>
+        <ul class="qpm__slides" role="list" data-qslides tabindex="0" aria-label="{{ name | escape }}">
           {%- for m in product.media -%}
             <li class="qpm__slide" data-qslide="{{ forloop.index0 }}" data-media-id="{{ m.id }}">
               {%- if forloop.first -%}
@@ -68,14 +68,16 @@
       <div class="qpm__tags">
         {%- if num != blank -%}<span class="q-tag q-tag--fill">No. {{ num }}</span>{%- endif -%}
         {%- if product.type != blank -%}<span class="q-tag">{{ product.type }}</span>{%- endif -%}
-        <span class="q-tag qpm__avail{% unless variant.available %} is-out{% endunless %}">{% if variant.available %}{{ 'products.available' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</span>
+        <span class="q-tag qpm__avail{% unless variant.available %} is-out{% endunless %}" data-avail>{% if variant.available %}{{ 'products.available' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</span>
       </div>
       <h1 class="qpm__title" id="ProductTitle">{{ name }}{% if sub != blank %}<span class="visually-hidden">: {{ sub }}</span>{% endif %}</h1>
       {%- if sub != blank -%}<p class="qpm__sub" aria-hidden="true">{{ sub }}</p>{%- endif -%}
 
       <div class="qpm__price q-price">
-        <span class="visually-hidden">{{ 'products.price' | t }}</span>
+        {%- assign on_sale = false -%}{%- if variant.compare_at_price > variant.price -%}{%- assign on_sale = true -%}{%- endif -%}
+        <span class="visually-hidden" data-price-label>{% if on_sale %}{{ 'products.sale_price' | t }}{% else %}{{ 'products.price' | t }}{% endif %}</span>
         <span class="q-price__now" data-variant-price>{{ variant.price | money_without_trailing_zeros }}</span>
+        <span class="visually-hidden" data-variant-compare-label{% unless on_sale %} hidden{% endunless %}>{{ 'products.regular_price' | t }}</span>
         <s class="q-price__was" data-variant-compare{% unless variant.compare_at_price > variant.price %} hidden{% endunless %}>{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money_without_trailing_zeros }}{% endif %}</s>
         <span class="qpm__tax q-label">{% if cart.taxes_included %}{{ 'products.taxes_included' | t }} {% endif %}{{ 'products.shipping_at_checkout' | t }}</span>
       </div>
@@ -98,7 +100,7 @@
               {%- for v in product.variants -%}
                 <label class="qpm__pill{% unless v.available %} is-out{% endunless %}">
                   <input type="radio" name="id" value="{{ v.id }}" data-variant-pill data-price="{{ v.price | money_without_trailing_zeros }}" data-compare="{% if v.compare_at_price > v.price %}{{ v.compare_at_price | money_without_trailing_zeros }}{% endif %}" data-available="{{ v.available }}"{% if v.featured_media %} data-media="{{ v.featured_media.id }}"{% endif %}{% if v.id == variant.id %} checked{% endif %}>
-                  <span>{{ v.title }}</span>
+                  <span>{{ v.title }}{% unless v.available %}<span class="visually-hidden">, {{ 'products.sold_out' | t }}</span>{% endunless %}</span>
                 </label>
               {%- endfor -%}
             </div>
@@ -146,9 +148,9 @@
     </div>
   </div>
 
-  <div class="qpm__bar" data-qbar hidden>
+  <div class="qpm__bar" data-qbar hidden inert>
     <p class="qpm__bar-t"><span class="q-label">{% if num != blank %}No. {{ num }}{% endif %}</span><span class="qpm__bar-n">{{ name }}</span></p>
-    <button class="q-btn q-btn--sm" type="submit" form="ProductForm"{% unless variant.available %} disabled{% endunless %}><span>{{ 'products.add_to_cart' | t }}</span><span class="q-btn__price" data-variant-price>{{ variant.price | money_without_trailing_zeros }}</span></button>
+    <button class="q-btn q-btn--sm" type="submit" form="ProductForm"{% unless variant.available %} disabled{% endunless %}><span data-add-label>{% if variant.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif %}</span><span class="q-btn__price" data-variant-price>{{ variant.price | money_without_trailing_zeros }}</span></button>
   </div>
 </section>
 

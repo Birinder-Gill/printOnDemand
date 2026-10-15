@@ -10,7 +10,7 @@
   assign heading = section.settings.heading | default: page.title
   assign product = section.settings.product | default: settings.hero_product
 -%}
-<section class="vs" aria-labelledby="VsTitle-{{ section.id }}" data-vs>
+<section class="vs on-dark" aria-labelledby="VsTitle-{{ section.id }}" data-vs>
   <div class="vs__ceiling" aria-hidden="true"><span></span><span></span><span></span></div>
   <header class="vs__head">
     <div class="vs__sign">

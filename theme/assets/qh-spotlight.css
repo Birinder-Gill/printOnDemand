@@ -6,7 +6,7 @@
 .qspot__num{margin:8px 0 -6px;font-weight:900;font-stretch:125%;font-size:clamp(5.5rem,13vw,12rem);line-height:.78;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:3px var(--q-ink)}
 .qs-ink .qspot__num,.qs-blue .qspot__num{-webkit-text-stroke-color:var(--q-yellow)}
 .qspot__title{font-size:clamp(2.2rem,4.6vw,4.4rem)}
-.qspot__sub{font-family:var(--q-mono);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px;background:var(--q-ink);color:var(--bg);padding:6px 10px 5px}
+.qspot__sub{font-family:var(--q-mono);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px;background:var(--q-ink);color:var(--q-yellow);padding:6px 10px 5px}
 .qspot__text{max-width:52ch;font-size:1.1rem;line-height:1.55}
 .qspot__text p+p{margin-top:.8em}
 .qspot__specs{margin:10px 0 6px;width:100%;max-width:620px;border-top:var(--q-bw) solid var(--q-ink);display:grid;grid-template-columns:1fr 1fr}

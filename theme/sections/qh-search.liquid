@@ -26,7 +26,7 @@
           {%- if prods.size > 0 -%}
             <ul class="qcat__grid" role="list">
               {%- for p in prods -%}
-                <li class="qcat__item">{%- render 'qh-card', product: p, index: forloop.index0, sizes: '(min-width: 990px) 30vw, (min-width: 600px) 50vw, 100vw' -%}</li>
+                <li class="qcat__item">{%- render 'qh-card', product: p, index: forloop.index0, heading: 'h2', sizes: '(min-width: 990px) 30vw, (min-width: 600px) 50vw, 100vw' -%}</li>
               {%- endfor -%}
             </ul>
           {%- endif -%}

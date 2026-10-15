@@ -23,7 +23,7 @@
 .qpm__tags{display:flex;flex-wrap:wrap;gap:8px}
 .qpm__avail::before{content:"";width:9px;height:9px;border-radius:50%;background:#1aa34a;border:2px solid var(--q-ink)}
 .qpm__avail.is-out::before{background:var(--q-red)}
-.qpm__title{margin:0;font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(2.4rem,4.6vw,4.6rem);line-height:.88;letter-spacing:-.03em;text-wrap:balance}
+.qpm__title{margin:0;font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(2rem,4.6vw + .3rem,4.6rem);line-height:.88;letter-spacing:-.03em;text-wrap:balance;overflow-wrap:anywhere}
 .qpm__sub{align-self:flex-start;margin-top:-6px;font-family:var(--q-mono);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px;background:var(--q-ink);color:var(--q-yellow);padding:6px 10px 5px}
 .qpm__price{padding:16px 0;border-top:var(--q-bw) solid var(--q-ink);border-bottom:var(--q-bw) solid var(--q-ink);align-items:center}
 .qpm__tax{flex-basis:100%;color:var(--q-mute)}
@@ -53,8 +53,10 @@
 .qpm__spec dt{color:var(--q-mute)}
 .qpm__spec dd{margin:0;font-weight:800;font-stretch:108%;line-height:1.25}
 
-.qpm__bar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px 10px 16px;background:var(--q-paper);border-top:var(--q-bw) solid var(--q-ink);transform:translateY(110%);transition:transform .25s var(--q-ease)}
-.qpm__bar.is-on{transform:none}
+.qpm__bar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px 10px 16px;background:var(--q-paper);border-top:var(--q-bw) solid var(--q-ink);transform:translateY(110%);visibility:hidden;transition:transform .25s var(--q-ease),visibility 0s .25s}
+.qpm__bar.is-on{transform:none;visibility:visible;transition:transform .25s var(--q-ease)}
+html.has-buybar{scroll-padding-bottom:96px}
+.qpm__slides:focus-visible{outline:3px solid var(--q-blue);outline-offset:-6px}
 .qpm__bar-t{display:grid;min-width:0}
 .qpm__bar-n{font-weight:900;font-stretch:115%;text-transform:uppercase;font-size:.95rem;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .qpm__bar .q-btn{margin:0 5px 5px 0}

@@ -16,7 +16,10 @@
         {%- if form.posted_successfully? -%}
           <p class="q-msg" role="status" tabindex="-1" autofocus>{{ 'contact.success' | t }}</p>
         {%- elsif form.errors -%}
-          <p class="q-msg q-msg--err" role="alert">{{ 'contact.error' | t }}</p>
+          <div class="q-msg q-msg--err" role="alert" id="ContactErr">
+            <p>{{ 'contact.error' | t }}</p>
+            <ul>{%- for field in form.errors -%}<li>{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</li>{%- endfor -%}</ul>
+          </div>
         {%- endif -%}
         <div class="qcontact__row">
           <div class="q-field">
@@ -25,7 +28,7 @@
           </div>
           <div class="q-field">
             <label class="q-label" for="ContactEmail">{{ 'contact.email' | t }} <span aria-hidden="true">*</span></label>
-            <input class="q-input" id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"{% if form.errors contains 'email' %} aria-invalid="true"{% endif %}>
+            <input class="q-input" id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"{% if form.errors contains 'email' %} aria-invalid="true" aria-describedby="ContactErr"{% endif %}>
           </div>
         </div>
         <div class="q-field">
@@ -34,7 +37,7 @@
         </div>
         <div class="q-field">
           <label class="q-label" for="ContactBody">{{ 'contact.message' | t }} <span aria-hidden="true">*</span></label>
-          <textarea class="q-textarea" id="ContactBody" name="contact[body]" rows="6" required>{{ form.body }}</textarea>
+          <textarea class="q-textarea" id="ContactBody" name="contact[body]" rows="6" required{% if form.errors contains 'body' %} aria-invalid="true" aria-describedby="ContactErr"{% endif %}>{{ form.body }}</textarea>
         </div>
         <button class="q-btn q-btn--lg" type="submit">{{ 'contact.send' | t }}{% render 'qh-arrow' %}</button>
       {%- endform -%}
@@ -52,7 +55,7 @@
   "blocks": [
     { "type": "cell", "name": "Info cell", "settings": [
       { "type": "text", "id": "label", "label": "Label", "default": "Replies" },
-      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>We answer every message, usually within two working days.</p>" } ] }
+      { "type": "richtext", "id": "text", "label": "Text", "default": "<p>We read every message and write back as soon as we can.</p>" } ] }
   ],
   "max_blocks": 6
 }

@@ -26,7 +26,10 @@
     "follow": "Follow",
     "breadcrumbs": "Breadcrumbs",
     "catalog": "Catalog",
-    "pagination": "Pagination"
+    "pagination": "Pagination",
+    "pause": "Pause",
+    "play": "Play",
+    "pause_motion": "Pause the moving text"
   },
   "products": {
     "add_to_cart": "Add to cart",
@@ -51,7 +54,8 @@
     "no_number": "Book",
     "available": "Available",
     "taxes_included": "Taxes included.",
-    "shipping_at_checkout": "Shipping calculated at checkout."
+    "shipping_at_checkout": "Shipping calculated at checkout.",
+    "from_price": "From {{ price }}"
   },
   "cart": {
     "title": "Your cart",
@@ -70,7 +74,8 @@
     "update_error": "That didn't go through. Please try again.",
     "note": "Order note",
     "view_cart": "View cart",
-    "empty_big": "Empty"
+    "empty_big": "Empty",
+    "updated": "Cart updated."
   },
   "newsletter": {
     "label": "Email",

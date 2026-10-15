@@ -7,7 +7,9 @@
         "heading": "These are the book's [liner notes].",
         "text": "Designed like the book: 1990s America, one piece at a time.",
         "jump_label": "Back to the book",
-        "jump_target": "/products/90s-america-crossword-gift-edition"
+        "jump_target": "/products/90s-america-crossword-gift-edition",
+        "link1_label": "Every puzzle, shelved",
+        "link1": "shopify://pages/inside-the-book"
       }
     },
     "main": {
